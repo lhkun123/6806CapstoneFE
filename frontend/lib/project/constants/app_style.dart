@@ -37,9 +37,18 @@ class AppStyle {
     color: Colors.black,
   );
 
+
   // Colors
-  static const primaryColor = Color(0xFF7EBDC2);
+  static const primaryColor = Colors.white;
   static const cardBackgroundColor = Color(0xFFFFFFFF);
   static const largeBackgroundColor = Color(0xFFF5F5F5); // 也用作小按钮颜色
   static const textColor = Color(0xFF262F34);
+  static const labelColor=Colors.black;
+  static const unselectedLabelColor= Colors.grey;
+  static const indicatorColor=Colors.black;
+  static const buttonBackgroundColor=Colors.grey;
+  static const buttonForegroundColor=Colors.white;
+
+
+
 }
