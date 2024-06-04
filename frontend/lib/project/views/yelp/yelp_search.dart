@@ -11,7 +11,7 @@ class YelpSearch extends StatefulWidget {
 }
 
 class _YelpSearchState extends State<YelpSearch> {
-  late List<dynamic> businesses;
+  List<dynamic> businesses=[];
   ApiRequest apiRequest = ApiRequest();
   Map<String, dynamic> searchQuery = {
     "url": "https://api.yelp.com/v3/businesses/search",
@@ -247,7 +247,7 @@ class _YelpSearchState extends State<YelpSearch> {
                     onTap: () {
                       Navigator.of(context).push(
                         MaterialPageRoute(
-                          builder: (context) => YelpOverview(alias:  businesses[index]["alias"] ?? ""),
+                          builder: (context) => YelpOverview(alias:  businesses[index]["alias"] ?? "",latitude: businesses[index]["coordinates"]["latitude"] ?? 0,longitude:  businesses[index]["coordinates"]["longitude"]?? 0),
                         ),
                       );
                     },

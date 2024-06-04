@@ -6,7 +6,8 @@ import 'package:frontend/project/views/yelp/yelp_review.dart';
 import '../../constants/app_style.dart';
 class YelpOverview extends StatefulWidget {
   String alias;
-  YelpOverview({super.key, required this.alias});
+  double latitude, longitude;
+  YelpOverview({super.key, required this.alias,required this.latitude, required this.longitude});
   @override
   _YelpOverViewState createState() =>   _YelpOverViewState();
 }
@@ -34,7 +35,7 @@ class _YelpOverViewState  extends State<YelpOverview> {
           body: TabBarView(
             children: [
               YelpDetail(alias: widget.alias), // Content of tab 1
-              YelpMap(), // Content of tab 2
+              YelpMap(latitude: widget.latitude,longitude: widget.longitude), // Content of tab 2
               YelpReview(), // Content of tab 3
             ],
           ),

@@ -4,6 +4,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:frontend/project/constants/app_style.dart';
 import '../../constants/api_key.dart';
 import '../../constants/api_request.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 
 class YelpDetail extends StatefulWidget {
   String alias;
@@ -20,6 +21,8 @@ class _YelpDetailState extends State<YelpDetail> {
   };
   ApiRequest apiRequest = ApiRequest();
   Map<String, dynamic>? detail;
+  List<String> imgList = [];
+  CarouselController buttonCarouselController = CarouselController();
 
   @override
   void initState() {
@@ -43,6 +46,11 @@ class _YelpDetailState extends State<YelpDetail> {
       if (response.statusCode == 200) {
         setState(() {
           detail = response.data;
+          print(detail);
+          for (var i = 0; i < detail!["photos"].length; i++) {
+            imgList.add(detail!["photos"][i]);
+          }
+          print(imgList);
         });
       } else {
         throw Exception('Failed to fetch detail!');
@@ -57,7 +65,7 @@ class _YelpDetailState extends State<YelpDetail> {
         title: Text(detail?["name"] ?? 'Loading...', style: AppStyle.bigheadingFont),
       ),
       body: detail == null
-          ? Center(
+          ? const Center(
         child: CircularProgressIndicator(
           color: AppStyle.indicatorColor,
         ),
@@ -210,6 +218,46 @@ class _YelpDetailState extends State<YelpDetail> {
                 ),
               ),
               const SizedBox(height: 16),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  TextButton(
+                    onPressed: () => buttonCarouselController.previousPage(
+                      duration: const Duration(milliseconds: 1000),
+                      curve: Curves.linear,
+                    ),
+                    child: const Icon(Icons.arrow_back_ios,color: AppStyle.labelColor),
+                  ),
+                  Expanded(
+                    child: CarouselSlider(
+                      items: imgList.map((item) => Center(
+                        child: Image.network(
+                          item,
+                          fit: BoxFit.cover,
+                          width: 600,
+                          height: 600,
+                        ),
+                      )).toList(),
+                      carouselController: buttonCarouselController,
+                      options: CarouselOptions(
+                        autoPlay: true,
+                        enlargeCenterPage: true,
+                        viewportFraction: 0.9,
+                        aspectRatio: 1.0,
+                      ),
+                    ),
+                  ),
+                  TextButton(
+                    onPressed: () => buttonCarouselController.nextPage(
+                      duration: const Duration(milliseconds: 1000),
+                      curve: Curves.linear,
+                    ),
+                    child: const Icon(Icons.arrow_forward_ios,color: AppStyle.labelColor),
+
+                  ),
+                ],
+              ),
+              const SizedBox(height: 16),
             ],
           ),
         ),
@@ -217,3 +265,4 @@ class _YelpDetailState extends State<YelpDetail> {
     );
   }
 }
+
