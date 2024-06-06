@@ -247,7 +247,7 @@ class _YelpSearchState extends State<YelpSearch> {
                     onTap: () {
                       Navigator.of(context).push(
                         MaterialPageRoute(
-                          builder: (context) => YelpOverview(alias:  businesses[index]["alias"] ?? "",latitude: businesses[index]["coordinates"]["latitude"] ?? 0,longitude:  businesses[index]["coordinates"]["longitude"]?? 0),
+                          builder: (context) => YelpOverview(alias:  businesses[index]["alias"] ?? "",latitude: businesses[index]["coordinates"]["latitude"] ?? 0,longitude:  businesses[index]["coordinates"]["longitude"]?? 0,location: businesses[index]["location"]["address1"],title: businesses[index]["name"],),
                         ),
                       );
                     },

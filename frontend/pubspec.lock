@@ -182,6 +182,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.20"
+  flutter_star:
+    dependency: "direct main"
+    description:
+      name: flutter_star
+      sha256: "7dc10b8b3667ace2aa575a37ea0c00558a7514019cfe7e76322573d85b72a472"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.2.0"
   flutter_test:
     dependency: "direct dev"
     description: flutter
