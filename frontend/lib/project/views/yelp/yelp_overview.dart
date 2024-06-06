@@ -36,7 +36,7 @@ class _YelpOverViewState  extends State<YelpOverview> {
             children: [
               YelpDetail(alias: widget.alias), // Content of tab 1
               YelpMap(latitude: widget.latitude,longitude: widget.longitude,location: widget.location,title: widget.title), // Content of tab 2
-              YelpReview(), // Content of tab 3
+              YelpReview(alias: widget.alias,), // Content of tab 3
             ],
           ),
           bottomNavigationBar: const Material(
