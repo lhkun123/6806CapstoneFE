@@ -32,13 +32,19 @@ class SignUpHttp extends StatefulWidget {
 class _SignUpState extends State<SignUpHttp> {
 
   final _formKey = GlobalKey<FormState>();
-  String error = '';
   bool loading = false;
 
   // text field state
-  String email = '';
-  String? password;
-  String? confirmPassword;
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _confirmPasswordController=TextEditingController();
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -58,6 +64,7 @@ class _SignUpState extends State<SignUpHttp> {
                   children: <Widget>[
                     const SizedBox(height: 20.0),
                     TextFormField(
+                      controller: _emailController,
                       decoration: const InputDecoration(
                         filled: true,
                         labelText: 'Email',
@@ -65,14 +72,11 @@ class _SignUpState extends State<SignUpHttp> {
                           color: Colors.black, // Color of the label when not focused
                         ),
                       ),
-
                       validator: (value) => Validator.validateEmail(value),
-                      onChanged: (val) {
-                        setState(() => email = val);
-                      },
                     ),
                     const SizedBox(height: 20.0),
                     TextFormField(
+                      controller: _passwordController,
                       decoration: const InputDecoration(
                         filled: true,
                         labelText: 'Password',
@@ -82,11 +86,9 @@ class _SignUpState extends State<SignUpHttp> {
                       ),
                       obscureText: true,
                       validator: (value) => Validator.validatePassword(value),
-                      onChanged: (val) {
-                        setState(() => password = val);
-                      },
                     ),
                     TextFormField(
+                      controller: _confirmPasswordController,
                       decoration: const InputDecoration(
                         filled: true,
                         labelText: 'Retype the Password',
@@ -103,15 +105,13 @@ class _SignUpState extends State<SignUpHttp> {
                       ),
                       obscureText: true,
                       validator: (value) => Validator.validatePassword(value),
-                      onChanged: (value) {
-                        setState(() => confirmPassword = value);
-                      },
+
                     ),
                     const SizedBox(height: 20.0),
                     TextButton(
                     child: const Text('Register'),
                     onPressed: () async {
-                      if (Validator.validatePasswordsMatch(confirmPassword,password)!=null) {
+                      if (Validator.validatePasswordsMatch(_passwordController.text.trim(),_confirmPasswordController.text.trim())!=null) {
                         ScaffoldMessenger.of(context)
                             .showSnackBar(
                             const SnackBar(content: Text('Passwords do NOT match!')));
@@ -124,11 +124,6 @@ class _SignUpState extends State<SignUpHttp> {
                         );
                       }
                     }),
-                    const SizedBox(height: 12.0),
-                    Text(
-                      error,
-                      style: const TextStyle(color: Colors.red, fontSize: 14.0),
-                    )
                   ],
                 ),
               ),

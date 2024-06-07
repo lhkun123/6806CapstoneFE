@@ -1,9 +1,19 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/project/constants/app_style.dart';
+import 'package:frontend/project/views/auth/sign_in.dart';
 
+class Profile extends StatefulWidget {
+  const Profile({
 
-class Profile extends StatelessWidget {
-  const Profile({super.key});
+    super.key,
+  });
+
+  @override
+  State<Profile> createState() => _ProfileState();
+}
+
+class _ProfileState extends State<Profile> {
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +57,11 @@ class Profile extends StatelessWidget {
                   ),
                   const SizedBox(height: 20),
                   ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () async{
+                      _showDialog(
+                        'Are you sure to exit the system?'
+                    );
+                    },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.blue,
                       padding: const EdgeInsets.symmetric(horizontal: 100, vertical: 20),
@@ -63,6 +77,40 @@ class Profile extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+
+
+  void _showDialog(String message) {
+    showDialog<void>(
+        context: context,
+        builder: (context) => CupertinoAlertDialog(
+          title: const Text("Notification"),
+          actions: [
+            CupertinoDialogAction(
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+              },
+              child: const Text(
+                "Cancel",
+                style: AppStyle.bodyTextFont,
+              ),
+            ),
+            CupertinoDialogAction(onPressed: (){
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(builder: (context) => const SignInHttp()),
+                    (Route<dynamic> route) => false,
+              );
+            },
+                child: const Text("OK",
+                    style:AppStyle.bodyTextFont
+                )),
+          ],
+          content: Text(message,
+              style:AppStyle.bodyTextFont
+          ),
+        )
     );
   }
 }
