@@ -1,10 +1,3 @@
-
-// Copyright 2020, the Flutter project authors. Please see the AUTHORS file
-// for details. All rights reserved. Use of this source code is governed by a
-// BSD-style license that can be found in the LICENSE file.
-
-
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/project/views/auth/sign_up.dart';
@@ -41,10 +34,10 @@ class SignInHttp extends StatefulWidget {
   });
 
   @override
-  State<SignInHttp> createState() => _SignInHttpDemoState();
+  State<SignInHttp> createState() => _SignInHttpState();
 }
 
-class _SignInHttpDemoState extends State<SignInHttp> {
+class _SignInHttpState extends State<SignInHttp> {
   FormData formData = FormData();
   late bool _isObscure=true;
 
@@ -116,19 +109,18 @@ class _SignInHttpDemoState extends State<SignInHttp> {
                         },
                       ))),
                   TextButton(
-                    child: const Text('Sign in'),
                     onPressed: () async {
-                      // Use a JSON encoded string to send
-                      // var result = await widget.httpClient!.post(
-                      //     Uri.parse('https://example.com/signin'),
-                      //     body: json.encode(formData.toJson()),
-                      //     headers: {'content-type': 'application/json'});
                       _showDialog(switch (200) {
                         200 => 'Successfully signed in.',
                       401 => 'Unable to sign in.',
                       _ => 'Something went wrong. Please try again.'
                     });
                     },
+                    style: TextButton.styleFrom(
+                        foregroundColor:AppStyle.buttonForegroundColor ,
+                        elevation: 2,
+                        backgroundColor: AppStyle.buttonBackgroundColor),
+                    child: const Text('Sign in'),
                   ),
                   TextButton(
                     child: const Text('Sign up'),
@@ -171,7 +163,7 @@ class _SignInHttpDemoState extends State<SignInHttp> {
               style:AppStyle.bodyTextFont
               )),
         ],
-        content: const Text("Login Successful",
+        content: Text(message,
             style:AppStyle.bodyTextFont
         ),
       )
