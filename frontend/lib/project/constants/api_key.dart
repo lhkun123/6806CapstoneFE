@@ -3,5 +3,6 @@ class ApiKey{
 
   static const String TRANS_LINK_API_KEY="v8hmC2seJItVH9fAHZEs";
 
+  static const String GOOGLE_MAP_API_KEY="AIzaSyA4cMafCGdDQKlHlA_2bT3r6oE2JT84d5g";
 
 }
