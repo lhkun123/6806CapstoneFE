@@ -1,11 +1,12 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_star/star.dart';
+import 'package:flutter_star/star_score.dart';
 import 'package:frontend/project/constants/app_style.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/project/constants/api_key.dart';
 import 'package:frontend/project/constants/api_request.dart';
 import 'package:frontend/project/views/yelp/yelp_overview.dart';
 import 'package:geolocator/geolocator.dart';
-
 
 class YelpSearch extends StatefulWidget {
   const YelpSearch({super.key});
@@ -324,14 +325,29 @@ class _YelpSearchState extends State<YelpSearch> {
                       height: 50,
                       fit: BoxFit.cover,
                     ),
-                    title: Text("${index + 1}. ${business['name']}"),
+                    title: Row(
+                      children: [
+                        Expanded(
+                          child: Text("${index + 1}. ${business['name']}"),
+                        ),
+                        StarScore(
+                          score: business['rating'],
+                          star: Star(
+                              fillColor: Colors.yellow,
+                              emptyColor: Colors.grey.withAlpha(88),
+                              size: 12
+
+                          ),
+                        ),
+                      ],
+                    ),
                     subtitle: Row(
                       children: [
-                        Text('${business['rating']}/5.0'),
-                        const SizedBox(width: 5),
-                        Text('${business['review_count']} reviews'),
+                        Text('${business['review_count']} reviews',style: AppStyle.bodyTextFont),
                         const SizedBox(width: 10),
-                        Text("${(business['distance'] / 1609.0).toStringAsFixed(2)} mi")
+                        Text("${(business['distance'] / 1609.0).toStringAsFixed(2)} mi",style: AppStyle.bodyTextFont),
+                        const SizedBox(width: 5),
+                        business["is_closed"] ? const Icon(Icons.event_busy_outlined,color: Colors.red,):const Icon(Icons.event_available,color: Colors.green,)
                       ],
                     ),
                     trailing: const Icon(Icons.arrow_forward_ios),
