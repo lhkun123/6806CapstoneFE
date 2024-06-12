@@ -84,7 +84,7 @@ class _YelpSearchState extends State<YelpSearch> {
     }
 
     // When we reach here, permissions are granted and we can
-    Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+    Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.bestForNavigation);
     Map<String, dynamic> locationQuery = {
       "url": "https://maps.googleapis.com/maps/api/geocode/json",
       "parameters": {
@@ -95,6 +95,7 @@ class _YelpSearchState extends State<YelpSearch> {
     await apiRequest.getRequest(locationQuery).then((response) {
       if (response.statusCode == 200) {
         setState(() {
+          businesses=[];
           searchQuery["parameters"]["location"]=response.data["results"][0]["formatted_address"].split(',')[0];
         });
         _fetchBusinesses();
