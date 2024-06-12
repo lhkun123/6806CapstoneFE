@@ -1,8 +1,11 @@
+import 'package:flutter/cupertino.dart';
 import 'package:frontend/project/constants/app_style.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/project/constants/api_key.dart';
 import 'package:frontend/project/constants/api_request.dart';
 import 'package:frontend/project/views/yelp/yelp_overview.dart';
+import 'package:geolocator/geolocator.dart';
+
 
 class YelpSearch extends StatefulWidget {
   const YelpSearch({super.key});
@@ -12,6 +15,7 @@ class YelpSearch extends StatefulWidget {
 
 class _YelpSearchState extends State<YelpSearch> {
   List<dynamic> businesses=[];
+  bool autoLocation=false;
   ApiRequest apiRequest = ApiRequest();
   Map<String, dynamic> searchQuery = {
     "url": "https://api.yelp.com/v3/businesses/search",
@@ -37,6 +41,7 @@ class _YelpSearchState extends State<YelpSearch> {
   }
 
   void _fetchBusinesses() async {
+
     await apiRequest.getRequest(searchQuery).then((response) {
       if (response.statusCode == 200) {
         setState(() {
@@ -46,6 +51,60 @@ class _YelpSearchState extends State<YelpSearch> {
         throw Exception('Failed to fetch businesses');
       }
     });
+  }
+  Future<Position> _determinePosition() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+    // Test if location services are enabled.
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      // Location services are not enabled don't continue
+      // accessing the position and request users of the
+      // App to enable the location services.
+      return Future.error('Location services are disabled.');
+    }
+
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        // Permissions are denied, next time you could try
+        // requesting permissions again (this is also where
+        // Android's shouldShowRequestPermissionRationale
+        // returned true. According to Android guidelines
+        // your App should show an explanatory UI now.
+        return Future.error('Location permissions are denied');
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      // Permissions are denied forever, handle appropriately.
+      return Future.error(
+          'Location permissions are permanently denied, we cannot request permissions.');
+    }
+
+    // When we reach here, permissions are granted and we can
+    Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.bestForNavigation);
+    Map<String, dynamic> locationQuery = {
+      "url": "https://maps.googleapis.com/maps/api/geocode/json",
+      "parameters": {
+          "latlng":"${position.latitude},${position.longitude}",
+          "key":ApiKey.GOOGLE_MAP_API_KEY
+      },
+    };
+    await apiRequest.getRequest(locationQuery).then((response) {
+      if (response.statusCode == 200) {
+        setState(() {
+          businesses=[];
+          searchQuery["parameters"]["location"]=response.data["results"][0]["formatted_address"].split(',')[0];
+        });
+        _fetchBusinesses();
+      } else {
+        throw Exception('Failed to fetch location');
+      }
+    });
+    autoLocation=!autoLocation;
+    return position;
   }
   Future<List<String>> _fetchAutocompleteList(String keyword) async{
     List<String> autoCompleteKeywords = [];
@@ -111,8 +170,41 @@ class _YelpSearchState extends State<YelpSearch> {
     return Scaffold(
       backgroundColor: Colors.white, // Set the background color to white
       appBar: AppBar(
-        title: const Text('The best match businesses for you in Vancouver', style: AppStyle.headingFont),
-          backgroundColor:AppStyle.largeBackgroundColor
+        title: Row(
+          children: [
+            const Text('Entertainments',style: AppStyle.bigheadingFont),
+            const SizedBox(width: 8),
+        GestureDetector(
+          onTap: () {
+            if(!autoLocation){
+              _determinePosition();
+            }else{
+              setState(() {
+                autoLocation=!autoLocation;
+              });
+            }
+          },
+          child: Icon(
+            autoLocation ? Icons.location_on : Icons.location_off,
+            color: AppStyle.labelColor,
+          ),
+        ),
+            InkWell(
+              onTap: () {
+                setState(() {
+                    if(!autoLocation){
+                      _showDialog();
+                    }
+                });
+              },
+              child: Row(
+                children: [
+                  Text(searchQuery["parameters"]["location"], style: AppStyle.subheadingFont),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
       body: Column(
         children: [
@@ -209,7 +301,6 @@ class _YelpSearchState extends State<YelpSearch> {
                       )]
                   ),
                 ),
-
               ],
             ),
           ),
@@ -260,4 +351,47 @@ class _YelpSearchState extends State<YelpSearch> {
       ),
     );
   }
+  void _showDialog() {
+    showDialog<void>(
+        context: context,
+        builder: (BuildContext context) {
+          TextEditingController _locationController = TextEditingController(
+              text: searchQuery["parameters"]["location"]);
+          return CupertinoAlertDialog(
+            title: const Text("Input Address"),
+            actions: [
+              CupertinoDialogAction(
+                onPressed: () {
+                  Navigator.of(context).pop(); // Close the dialog
+                },
+                child: const Text(
+                  "Cancel",
+                  style: AppStyle.bodyTextFont,
+                ),
+              ),
+              CupertinoDialogAction(
+                onPressed: () {
+                  setState(() {
+                    searchQuery["parameters"]["location"] =
+                        _locationController.text;
+                  });
+                  Navigator.of(context).pop();
+                  _fetchBusinesses();
+                },
+                child: const Text(
+                  "OK",
+                  style: AppStyle.bodyTextFont,
+                ),
+              ),
+            ],
+            content: CupertinoTextField(
+              controller: _locationController,
+              enabled: !autoLocation,
+              style: AppStyle.bodyTextFont,
+            ),
+          );
+        });
+  }
 }
+
+
