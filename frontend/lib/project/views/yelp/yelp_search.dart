@@ -173,7 +173,7 @@ class _YelpSearchState extends State<YelpSearch> {
       appBar: AppBar(
         title: Row(
           children: [
-            const Text('Entertainments',style: AppStyle.bigheadingFont),
+            const Text('Entertainment',style: AppStyle.bigheadingFont),
             const SizedBox(width: 8),
         GestureDetector(
           onTap: () {

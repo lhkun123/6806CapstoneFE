@@ -63,6 +63,7 @@ class _YelpDetailState extends State<YelpDetail> {
     return Scaffold(
       appBar: AppBar(
         title: Text(detail?["name"] ?? 'Loading...', style: AppStyle.bigheadingFont),
+        centerTitle: true
       ),
       body: detail == null
           ? const Center(
