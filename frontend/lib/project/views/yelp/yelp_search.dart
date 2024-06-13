@@ -187,7 +187,7 @@ class _YelpSearchState extends State<YelpSearch> {
           },
           child: Icon(
             autoLocation ? Icons.location_on : Icons.location_off,
-            color: AppStyle.labelColor,
+            color: AppStyle.BarBackgroundColor,
           ),
         ),
             InkWell(
@@ -262,7 +262,7 @@ class _YelpSearchState extends State<YelpSearch> {
                     children: [
                       Row(
                         children: [
-                        const Text('Sort by:', style: AppStyle.bodyTextFont),
+                        const Text('Sort by:  ', style: AppStyle.bodyTextFont),
                         const SizedBox(height: 8),
                         DropdownButton<String>(
                         style: AppStyle.bodyTextFont,
@@ -280,7 +280,7 @@ class _YelpSearchState extends State<YelpSearch> {
                         );
                         }).toList(),
                         ),
-                        const Text('Category:', style: AppStyle.bodyTextFont),
+                        const Text('Category:  ', style: AppStyle.bodyTextFont),
                         const SizedBox(height: 8),
                         DropdownButton<String>(
                         style: AppStyle.bodyTextFont,
@@ -350,7 +350,7 @@ class _YelpSearchState extends State<YelpSearch> {
                         business["is_closed"] ? const Icon(Icons.event_busy_outlined,color: Colors.red,):const Icon(Icons.event_available,color: Colors.green,)
                       ],
                     ),
-                    trailing: const Icon(Icons.arrow_forward_ios),
+                    trailing: const Icon(Icons.arrow_forward_ios,color: AppStyle.BarBackgroundColor),
                     onTap: () {
                       Navigator.of(context).push(
                         MaterialPageRoute(

@@ -26,7 +26,7 @@ class _YelpOverViewState  extends State<YelpOverview> {
         child: Scaffold(
           appBar: AppBar(
             leading: IconButton(
-              icon: const Icon(Icons.arrow_back),
+              icon: const Icon(Icons.arrow_back, color: AppStyle.BarBackgroundColor),
               onPressed: () {
                 Navigator.of(context).pop();
               },
@@ -40,6 +40,7 @@ class _YelpOverViewState  extends State<YelpOverview> {
             ],
           ),
           bottomNavigationBar: const Material(
+            color: AppStyle.BarBackgroundColor,
             child: TabBar(
               labelColor: AppStyle.labelColor, // Color of the selected tab
               unselectedLabelColor: AppStyle.unselectedLabelColor, // Color of the unselected ta

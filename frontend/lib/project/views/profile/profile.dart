@@ -62,14 +62,16 @@ class _ProfileState extends State<Profile> {
                         'Are you sure to exit the system?'
                     );
                     },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.blue,
-                      padding: const EdgeInsets.symmetric(horizontal: 100, vertical: 20),
+                    style: TextButton.styleFrom(
+                      foregroundColor: AppStyle.buttonForegroundColor,
+                      elevation: 2,
+                      backgroundColor: AppStyle.buttonBackgroundColor,
+                      minimumSize: const Size(double.infinity, 55),
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8.0),
+                        borderRadius: BorderRadius.circular(10), // 设置按钮的圆角半径
                       ),
                     ),
-                    child: const Text('Log Out', style: AppStyle.subheadingFont),
+                    child: const Text('Log Out'),
                   ),
                 ],
               ),
