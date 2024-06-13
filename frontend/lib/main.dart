@@ -4,12 +4,12 @@ import 'package:frontend/project/constants/app_style.dart';
 import 'package:frontend/project/views/auth/sign_up.dart';
 import 'package:frontend/project/views/home/home.dart';
 import 'project/views/auth/sign_in.dart';
+
 void main() => runApp(
   DevicePreview(
     builder: (context) => const MyApp(), // Wrap your app
   ),
 );
-
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -22,12 +22,16 @@ class MyApp extends StatelessWidget {
         home: const SignInHttp(), //作为应用的home(首页)
         theme: ThemeData(
           primaryColor: AppStyle.primaryColor,
+          scaffoldBackgroundColor: Colors.white,
           textSelectionTheme: const TextSelectionThemeData(
             cursorColor: Colors.black,
           ),
           colorScheme: ColorScheme.fromSeed(
             seedColor: Colors.white,
             brightness: Brightness.light,
+          ),
+          appBarTheme: const AppBarTheme(
+            backgroundColor: Colors.white
           ),
         ),
         //注册路由表

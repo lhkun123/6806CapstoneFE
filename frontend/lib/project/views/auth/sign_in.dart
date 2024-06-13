@@ -39,14 +39,17 @@ class SignInHttp extends StatefulWidget {
 class _SignInHttpState extends State<SignInHttp> {
   FormData formData = FormData();
   late bool _isObscure = true;
+  final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         title: const Text('  '),
       ),
       body: Form(
+        key: _formKey,
         child: Scrollbar(
           child: SingleChildScrollView(
             padding: const EdgeInsets.all(16),
@@ -81,6 +84,7 @@ class _SignInHttpState extends State<SignInHttp> {
                         focusedBorder: OutlineInputBorder(
                           borderSide: BorderSide(color: Color.fromRGBO(130, 130, 130, 1), width: 1.5),
                         ),
+                        errorStyle: AppStyle.errorFont
                       ),
                       onChanged: (value) {
                         formData.email = value;
@@ -106,11 +110,15 @@ class _SignInHttpState extends State<SignInHttp> {
                         focusedBorder: const OutlineInputBorder(
                           borderSide: BorderSide(color: Color.fromRGBO(130, 130, 130, 1), width: 1.5),
                         ),
+                        errorStyle: AppStyle.errorFont,
                         suffixIcon: IconButton(
-                          icon: const Icon(
-                            Icons.remove_red_eye,
-                            color: Color.fromRGBO(130, 130, 130, 1),
-                          ),
+                          icon: _isObscure ? const Icon(
+                              Icons.remove_red_eye_outlined,
+                              color: Color.fromRGBO(130, 130, 130, 1),
+                            ) : const Icon(
+                              Icons.remove_red_eye,
+                              color: Color.fromRGBO(130, 130, 130, 1),
+                            ),
                           onPressed: () {
                             // 修改 state 内部变量, 且需要界面内容更新, 需要使用 setState()
                             setState(() {
@@ -122,11 +130,13 @@ class _SignInHttpState extends State<SignInHttp> {
                     ),
                     TextButton(
                       onPressed: () async {
-                        _showDialog(switch (200) {
-                          200 => 'Successfully signed in.',
-                          401 => 'Unable to sign in.',
-                          _ => 'Something went wrong. Please try again.'
-                        });
+                        if (_formKey.currentState!.validate()) {
+                          _showDialog(switch (200) {
+                            200 => 'Successfully signed in.',
+                            401 => 'Unable to sign in.',
+                            _ => 'Something went wrong. Please try again.'
+                          });
+                        }
                       },
                       style: TextButton.styleFrom(
                         foregroundColor: AppStyle.buttonForegroundColor,

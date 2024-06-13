@@ -50,6 +50,13 @@ class AppStyle {
     color: Colors.black,
   );
 
+  static const errorFont = TextStyle(
+    fontFamily: 'Roboto',
+    fontWeight: FontWeight.normal,
+    fontSize: 12,
+    color: Colors.red,
+  );
+
 
   // Colors
   static const primaryColor = Colors.white;
