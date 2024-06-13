@@ -2,6 +2,19 @@ import 'package:flutter/material.dart';
 
 class AppStyle {
   // Fonts
+  static const hugeHeadingFont = TextStyle(
+    fontFamily: 'Roboto',
+    fontWeight: FontWeight.bold,
+    fontSize: 57,
+    color: Color.fromRGBO(56, 137, 242, 1),
+    height: 0.8
+  );
+  static const sloganFont = TextStyle(
+    fontFamily: 'Roboto',
+    fontWeight: FontWeight.bold,
+    fontSize: 15,
+    color: Color.fromRGBO(130, 130, 130, 1),
+  );
   static const bigheadingFont = TextStyle(
     fontFamily: 'Roboto',
     fontWeight: FontWeight.bold,
@@ -40,14 +53,15 @@ class AppStyle {
 
   // Colors
   static const primaryColor = Colors.white;
-  static const cardBackgroundColor = Color(0xFFFFFFFF);
-  static const largeBackgroundColor = Color(0xFFF5F5F5); // 也用作小按钮颜色
-  static const textColor = Color(0xFF262F34);
-  static const labelColor=Colors.black;
-  static const unselectedLabelColor= Colors.grey;
-  static const indicatorColor=Colors.black;
-  static const buttonBackgroundColor=Colors.grey;
+  static const cardBackgroundColor = Color.fromRGBO(56, 137, 242, 1);
+  static const largeBackgroundColor = Color.fromRGBO(56, 137, 242, 1); // 也用作小按钮颜色
+  static const textColor = Colors.black;
+  static const labelColor = Colors.white;
+  static const unselectedLabelColor= Color.fromRGBO(242, 242, 235, 0.5);
+  static const indicatorColor = Color.fromRGBO(56, 137, 242, 1);
+  static const buttonBackgroundColor = Color.fromRGBO(56, 137, 242, 1);
   static const buttonForegroundColor=Colors.white;
+  static const BarBackgroundColor = Color.fromRGBO(56, 137, 242, 1);
 
 
 

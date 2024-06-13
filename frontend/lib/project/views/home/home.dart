@@ -25,6 +25,7 @@ class Home extends StatelessWidget {
             ],
           ),
           bottomNavigationBar: const Material(
+            color: AppStyle.BarBackgroundColor,
             child: TabBar(
               labelColor: AppStyle.labelColor, // Color of the selected tab
               unselectedLabelColor: AppStyle.unselectedLabelColor, // Color of the unselected ta

@@ -187,7 +187,7 @@ class _YelpDetailState extends State<YelpDetail> {
               Center(
                 child: IconButton(
                   onPressed: () {},
-                  icon: const Icon(CupertinoIcons.heart_solid),
+                  icon: const Icon(CupertinoIcons.heart_solid, color: AppStyle.BarBackgroundColor),
                 ),
               ),
               const SizedBox(height: 16),
@@ -201,14 +201,14 @@ class _YelpDetailState extends State<YelpDetail> {
                         const SizedBox(height: 8),
                         IconButton(
                           icon: const Icon(Icons.facebook),
-                          color: Colors.blue,
+                          color: AppStyle.BarBackgroundColor,
                           onPressed: () {
                             // Handle Facebook share
                           },
                         ),
                         IconButton(
                           icon: const Icon(FontAwesomeIcons.twitter),
-                          color: Colors.blue,
+                          color: AppStyle.BarBackgroundColor,
                           onPressed: () {
                             // Handle Twitter share
                           },
@@ -227,7 +227,7 @@ class _YelpDetailState extends State<YelpDetail> {
                       duration: const Duration(milliseconds: 1000),
                       curve: Curves.linear,
                     ),
-                    child: const Icon(Icons.arrow_back_ios,color: AppStyle.labelColor),
+                    child: const Icon(Icons.arrow_back_ios,color: AppStyle.BarBackgroundColor),
                   ),
                   Expanded(
                     child: CarouselSlider(
@@ -253,7 +253,7 @@ class _YelpDetailState extends State<YelpDetail> {
                       duration: const Duration(milliseconds: 1000),
                       curve: Curves.linear,
                     ),
-                    child: const Icon(Icons.arrow_forward_ios,color: AppStyle.labelColor),
+                    child: const Icon(Icons.arrow_forward_ios,color: AppStyle.BarBackgroundColor),
 
                   ),
                 ],
