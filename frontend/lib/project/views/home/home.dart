@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'package:intl/intl.dart';
+
 import 'package:frontend/project/constants/app_style.dart';
 import 'package:frontend/project/views/profile/profile.dart';
 import 'package:frontend/project/views/yelp/yelp_search.dart';
@@ -11,6 +11,10 @@ import 'package:frontend/project/views/fields/field_detail_page.dart';
 import 'weatherDetail/weather_detail.dart'; 
 
 class Home extends StatefulWidget {
+
+  const Home({
+    super.key,
+  });
   @override
   _HomeState createState() => _HomeState();
 }
@@ -58,9 +62,7 @@ class _HomeState extends State<Home> {
     return DefaultTabController(
       length: 4, // Total number of tabs
       child: Scaffold(
-        appBar: AppBar(
-          title: const Text('Your App Title'),
-        ),
+
         body: TabBarView(
           children: [
             weatherData == null
