@@ -72,14 +72,18 @@ class _SignInHttpState extends State<SignInHttp> {
                       decoration: const InputDecoration(
                         labelText: 'Email',
                         labelStyle: TextStyle(
-                          color: Color.fromRGBO(130, 130, 130, 1), // Color of the label when not focused
+                          color: Color.fromRGBO(130, 130, 130,
+                              1), // Color of the label when not focused
                         ),
                         border: OutlineInputBorder(
-                          borderSide: BorderSide(color: Color.fromRGBO(130, 130, 130, 1)),
+                          borderSide: BorderSide(
+                              color: Color.fromRGBO(130, 130, 130, 1)),
                         ),
                         // Focused border when the TextField is focused
                         focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Color.fromRGBO(130, 130, 130, 1), width: 1.5),
+                          borderSide: BorderSide(
+                              color: Color.fromRGBO(130, 130, 130, 1),
+                              width: 1.5),
                         ),
                       ),
                       onChanged: (value) {
@@ -97,14 +101,18 @@ class _SignInHttpState extends State<SignInHttp> {
                       decoration: InputDecoration(
                         labelText: "Password",
                         labelStyle: const TextStyle(
-                          color: Color.fromRGBO(130, 130, 130, 1), // Color of the label when not focused
+                          color: Color.fromRGBO(130, 130, 130,
+                              1), // Color of the label when not focused
                         ),
                         border: const OutlineInputBorder(
-                          borderSide: BorderSide(color: Color.fromRGBO(130, 130, 130, 1)),
+                          borderSide: BorderSide(
+                              color: Color.fromRGBO(130, 130, 130, 1)),
                         ),
                         // Focused border when the TextField is focused
                         focusedBorder: const OutlineInputBorder(
-                          borderSide: BorderSide(color: Color.fromRGBO(130, 130, 130, 1), width: 1.5),
+                          borderSide: BorderSide(
+                              color: Color.fromRGBO(130, 130, 130, 1),
+                              width: 1.5),
                         ),
                         suffixIcon: IconButton(
                           icon: const Icon(
@@ -157,7 +165,7 @@ class _SignInHttpState extends State<SignInHttp> {
                       child: const Text('Sign Up'),
                     ),
                   ].expand(
-                        (widget) => [
+                    (widget) => [
                       widget,
                       const SizedBox(
                         height: 18,
@@ -183,7 +191,7 @@ class _SignInHttpState extends State<SignInHttp> {
             onPressed: () {
               Navigator.of(context).push(
                 MaterialPageRoute(
-                  builder: (context) => const Home(),
+                  builder: (context) => Home(), // 不使用 const 关键字
                 ),
               );
             },
@@ -214,6 +222,6 @@ FormData _$FormDataFromJson(Map<String, dynamic> json) {
 }
 
 Map<String, dynamic> _$FormDataToJson(FormData instance) => <String, dynamic>{
-  'email': instance.email,
-  'password': instance.password,
-};
+      'email': instance.email,
+      'password': instance.password,
+    };
