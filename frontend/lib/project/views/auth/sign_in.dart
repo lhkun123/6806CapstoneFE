@@ -115,7 +115,7 @@ class _SignInHttpState extends State<SignInHttp> {
                               width: 1.5),
                         ),
                         suffixIcon: IconButton(
-                          icon: const Icon(
+                          icon:  const Icon(
                             Icons.remove_red_eye,
                             color: Color.fromRGBO(130, 130, 130, 1),
                           ),
@@ -189,10 +189,10 @@ class _SignInHttpState extends State<SignInHttp> {
         actions: [
           CupertinoDialogAction(
             onPressed: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => Home(), // 不使用 const 关键字
-                ),
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(builder: (context) => const Home()),
+                    (Route<dynamic> route) => false,
               );
             },
             child: const Text(

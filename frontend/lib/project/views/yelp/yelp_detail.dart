@@ -28,7 +28,6 @@ class _YelpDetailState extends State<YelpDetail> {
   void initState() {
     super.initState();
     try {
-      print(query);
       _fetchDetail();
     } on Exception catch (e) {
       print('Error: $e');
@@ -46,11 +45,9 @@ class _YelpDetailState extends State<YelpDetail> {
       if (response.statusCode == 200) {
         setState(() {
           detail = response.data;
-          print(detail);
           for (var i = 0; i < detail!["photos"].length; i++) {
             imgList.add(detail!["photos"][i]);
           }
-          print(imgList);
         });
       } else {
         throw Exception('Failed to fetch detail!');

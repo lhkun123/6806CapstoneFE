@@ -347,7 +347,7 @@ class _YelpSearchState extends State<YelpSearch> {
                         const SizedBox(width: 10),
                         Text("${(business['distance'] / 1609.0).toStringAsFixed(2)} mi",style: AppStyle.bodyTextFont),
                         const SizedBox(width: 5),
-                        business["is_closed"] ? const Icon(Icons.event_busy_outlined,color: Colors.red,):const Icon(Icons.event_available,color: Colors.green,)
+                        business["is_closed"] ? const Icon(Icons.clear_rounded,color: Colors.red,):const Icon(Icons.check,color: Colors.green,)
                       ],
                     ),
                     trailing: const Icon(Icons.arrow_forward_ios,color: AppStyle.BarBackgroundColor),
