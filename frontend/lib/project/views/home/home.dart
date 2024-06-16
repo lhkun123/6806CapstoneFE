@@ -107,13 +107,13 @@ class WeatherHome extends StatelessWidget {
       child: Column(
         children: [
           WeatherCard(weatherData: weatherData),
-          SizedBox(height: 10),
-          Text("Today's Recommendation",
+          const SizedBox(height: 10),
+          const Text("Today's Recommendation",
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           Text(
             recommendationData?['advice'] ?? 'No recommendations available.',
-            style: TextStyle(fontSize: 16),
+            style: const TextStyle(fontSize: 16),
           ),
           if (recommendationData != null)
             for (var location in recommendationData!['fields'])
@@ -156,7 +156,7 @@ class WeatherCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      margin: EdgeInsets.all(16.0),
+      margin: const EdgeInsets.all(16.0),
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: GestureDetector(
@@ -225,7 +225,7 @@ class RecommendationCard extends StatelessWidget {
               children: [
                 Text(location['name'] ?? 'No Name',
                     style:
-                        TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                        const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
                 Text(location['location'] ?? 'No Location'),
                 Text('Rating: ${location['rating'] ?? 'No Rating'}'),
                 Text(
@@ -233,7 +233,7 @@ class RecommendationCard extends StatelessWidget {
                 Text('Distance: ${location['distance'] ?? 'No Distance'} km'),
                 Text(
                     'Estimated Time: ${location['estimated_time'] ?? 'No Estimated Time'}'),
-                SizedBox(height: 8),
+                const SizedBox(height: 8),
                 Align(
                   alignment: Alignment.center,
                   child: ElevatedButton(
@@ -246,7 +246,7 @@ class RecommendationCard extends StatelessWidget {
                         ),
                       );
                     },
-                    child: Text('View Details'),
+                    child: const Text('View Details'),
                   ),
                 ),
               ],
