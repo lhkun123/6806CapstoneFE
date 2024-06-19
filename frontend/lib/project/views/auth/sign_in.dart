@@ -57,17 +57,9 @@ class _SignInHttpState extends State<SignInHttp> {
               child: Column(
                 children: [
                   ...[
-                    const SizedBox(
-                      height: 100,
-                    ),
-                    const Text(
-                      'VanLife',
-                      style: AppStyle.hugeHeadingFont,
-                    ),
-                    const Text(
-                      'Simplifying Outdoor Fun in Vancouver.',
-                      style: AppStyle.sloganFont,
-                    ),
+                    const SizedBox(height: 100),
+                    const Text('VanLife', style: AppStyle.hugeHeadingFont),
+                    const Text('Simplifying Outdoor Fun in Vancouver.', style: AppStyle.sloganFont),
                     TextFormField(
                       autofocus: true,
                       textInputAction: TextInputAction.next,
@@ -147,7 +139,7 @@ class _SignInHttpState extends State<SignInHttp> {
                           borderRadius: BorderRadius.circular(10), // 设置按钮的圆角半径
                         ),
                       ),
-                      child: const Text('Sign In'),
+                      child: const Text('Sign In', style: AppStyle.bigButtonFont),
                     ),
                     TextButton(
                       onPressed: () => Navigator.of(context).push(
@@ -164,7 +156,7 @@ class _SignInHttpState extends State<SignInHttp> {
                           borderRadius: BorderRadius.circular(10), // 设置按钮的圆角半径
                         ),
                       ),
-                      child: const Text('Sign Up'),
+                      child: const Text('Sign Up', style: AppStyle.bigButtonFont),
                     ),
                   ].expand(
                         (widget) => [

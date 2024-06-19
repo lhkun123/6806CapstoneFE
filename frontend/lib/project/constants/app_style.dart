@@ -9,19 +9,36 @@ class AppStyle {
     color: Color.fromRGBO(56, 137, 242, 1),
     height: 0.8
   );
+
   static const sloganFont = TextStyle(
     fontFamily: 'Roboto',
     fontWeight: FontWeight.bold,
     fontSize: 15,
     color: Color.fromRGBO(130, 130, 130, 1),
   );
-  static const bigheadingFont = TextStyle(
+
+  static const barHeadingFont = TextStyle(
+    fontFamily: 'Roboto',
+    fontWeight: FontWeight.normal,
+    fontSize: 22,
+    color: Colors.white,
+  );
+
+  static const bigButtonFont = TextStyle(
+    fontFamily: 'Roboto',
+    fontWeight: FontWeight.normal,
+    fontSize: 18,
+    color: Colors.white,
+  );
+
+  static const bigHeadingFont = TextStyle(
     fontFamily: 'Roboto',
     fontWeight: FontWeight.bold,
     fontSize: 22,
     color: Colors.black,
   );
   // Fonts
+
   static const headingFont = TextStyle(
     fontFamily: 'Roboto',
     fontWeight: FontWeight.bold,
@@ -68,7 +85,8 @@ class AppStyle {
   static const indicatorColor = Color.fromRGBO(56, 137, 242, 1);
   static const buttonBackgroundColor = Color.fromRGBO(56, 137, 242, 1);
   static const buttonForegroundColor=Colors.white;
-  static const BarBackgroundColor = Color.fromRGBO(56, 137, 242, 1);
+  static const barBackgroundColor = Color.fromRGBO(56, 137, 242, 1);
+  static const systemGreyColor = Color.fromRGBO(130, 130, 130, 1);
 
 
 
