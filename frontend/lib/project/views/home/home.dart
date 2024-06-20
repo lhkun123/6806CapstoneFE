@@ -1,15 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/project/constants/api_request.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
 import 'package:frontend/project/constants/app_style.dart';
 import 'package:frontend/project/views/profile/profile.dart';
 import 'package:frontend/project/views/yelp/yelp_search.dart';
-import 'package:frontend/project/views/fields/fields_list_page.dart'; 
-import 'package:frontend/project/views/fields/field_detail_page.dart'; 
-
-import 'home_field_detail_page.dart';
-import 'weatherDetail/weather_detail.dart';
+import 'package:frontend/project/views/fields/fields_list_page.dart';
+import '../fields/home_field_detail_page.dart';
+import '../weather/weather_detail.dart';
 
 class Home extends StatefulWidget {
   const Home({
