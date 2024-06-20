@@ -1,9 +1,12 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:frontend/project/constants/api_request.dart';
 import 'package:frontend/project/views/auth/sign_up.dart';
 import 'package:http/http.dart' as http;
 import 'package:json_annotation/json_annotation.dart';
 import 'package:frontend/project/util/validate.dart';
+import 'package:localstorage/localstorage.dart';
 
 import '../../constants/app_style.dart';
 import '../home/home.dart';
@@ -39,6 +42,32 @@ class SignInHttp extends StatefulWidget {
 class _SignInHttpState extends State<SignInHttp> {
   FormData formData = FormData();
   late bool _isObscure = true;
+  ApiRequest apiRequest=ApiRequest();
+  late Map<String, dynamic> query = {
+    "url": "http://localhost:8080/user-tokens",
+    "body":{
+      "email":formData.email,
+      "password":formData.password
+    }
+  };
+  void _fetchToken() async {
+    await apiRequest.postRequest(query).then((response) {
+      if (response.data["code"] == "200") {
+        localStorage.setItem('token', response.data["data"]);
+      } else {
+        throw Exception('Failed to fetch token');
+      }
+      _showDialog(switch (response.data["code"]) {
+        "200" => 'Successfully signed in.',
+      "401" => 'Unable to sign in.',
+      _ => 'Something went wrong. Please try again.'
+    });
+    });
+  }
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -115,7 +144,7 @@ class _SignInHttpState extends State<SignInHttp> {
                               width: 1.5),
                         ),
                         suffixIcon: IconButton(
-                          icon: const Icon(
+                          icon:  const Icon(
                             Icons.remove_red_eye,
                             color: Color.fromRGBO(130, 130, 130, 1),
                           ),
@@ -130,11 +159,7 @@ class _SignInHttpState extends State<SignInHttp> {
                     ),
                     TextButton(
                       onPressed: () async {
-                        _showDialog(switch (200) {
-                          200 => 'Successfully signed in.',
-                          401 => 'Unable to sign in.',
-                          _ => 'Something went wrong. Please try again.'
-                        });
+                        _fetchToken();
                       },
                       style: TextButton.styleFrom(
                         foregroundColor: AppStyle.buttonForegroundColor,
@@ -189,11 +214,18 @@ class _SignInHttpState extends State<SignInHttp> {
         actions: [
           CupertinoDialogAction(
             onPressed: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => Home(), // 不使用 const 关键字
-                ),
-              );
+              if(message=='Successfully signed in.') {
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(builder: (context) => const Home()),
+                      (Route<dynamic> route) => false,
+                );
+              }else{
+                setState(() {
+                  formData.email="";
+                  formData.password="";
+                });
+              }
             },
             child: const Text(
               "OK",

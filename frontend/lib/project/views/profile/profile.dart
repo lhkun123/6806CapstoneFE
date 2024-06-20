@@ -1,20 +1,43 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:frontend/project/constants/api_request.dart';
 import 'package:frontend/project/constants/app_style.dart';
 import 'package:frontend/project/views/auth/sign_in.dart';
+import 'package:localstorage/localstorage.dart';
 
 class Profile extends StatefulWidget {
   const Profile({
-
     super.key,
   });
-
   @override
   State<Profile> createState() => _ProfileState();
 }
 
 class _ProfileState extends State<Profile> {
-
+  late Map<String, dynamic> profileInformation={};
+  Map<String, dynamic> query = {
+    "url": "http://localhost:8080/users",
+    "token": localStorage.getItem("token")
+  };
+  ApiRequest apiRequest=ApiRequest();
+  void _fetchProfile() async {
+    await apiRequest.getRequest(query).then((response) {
+      print(response.data);
+      print(response.data["data"]);
+      if (response.data["code"] =="200") {
+        setState(() {
+          profileInformation = response.data["data"];
+        });
+      } else {
+        throw Exception('Failed to fetch profile information');
+      }
+    });
+  }
+  @override
+  void initState() {
+    super.initState();
+    _fetchProfile();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,7 +45,13 @@ class _ProfileState extends State<Profile> {
         title: const Text('Profile', style: AppStyle.bigheadingFont),
         centerTitle: true,
       ),
-      body: SingleChildScrollView(
+      body: profileInformation.isEmpty
+          ? const Center(
+        child: CircularProgressIndicator(
+          color: AppStyle.indicatorColor,
+        ),
+      ) :
+      SingleChildScrollView(
         child: Column(
           children: [
             const SizedBox(height: 20),
@@ -35,20 +64,25 @@ class _ProfileState extends State<Profile> {
               padding: const EdgeInsets.symmetric(horizontal: 20.0),
               child: Column(
                 children: [
-                  const ProfileItem(
+                  ProfileItem(
                     title: 'Username',
-                    value: 'name',
-                    icon: Icons.edit,
+                    value: profileInformation["nick"],
+                    icon: Icons.verified_user,
                   ),
-                  const ProfileItem(
-                    title: 'Email',
-                    value: 'name@domain.com',
-                    icon: Icons.edit,
+                  ProfileItem(
+                    title: 'Birthday',
+                    value: profileInformation["birth"],
+                    icon: Icons.cake,
+                  ),
+                  ProfileItem(
+                    title: 'Gender',
+                    value: '',
+                    icon: profileInformation["gender"]=="0" ? Icons.female:Icons.male,
                   ),
                   const ProfileItem(
                     title: 'Favorites',
                     value: '',
-                    icon: Icons.arrow_forward_ios,
+                    icon: Icons.favorite,
                   ),
                   const ProfileItem(
                     title: 'About',
@@ -99,6 +133,7 @@ class _ProfileState extends State<Profile> {
               ),
             ),
             CupertinoDialogAction(onPressed: (){
+              localStorage.removeItem("token");
               Navigator.pushAndRemoveUntil(
                 context,
                 MaterialPageRoute(builder: (context) => const SignInHttp()),
@@ -120,6 +155,7 @@ class _ProfileState extends State<Profile> {
 class ProfileItem extends StatelessWidget {
   final String title;
   final String value;
+
   final IconData icon;
 
   const ProfileItem({
@@ -139,8 +175,10 @@ class ProfileItem extends StatelessWidget {
             style: AppStyle.subheadingFont,
           ),
           subtitle: value.isNotEmpty ? Text(value, style: AppStyle.bodyTextFont) : null,
-          trailing: Icon(icon, color: Colors.blue),
-          onTap: () {},
+          trailing:  Icon(icon, color: Colors.blue),
+          onTap: () {
+
+          },
         ),
         const Divider(),
       ],

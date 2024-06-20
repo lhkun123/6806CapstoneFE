@@ -1,16 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'package:intl/intl.dart';
+
 import 'package:frontend/project/constants/app_style.dart';
 import 'package:frontend/project/views/profile/profile.dart';
 import 'package:frontend/project/views/yelp/yelp_search.dart';
-import 'package:frontend/project/views/fields/fields_list_page.dart'; 
-import 'package:frontend/project/views/fields/field_detail_page.dart'; 
+import 'package:frontend/project/views/fields/fields_list_page.dart';
+import 'package:frontend/project/views/fields/field_detail_page.dart';
+import 'package:frontend/project/views/home/home_field_detail_page.dart';
 
-import 'weatherDetail/weather_detail.dart'; 
+import 'weatherDetail/weather_detail.dart';
 
 class Home extends StatefulWidget {
+  const Home({
+    super.key,
+  });
+
   @override
   _HomeState createState() => _HomeState();
 }
@@ -46,7 +51,7 @@ class _HomeState extends State<Home> {
       final data = json.decode(response.body);
       setState(() {
         recommendationData = data;
-        print("Recommendation data: $recommendationData"); 
+        print("Recommendation data: $recommendationData");
       });
     } catch (error) {
       print('Error fetching recommendation data: $error');
@@ -58,9 +63,6 @@ class _HomeState extends State<Home> {
     return DefaultTabController(
       length: 4, // Total number of tabs
       child: Scaffold(
-        appBar: AppBar(
-          title: const Text('Your App Title'),
-        ),
         body: TabBarView(
           children: [
             weatherData == null
@@ -101,21 +103,44 @@ class WeatherHome extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    bool badWeather =
+        recommendationData == null || recommendationData!['fields'].isEmpty;
+
     return SingleChildScrollView(
       child: Column(
         children: [
           WeatherCard(weatherData: weatherData),
-          SizedBox(height: 10),
-          Text("Today's Recommendation",
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-          SizedBox(height: 10),
-          Text(
-            recommendationData?['advice'] ?? 'No recommendations available.',
-            style: TextStyle(fontSize: 16),
-          ),
-          if (recommendationData != null)
-            for (var location in recommendationData!['fields'])
-              RecommendationCard(location: location),
+          const SizedBox(height: 10),
+          if (badWeather)
+            Column(
+              children: [
+                const Text("The weather is not good for outdoor activities.",
+                    style:
+                        TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                const SizedBox(height: 10),
+                const Text("You can choose indoor activities.",
+                    style: TextStyle(fontSize: 16)),
+                const SizedBox(height: 10),
+                Image.asset('assets/image.png'), // 确保你的图片路径正确
+              ],
+            )
+          else
+            Column(
+              children: [
+                const Text("Today's Recommendation",
+                    style:
+                        TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                const SizedBox(height: 10),
+                Text(
+                  recommendationData?['advice'] ??
+                      'No recommendations available.',
+                  style: const TextStyle(fontSize: 16),
+                ),
+                if (recommendationData != null)
+                  for (var location in recommendationData!['fields'])
+                    RecommendationCard(location: location),
+              ],
+            ),
         ],
       ),
     );
@@ -154,7 +179,7 @@ class WeatherCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      margin: EdgeInsets.all(16.0),
+      margin: const EdgeInsets.all(16.0),
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: GestureDetector(
@@ -222,8 +247,8 @@ class RecommendationCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(location['name'] ?? 'No Name',
-                    style:
-                        TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                    style: const TextStyle(
+                        fontSize: 20, fontWeight: FontWeight.bold)),
                 Text(location['location'] ?? 'No Location'),
                 Text('Rating: ${location['rating'] ?? 'No Rating'}'),
                 Text(
@@ -231,7 +256,7 @@ class RecommendationCard extends StatelessWidget {
                 Text('Distance: ${location['distance'] ?? 'No Distance'} km'),
                 Text(
                     'Estimated Time: ${location['estimated_time'] ?? 'No Estimated Time'}'),
-                SizedBox(height: 8),
+                const SizedBox(height: 8),
                 Align(
                   alignment: Alignment.center,
                   child: ElevatedButton(
@@ -239,12 +264,12 @@ class RecommendationCard extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) =>
-                              FieldDetailPage(field: location),
+                          builder: (context) => HomeFieldDetailPage(
+                              field: location), // 确保此处导入了HomeFieldDetailPage
                         ),
                       );
                     },
-                    child: Text('View Details'),
+                    child: const Text('View Details'),
                   ),
                 ),
               ],
