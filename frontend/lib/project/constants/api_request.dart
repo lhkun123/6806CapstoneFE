@@ -19,6 +19,7 @@ class ApiRequest{
         query["url"],
         options: Options(headers: {
         "Content-Type": "application/json",
+          "Authorization": query["token"],
         }),
         data: jsonEncode(query["body"]),
     );
@@ -28,6 +29,17 @@ class ApiRequest{
     final response =await dio.put(
         query["url"],
         queryParameters: query["parameters"]
+    );
+    return response;
+  }
+  Future<Response> deleteRequest(Map<String,dynamic> query) async {
+    final response =await dio.delete(
+        query["url"],
+        queryParameters: query["parameters"],
+        options: Options(headers: {
+          "Content-Type": "application/json",
+          "Authorization": query["token"],
+        })
     );
     return response;
   }

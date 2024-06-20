@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:frontend/project/constants/app_style.dart';
+import 'package:localstorage/localstorage.dart';
 import '../../constants/api_key.dart';
 import '../../constants/api_request.dart';
 import 'package:carousel_slider/carousel_slider.dart';
@@ -21,6 +22,7 @@ class _YelpDetailState extends State<YelpDetail> {
   };
   ApiRequest apiRequest = ApiRequest();
   Map<String, dynamic>? detail;
+  bool favourite=false;
   List<String> imgList = [];
   CarouselController buttonCarouselController = CarouselController();
 
@@ -29,6 +31,7 @@ class _YelpDetailState extends State<YelpDetail> {
     super.initState();
     try {
       _fetchDetail();
+
     } on Exception catch (e) {
       print('Error: $e');
     }
@@ -40,6 +43,61 @@ class _YelpDetailState extends State<YelpDetail> {
     super.dispose();
   }
 
+  Future<void> _fetchFavourite() async {
+    Map<String, dynamic> queryFavourite = {
+      "url": "http://localhost:8080/favorites",
+      "token":localStorage.getItem("token")
+    };
+    await apiRequest.getRequest(queryFavourite).then((response) {
+      if (response.statusCode == 200) {
+          if(response.data["data"]["entertainment"]!=null && response.data["data"]["entertainment"].any((e) => e.toString().contains(widget.alias))){
+            setState(() {
+              favourite=true;
+            });
+          }
+      } else {
+        throw Exception('Failed to fetch favourite!');
+      }
+    });
+
+  }
+  void _addOrRemoveFavorite() async {
+    Map<String, dynamic> queryFavourite = {
+      "url": "http://localhost:8080/favorites",
+      "token":localStorage.getItem("token"),
+      "body":{
+        "alias":widget.alias,
+        "category":"entertainment"
+      },
+      "parameters":{
+        "alias":widget.alias,
+        "category":"entertainment"
+      }
+    };
+    if(!favourite){
+
+      await apiRequest.postRequest(queryFavourite).then((response) {
+
+        if (response.statusCode == 200) {
+          setState(() {
+              favourite=true;
+          });
+        } else {
+          throw Exception('Failed to add this item to favorite!');
+        }
+      });
+    }else{
+      await apiRequest.deleteRequest(queryFavourite).then((response) {
+        if (response.statusCode == 200) {
+          setState(() {
+            favourite=false;
+          });
+        } else {
+          throw Exception('Failed to delete this item from favorite!');
+        }
+      });
+    }
+  }
   void _fetchDetail() async {
     await apiRequest.getRequest(query).then((response) {
       if (response.statusCode == 200) {
@@ -49,6 +107,7 @@ class _YelpDetailState extends State<YelpDetail> {
             imgList.add(detail!["photos"][i]);
           }
         });
+        _fetchFavourite();
       } else {
         throw Exception('Failed to fetch detail!');
       }
@@ -183,8 +242,14 @@ class _YelpDetailState extends State<YelpDetail> {
               const SizedBox(height: 16),
               Center(
                 child: IconButton(
-                  onPressed: () {},
-                  icon: const Icon(CupertinoIcons.heart_solid, color: AppStyle.barBackgroundColor),
+                  onPressed: () {
+                    if(favourite){
+                      _showDialog("Are you sure to remove this from your favourite list?");
+                    }else{
+                      _showDialog("${detail?["name"]} has been added to you favourite list!");
+                    }
+                  },
+                   icon: Icon(CupertinoIcons.heart_solid, color: favourite? Colors.red:AppStyle.barBackgroundColor),
                 ),
               ),
               const SizedBox(height: 16),
@@ -262,5 +327,42 @@ class _YelpDetailState extends State<YelpDetail> {
       ),
     );
   }
+  void _showDialog(String message) {
+    showDialog<void>(
+      context: context,
+      builder: (context) => CupertinoAlertDialog(
+        title: const Text("Notification"),
+        actions: [
+          if (favourite)
+            CupertinoDialogAction(
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+              },
+              child: const Text(
+                "Cancel",
+                style: AppStyle.bodyTextFont,
+              ),
+            ),
+          CupertinoDialogAction(
+            onPressed: () {
+              _addOrRemoveFavorite();
+              favourite = !favourite;
+              Navigator.of(context).pop();
+            },
+            child: const Text(
+              "OK",
+              style: AppStyle.bodyTextFont,
+            ),
+          ),
+        ],
+        content: Text(
+          message,
+          style: AppStyle.bodyTextFont,
+        ),
+      ),
+    );
+  }
+
+
 }
 
