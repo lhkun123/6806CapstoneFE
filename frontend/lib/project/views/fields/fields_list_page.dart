@@ -26,10 +26,10 @@ class _FieldsListPageState extends State<FieldsListPage> {
         "url": "http://localhost:8080/api/fields",
       };
       await apiRequest.getRequest(query).then((response) {
-        print(response.data);
+        print(response.data["data"]);
         if (response.statusCode==200) {
           setState(() {
-            fields = response.data; // 这里提取data字段
+            fields = response.data["data"]; // 这里提取data字段
             filteredFields = fields;
           });
         } else {

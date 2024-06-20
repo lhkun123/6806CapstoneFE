@@ -15,8 +15,8 @@ class YelpSearch extends StatefulWidget {
 }
 
 class _YelpSearchState extends State<YelpSearch> {
-  List<dynamic> businesses=[];
-  bool autoLocation=false;
+  List<dynamic> businesses = [];
+  bool autoLocation = false;
   ApiRequest apiRequest = ApiRequest();
   Map<String, dynamic> searchQuery = {
     "url": "https://api.yelp.com/v3/businesses/search",
@@ -30,6 +30,7 @@ class _YelpSearchState extends State<YelpSearch> {
 
   String selectedSortCategory = "Default";
   String selectedBusinessCategory = 'All';
+  final ScrollController _scrollController = ScrollController();
 
   @override
   void initState() {
@@ -42,7 +43,6 @@ class _YelpSearchState extends State<YelpSearch> {
   }
 
   void _fetchBusinesses() async {
-
     await apiRequest.getRequest(searchQuery).then((response) {
       if (response.statusCode == 200) {
         setState(() {
@@ -53,15 +53,13 @@ class _YelpSearchState extends State<YelpSearch> {
       }
     });
   }
+
   Future<Position> _determinePosition() async {
     bool serviceEnabled;
     LocationPermission permission;
-    // Test if location services are enabled.
+
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
-      // Location services are not enabled don't continue
-      // accessing the position and request users of the
-      // App to enable the location services.
       return Future.error('Location services are disabled.');
     }
 
@@ -69,53 +67,47 @@ class _YelpSearchState extends State<YelpSearch> {
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
       if (permission == LocationPermission.denied) {
-        // Permissions are denied, next time you could try
-        // requesting permissions again (this is also where
-        // Android's shouldShowRequestPermissionRationale
-        // returned true. According to Android guidelines
-        // your App should show an explanatory UI now.
         return Future.error('Location permissions are denied');
       }
     }
 
     if (permission == LocationPermission.deniedForever) {
-      // Permissions are denied forever, handle appropriately.
       return Future.error(
           'Location permissions are permanently denied, we cannot request permissions.');
     }
 
-    // When we reach here, permissions are granted and we can
     Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.bestForNavigation);
     Map<String, dynamic> locationQuery = {
       "url": "https://maps.googleapis.com/maps/api/geocode/json",
       "parameters": {
-          "latlng":"${position.latitude},${position.longitude}",
-          "key":ApiKey.GOOGLE_MAP_API_KEY
+        "latlng": "${position.latitude},${position.longitude}",
+        "key": ApiKey.GOOGLE_MAP_API_KEY
       },
     };
     await apiRequest.getRequest(locationQuery).then((response) {
       if (response.statusCode == 200) {
         setState(() {
-          businesses=[];
-          searchQuery["parameters"]["location"]=response.data["results"][0]["formatted_address"].split(',')[0];
+          businesses = [];
+          searchQuery["parameters"]["location"] = response.data["results"][0]["formatted_address"].split(',')[0];
         });
         _fetchBusinesses();
       } else {
         throw Exception('Failed to fetch location');
       }
     });
-    autoLocation=!autoLocation;
+    autoLocation = !autoLocation;
     return position;
   }
-  Future<List<String>> _fetchAutocompleteList(String keyword) async{
+
+  Future<List<String>> _fetchAutocompleteList(String keyword) async {
     List<String> autoCompleteKeywords = [];
-    if(keyword.isEmpty){
+    if (keyword.isEmpty) {
       return autoCompleteKeywords;
     }
     Map<String, dynamic> autocompleteQuery = {
       "url": "https://api.yelp.com/v3/autocomplete",
-      "parameters":{
-        "text":keyword
+      "parameters": {
+        "text": keyword
       },
       "token": ApiKey.YELP_API_KEY
     };
@@ -132,6 +124,7 @@ class _YelpSearchState extends State<YelpSearch> {
     });
     return autoCompleteKeywords;
   }
+
   void _sortByCategory(String category) {
     setState(() {
       if (category == 'Rating') {
@@ -154,12 +147,13 @@ class _YelpSearchState extends State<YelpSearch> {
       selectedBusinessCategory = category;
     });
   }
-  void _searchByKeyword(String keyword){
+
+  void _searchByKeyword(String keyword) {
     setState(() {
-      if(keyword.isEmpty){
+      if (keyword.isEmpty) {
         searchQuery["parameters"].remove("term");
-      }else{
-        searchQuery["parameters"]["term"]=keyword;
+      } else {
+        searchQuery["parameters"]["term"] = keyword;
       }
       _fetchBusinesses();
     });
@@ -173,29 +167,29 @@ class _YelpSearchState extends State<YelpSearch> {
       appBar: AppBar(
         title: Row(
           children: [
-            const Text('Entertainment',style: AppStyle.bigHeadingFont),
+            const Text('Entertainment', style: AppStyle.bigHeadingFont),
             const SizedBox(width: 8),
-        GestureDetector(
-          onTap: () {
-            if(!autoLocation){
-              _determinePosition();
-            }else{
-              setState(() {
-                autoLocation=!autoLocation;
-              });
-            }
-          },
-          child: Icon(
-            autoLocation ? Icons.location_on : Icons.location_off,
-            color: AppStyle.barBackgroundColor,
-          ),
-        ),
+            GestureDetector(
+              onTap: () {
+                if (!autoLocation) {
+                  _determinePosition();
+                } else {
+                  setState(() {
+                    autoLocation = !autoLocation;
+                  });
+                }
+              },
+              child: Icon(
+                autoLocation ? Icons.location_on : Icons.location_off,
+                color: AppStyle.barBackgroundColor,
+              ),
+            ),
             InkWell(
               onTap: () {
                 setState(() {
-                    if(!autoLocation){
-                      _showDialog();
-                    }
+                  if (!autoLocation) {
+                    _showDialog();
+                  }
                 });
               },
               child: Row(
@@ -215,9 +209,9 @@ class _YelpSearchState extends State<YelpSearch> {
               children: [
                 SizedBox(
                   width: 320, height: 50,
-                  child:SearchAnchor(
-                    viewBackgroundColor:AppStyle.primaryColor,
-                    dividerColor:AppStyle.primaryColor,
+                  child: SearchAnchor(
+                    viewBackgroundColor: AppStyle.primaryColor,
+                    dividerColor: AppStyle.primaryColor,
                     builder: (BuildContext context, SearchController controller) {
                       return SearchBar(
                         controller: controller,
@@ -229,25 +223,24 @@ class _YelpSearchState extends State<YelpSearch> {
                           controller.openView();
                         },
                         onChanged: (keyword) {
-
                           controller.openView();
                         },
                         leading: const Icon(Icons.search),
                       );
                     },
-                    suggestionsBuilder: (BuildContext context, SearchController controller) async{
-                        final List<String> options = await _fetchAutocompleteList(
-                            controller.text);
-                        return options.map((String keyword) => ListTile(
-                          title: Text(keyword),
-                          onTap: () {
-                            setState(() {
-                              _searchByKeyword(keyword);
-                              controller.closeView(keyword);
-                            });
-                          },
-                        )).toList();
-                    }
+                    suggestionsBuilder: (BuildContext context, SearchController controller) async {
+                      final List<String> options = await _fetchAutocompleteList(
+                          controller.text);
+                      return options.map((String keyword) => ListTile(
+                        title: Text(keyword),
+                        onTap: () {
+                          setState(() {
+                            _searchByKeyword(keyword);
+                            controller.closeView(keyword);
+                          });
+                        },
+                      )).toList();
+                    },
                   ),
                 )
               ],
@@ -262,44 +255,45 @@ class _YelpSearchState extends State<YelpSearch> {
                     children: [
                       Row(
                         children: [
-                        const Text('Sort by:  ', style: AppStyle.bodyTextFont),
-                        const SizedBox(height: 8),
-                        DropdownButton<String>(
-                        style: AppStyle.bodyTextFont,
-                        value: selectedSortCategory,
-                        onChanged: (String? newValue) {
-                        setState(() {
-                          _sortByCategory(newValue!);
-                        });
-                        },
-                        items: <String>['Default', 'Rating', 'Distance', 'Reviews']
-                            .map<DropdownMenuItem<String>>((String value) {
-                        return DropdownMenuItem<String>(
-                        value: value,
-                        child: Text(value),
-                        );
-                        }).toList(),
-                        ),
-                        const Text('Category:  ', style: AppStyle.bodyTextFont),
-                        const SizedBox(height: 8),
-                        DropdownButton<String>(
-                        style: AppStyle.bodyTextFont,
-                        value: selectedBusinessCategory,
-                        onChanged: (String? newValue) {
-                        setState(() {
-                          _searchByCategory(newValue!);
-                        });
-                        },
-                        items: <String>["All",'Food', 'Arts & Entertainment', 'Hotels & Travel', 'Health & Medical']
-                            .map<DropdownMenuItem<String>>((String value) {
-                        return DropdownMenuItem<String>(
-                        value: value,
-                        child: Text(value),
-                        );
-                        }).toList(),
-                        ),
+                          const Text('Sort by:  ', style: AppStyle.bodyTextFont),
+                          const SizedBox(height: 8),
+                          DropdownButton<String>(
+                            style: AppStyle.bodyTextFont,
+                            value: selectedSortCategory,
+                            onChanged: (String? newValue) {
+                              setState(() {
+                                _sortByCategory(newValue!);
+                              });
+                            },
+                            items: <String>['Default', 'Rating', 'Distance', 'Reviews']
+                                .map<DropdownMenuItem<String>>((String value) {
+                              return DropdownMenuItem<String>(
+                                value: value,
+                                child: Text(value),
+                              );
+                            }).toList(),
+                          ),
+                          const Text('Category:  ', style: AppStyle.bodyTextFont),
+                          const SizedBox(height: 8),
+                          DropdownButton<String>(
+                            style: AppStyle.bodyTextFont,
+                            value: selectedBusinessCategory,
+                            onChanged: (String? newValue) {
+                              setState(() {
+                                _searchByCategory(newValue!);
+                              });
+                            },
+                            items: <String>["All", 'Food', 'Arts & Entertainment', 'Hotels & Travel', 'Health & Medical']
+                                .map<DropdownMenuItem<String>>((String value) {
+                              return DropdownMenuItem<String>(
+                                value: value,
+                                child: Text(value),
+                              );
+                            }).toList(),
+                          ),
                         ],
-                      )]
+                      )
+                    ],
                   ),
                 ),
               ],
@@ -314,7 +308,9 @@ class _YelpSearchState extends State<YelpSearch> {
             )
                 : Scrollbar(
               thumbVisibility: true,
+              controller: _scrollController,  // Attach the ScrollController
               child: ListView.builder(
+                controller: _scrollController,  // Attach the ScrollController
                 itemCount: businesses.length,
                 itemBuilder: (context, index) {
                   business = businesses[index];
@@ -336,25 +332,24 @@ class _YelpSearchState extends State<YelpSearch> {
                               fillColor: Colors.yellow,
                               emptyColor: Colors.grey.withAlpha(88),
                               size: 12
-
                           ),
                         ),
                       ],
                     ),
                     subtitle: Row(
                       children: [
-                        Text('${business['review_count']} reviews',style: AppStyle.bodyTextFont),
+                        Text('${business['review_count']} reviews', style: AppStyle.bodyTextFont),
                         const SizedBox(width: 10),
-                        Text("${(business['distance'] / 1609.0).toStringAsFixed(2)} mi",style: AppStyle.bodyTextFont),
+                        Text("${(business['distance'] / 1609.0).toStringAsFixed(2)} mi", style: AppStyle.bodyTextFont),
                         const SizedBox(width: 5),
-                        business["is_closed"] ? const Icon(Icons.clear_rounded,color: Colors.red,):const Icon(Icons.check,color: Colors.green,)
+                        business["is_closed"] ? const Icon(Icons.clear_rounded, color: Colors.red,) : const Icon(Icons.check, color: Colors.green,)
                       ],
                     ),
-                    trailing: const Icon(Icons.arrow_forward_ios,color: AppStyle.barBackgroundColor),
+                    trailing: const Icon(Icons.arrow_forward_ios, color: AppStyle.barBackgroundColor),
                     onTap: () {
                       Navigator.of(context).push(
                         MaterialPageRoute(
-                          builder: (context) => YelpOverview(alias:  businesses[index]["alias"] ?? "",latitude: businesses[index]["coordinates"]["latitude"] ?? 0,longitude:  businesses[index]["coordinates"]["longitude"]?? 0,location: businesses[index]["location"]["address1"],title: businesses[index]["name"],),
+                          builder: (context) => YelpOverview(alias: businesses[index]["alias"] ?? "", latitude: businesses[index]["coordinates"]["latitude"] ?? 0, longitude: businesses[index]["coordinates"]["longitude"] ?? 0, location: businesses[index]["location"]["address1"], title: businesses[index]["name"],),
                         ),
                       );
                     },
@@ -367,47 +362,47 @@ class _YelpSearchState extends State<YelpSearch> {
       ),
     );
   }
+
   void _showDialog() {
     showDialog<void>(
-        context: context,
-        builder: (BuildContext context) {
-          TextEditingController _locationController = TextEditingController(
-              text: searchQuery["parameters"]["location"]);
-          return CupertinoAlertDialog(
-            title: const Text("Input Address"),
-            actions: [
-              CupertinoDialogAction(
-                onPressed: () {
-                  Navigator.of(context).pop(); // Close the dialog
-                },
-                child: const Text(
-                  "Cancel",
-                  style: AppStyle.bodyTextFont,
-                ),
+      context: context,
+      builder: (BuildContext context) {
+        TextEditingController _locationController = TextEditingController(
+            text: searchQuery["parameters"]["location"]);
+        return CupertinoAlertDialog(
+          title: const Text("Input Address"),
+          actions: [
+            CupertinoDialogAction(
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+              },
+              child: const Text(
+                "Cancel",
+                style: AppStyle.bodyTextFont,
               ),
-              CupertinoDialogAction(
-                onPressed: () {
-                  setState(() {
-                    searchQuery["parameters"]["location"] =
-                        _locationController.text;
-                  });
-                  Navigator.of(context).pop();
-                  _fetchBusinesses();
-                },
-                child: const Text(
-                  "OK",
-                  style: AppStyle.bodyTextFont,
-                ),
-              ),
-            ],
-            content: CupertinoTextField(
-              controller: _locationController,
-              enabled: !autoLocation,
-              style: AppStyle.bodyTextFont,
             ),
-          );
-        });
+            CupertinoDialogAction(
+              onPressed: () {
+                setState(() {
+                  searchQuery["parameters"]["location"] =
+                      _locationController.text;
+                });
+                Navigator.of(context).pop();
+                _fetchBusinesses();
+              },
+              child: const Text(
+                "OK",
+                style: AppStyle.bodyTextFont,
+              ),
+            ),
+          ],
+          content: CupertinoTextField(
+            controller: _locationController,
+            enabled: !autoLocation,
+            style: AppStyle.bodyTextFont,
+          ),
+        );
+      },
+    );
   }
 }
-
-

@@ -15,8 +15,8 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  Map<String, dynamic>? weatherData;
-  Map<String, dynamic>? recommendationData;
+  Map<String, dynamic> weatherData={};
+  Map<String, dynamic> recommendationData={};
   ApiRequest apiRequest=ApiRequest();
 
   @override
@@ -36,10 +36,10 @@ class _HomeState extends State<Home> {
       await apiRequest.getRequest(query).then((response) {
         if(response.statusCode == 200){
           setState(() {
-            weatherData = response.data;
+            weatherData = response.data["data"];
           });
         }
-        fetchRecommendationData(response.data['city']);
+        fetchRecommendationData(response.data["data"]['city']);
       });
 
     } catch (error) {
@@ -58,7 +58,7 @@ class _HomeState extends State<Home> {
       await apiRequest.getRequest(query).then((response) {
         if(response.statusCode == 200){
           setState(() {
-            recommendationData = response.data;
+            recommendationData = response.data["data"];
           });
         }
       });
@@ -72,11 +72,11 @@ class _HomeState extends State<Home> {
     return MaterialApp(
       home: DefaultTabController(
         length: 4,  // Total number of tabs
-        child:  weatherData == null ? const Center(child: CircularProgressIndicator()) :Scaffold(
+        child:  weatherData.isEmpty ? const Center(child: CircularProgressIndicator()) :Scaffold(
         body: TabBarView(
           children: [
                  WeatherHome(
-                    weatherData: weatherData!,
+                    weatherData: weatherData,
                     recommendationData: recommendationData), // 显示WeatherHome内容
             const YelpSearch(), // YelpSearch tab content
             FieldsListPage(), // FieldsListPage tab content
