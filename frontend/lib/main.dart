@@ -28,7 +28,10 @@ Future<void> main() async {
   await initLocalStorage();
   await verifyToken();
   runApp(
-    const MyApp()
+    DevicePreview(
+      enabled: true, // 启用 DevicePreview
+      builder: (context) => const MyApp(),
+    ),
   );
 }
 
@@ -37,6 +40,8 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+        locale: DevicePreview.locale(context),
+        builder: DevicePreview.appBuilder,
         debugShowCheckedModeBanner: false,
         home: localStorage.getItem("token") == null
             ? const SignInHttp()
