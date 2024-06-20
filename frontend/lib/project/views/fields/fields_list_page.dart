@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import '../../constants/api_request.dart';
 import 'field_detail_page.dart';
 
 class FieldsListPage extends StatefulWidget {
@@ -13,31 +14,33 @@ class _FieldsListPageState extends State<FieldsListPage> {
   List<dynamic> filteredFields = [];
   String searchQuery = '';
   String sortBy = 'All';
-
   @override
   void initState() {
     super.initState();
     fetchFields();
   }
-
+  ApiRequest apiRequest=ApiRequest();
   Future<void> fetchFields() async {
     try {
-      final response =
-      await http.get(Uri.parse('http://localhost:8080/api/fields'));
-      final data = json.decode(response.body);
-      if (data['code'] == '200') {
-        setState(() {
-          fields = data['data']; // 这里提取data字段
-          filteredFields = fields;
-        });
-      } else {
-        print('Error: ${data['msg']}');
-      }
+      Map<String, dynamic> query = {
+        "url": "http://localhost:8080/api/fields",
+      };
+      await apiRequest.getRequest(query).then((response) {
+        print(response.data);
+        if (response.statusCode==200) {
+          setState(() {
+            fields = response.data; // 这里提取data字段
+            filteredFields = fields;
+          });
+        } else {
+          print('Error: ${response.data['msg']}');
+        }
+
+      });
     } catch (error) {
       print('Error fetching fields data: $error');
     }
   }
-
   void filterFields(String query) {
     setState(() {
       searchQuery = query;
