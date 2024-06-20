@@ -23,12 +23,16 @@ class _FieldsListPageState extends State<FieldsListPage> {
   Future<void> fetchFields() async {
     try {
       final response =
-          await http.get(Uri.parse('http://localhost:8080/api/fields'));
+      await http.get(Uri.parse('http://localhost:8080/api/fields'));
       final data = json.decode(response.body);
-      setState(() {
-        fields = data;
-        filteredFields = fields;
-      });
+      if (data['code'] == '200') {
+        setState(() {
+          fields = data['data']; // 这里提取data字段
+          filteredFields = fields;
+        });
+      } else {
+        print('Error: ${data['msg']}');
+      }
     } catch (error) {
       print('Error fetching fields data: $error');
     }
@@ -39,8 +43,8 @@ class _FieldsListPageState extends State<FieldsListPage> {
       searchQuery = query;
       filteredFields = fields
           .where((field) =>
-              field['name'] != null &&
-              field['name'].toLowerCase().contains(query.toLowerCase()))
+      field['name'] != null &&
+          field['name'].toLowerCase().contains(query.toLowerCase()))
           .toList();
       sortFields();
     });
@@ -48,12 +52,14 @@ class _FieldsListPageState extends State<FieldsListPage> {
 
   void sortFields() {
     if (sortBy == 'Rating') {
-      filteredFields.sort((a, b) => a['rating'].compareTo(b['rating']));
-    } else if (sortBy == 'Difficulty') {
-      filteredFields.sort((a, b) => a['difficulty'].compareTo(b['difficulty']));
-    } else if (sortBy == 'Estimated Time') {
       filteredFields
-          .sort((a, b) => a['estimatedTime'].compareTo(b['estimatedTime']));
+          .sort((a, b) => (b['rating'] ?? 0).compareTo(a['rating'] ?? 0));
+    } else if (sortBy == 'Difficulty') {
+      filteredFields.sort(
+              (a, b) => (a['difficulty'] ?? '').compareTo(b['difficulty'] ?? ''));
+    } else if (sortBy == 'Estimated Time') {
+      filteredFields.sort((a, b) =>
+          (a['estimatedTime'] ?? '').compareTo(b['estimatedTime'] ?? ''));
     }
   }
 
@@ -131,57 +137,57 @@ class _FieldsListPageState extends State<FieldsListPage> {
             child: filteredFields.isEmpty
                 ? Center(child: CircularProgressIndicator())
                 : ListView.builder(
-                    itemCount: filteredFields.length,
-                    itemBuilder: (context, index) {
-                      final field = filteredFields[index];
-                      return Card(
-                        margin: EdgeInsets.all(16.0),
-                        child: Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              if (field['imageUrl'] != null &&
-                                  field['imageUrl'].isNotEmpty)
-                                ClipRRect(
-                                  borderRadius: BorderRadius.circular(8.0),
-                                  child: Image.network(field['imageUrl']),
+              itemCount: filteredFields.length,
+              itemBuilder: (context, index) {
+                final field = filteredFields[index];
+                return Card(
+                  margin: EdgeInsets.all(16.0),
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        if (field['imageUrl'] != null &&
+                            field['imageUrl'].isNotEmpty)
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(8.0),
+                            child: Image.network(field['imageUrl']),
+                          ),
+                        SizedBox(height: 8),
+                        Text(field['name'] ?? 'No Name',
+                            style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold)),
+                        Text(field['location'] ?? 'No Location'),
+                        Text('Rating: ${field['rating'] ?? 'No Rating'}'),
+                        Text(
+                            'Difficulty: ${field['difficulty'] ?? 'No Difficulty'}'),
+                        Text(
+                            'Distance: ${field['distance'] ?? 'No Distance'} km'),
+                        Text(
+                            'Estimated Time: ${field['estimatedTime'] ?? 'No Estimated Time'}'),
+                        SizedBox(height: 8),
+                        Align(
+                          alignment: Alignment.center,
+                          child: ElevatedButton(
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      FieldDetailPage(field: field),
                                 ),
-                              SizedBox(height: 8),
-                              Text(field['name'] ?? 'No Name',
-                                  style: TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold)),
-                              Text(field['location'] ?? 'No Location'),
-                              Text('Rating: ${field['rating'] ?? 'No Rating'}'),
-                              Text(
-                                  'Difficulty: ${field['difficulty'] ?? 'No Difficulty'}'),
-                              Text(
-                                  'Distance: ${field['distance'] ?? 'No Distance'} km'),
-                              Text(
-                                  'Estimated Time: ${field['estimatedTime'] ?? 'No Estimated Time'}'),
-                              SizedBox(height: 8),
-                              Align(
-                                alignment: Alignment.center,
-                                child: ElevatedButton(
-                                  onPressed: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) =>
-                                            FieldDetailPage(field: field),
-                                      ),
-                                    );
-                                  },
-                                  child: Text('View Details'),
-                                ),
-                              ),
-                            ],
+                              );
+                            },
+                            child: const Text('View Details'),
                           ),
                         ),
-                      );
-                    },
+                      ],
+                    ),
                   ),
+                );
+              },
+            ),
           ),
         ],
       ),

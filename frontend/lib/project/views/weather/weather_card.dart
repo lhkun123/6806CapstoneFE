@@ -6,9 +6,9 @@ import 'package:frontend/project/views/weather/weather_detail.dart';
 class WeatherCard extends StatelessWidget {
   final Map<String, dynamic> weatherData;
 
-  const WeatherCard({super.key, required this.weatherData});
+  const WeatherCard({required this.weatherData});
 
-  IconData getWeatherIcon(String weatherType) {
+  IconData getWeatherIcon(String? weatherType) {
     switch (weatherType) {
       case 'clear_sky':
         return Icons.wb_sunny;
@@ -54,25 +54,26 @@ class WeatherCard extends StatelessWidget {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(weatherData['city'],
-                      style:
-                      const TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+                  Text(
+                    weatherData['city'] ?? 'Unknown city',
+                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                  ),
                   Row(
                     children: [
                       Icon(
                         getWeatherIcon(weatherData['weather_type']),
                         size: 32,
                       ),
-                      const SizedBox(width: 8),
+                      SizedBox(width: 8),
                       Text(
-                        '${weatherData['temperature']}°C',
-                        style: const TextStyle(fontSize: 32),
+                        '${weatherData['temperature'] ?? 'N/A'}°C',
+                        style: TextStyle(fontSize: 32),
                       ),
                     ],
                   ),
                 ],
               ),
-              const Icon(Icons.arrow_forward_ios, size: 24, color: Colors.grey),
+              Icon(Icons.arrow_forward_ios, size: 24, color: Colors.grey),
             ],
           ),
         ),

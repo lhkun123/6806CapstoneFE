@@ -1,21 +1,27 @@
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+
 import '../fields/home_field_detail_page.dart';
+
 class RecommendationCard extends StatelessWidget {
   final Map<String, dynamic> location;
 
-  const RecommendationCard({super.key, required this.location});
+  const RecommendationCard({required this.location});
 
   @override
   Widget build(BuildContext context) {
     return Card(
-      margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+      margin: EdgeInsets.symmetric(vertical: 10, horizontal: 16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           ClipRRect(
             borderRadius: BorderRadius.circular(8.0),
-            child: Image.network(location['image_url'] ?? ''),
+            child: Image.network(location['image_url'] ?? '',
+                errorBuilder: (context, error, stackTrace) {
+                  return Image.asset('assets/placeholder.png'); // 使用占位符图片
+                }),
           ),
           Padding(
             padding: const EdgeInsets.all(16.0),
@@ -40,8 +46,8 @@ class RecommendationCard extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => HomeFieldDetailPage(
-                              field: location), // 确保此处导入了HomeFieldDetailPage
+                          builder: (context) =>
+                              HomeFieldDetailPage(field: location),
                         ),
                       );
                     },
