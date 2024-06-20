@@ -173,7 +173,7 @@ class _YelpSearchState extends State<YelpSearch> {
       appBar: AppBar(
         title: Row(
           children: [
-            const Text('Entertainment',style: AppStyle.bigheadingFont),
+            const Text('Entertainment',style: AppStyle.bigHeadingFont),
             const SizedBox(width: 8),
         GestureDetector(
           onTap: () {
@@ -187,7 +187,7 @@ class _YelpSearchState extends State<YelpSearch> {
           },
           child: Icon(
             autoLocation ? Icons.location_on : Icons.location_off,
-            color: AppStyle.BarBackgroundColor,
+            color: AppStyle.barBackgroundColor,
           ),
         ),
             InkWell(
@@ -350,7 +350,7 @@ class _YelpSearchState extends State<YelpSearch> {
                         business["is_closed"] ? const Icon(Icons.clear_rounded,color: Colors.red,):const Icon(Icons.check,color: Colors.green,)
                       ],
                     ),
-                    trailing: const Icon(Icons.arrow_forward_ios,color: AppStyle.BarBackgroundColor),
+                    trailing: const Icon(Icons.arrow_forward_ios,color: AppStyle.barBackgroundColor),
                     onTap: () {
                       Navigator.of(context).push(
                         MaterialPageRoute(

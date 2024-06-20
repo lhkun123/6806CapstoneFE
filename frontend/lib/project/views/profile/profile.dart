@@ -42,7 +42,7 @@ class _ProfileState extends State<Profile> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Profile', style: AppStyle.bigheadingFont),
+        title: const Text('Profile', style: AppStyle.bigHeadingFont),
         centerTitle: true,
       ),
       body: profileInformation.isEmpty

@@ -1,4 +1,3 @@
-import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/project/constants/api_request.dart';
@@ -7,7 +6,6 @@ import 'package:http/http.dart' as http;
 import 'package:json_annotation/json_annotation.dart';
 import 'package:frontend/project/util/validate.dart';
 import 'package:localstorage/localstorage.dart';
-
 import '../../constants/app_style.dart';
 import '../home/home.dart';
 
@@ -83,17 +81,9 @@ class _SignInHttpState extends State<SignInHttp> {
               child: Column(
                 children: [
                   ...[
-                    const SizedBox(
-                      height: 100,
-                    ),
-                    const Text(
-                      'VanLife',
-                      style: AppStyle.hugeHeadingFont,
-                    ),
-                    const Text(
-                      'Simplifying Outdoor Fun in Vancouver.',
-                      style: AppStyle.sloganFont,
-                    ),
+                    const SizedBox(height: 100),
+                    const Text('VanLife', style: AppStyle.hugeHeadingFont),
+                    const Text('Simplifying Outdoor Fun in Vancouver.', style: AppStyle.sloganFont),
                     TextFormField(
                       autofocus: true,
                       textInputAction: TextInputAction.next,
@@ -101,19 +91,16 @@ class _SignInHttpState extends State<SignInHttp> {
                       decoration: const InputDecoration(
                         labelText: 'Email',
                         labelStyle: TextStyle(
-                          color: Color.fromRGBO(130, 130, 130,
-                              1), // Color of the label when not focused
+                          color: Color.fromRGBO(130, 130, 130, 1), // Color of the label when not focused
                         ),
                         border: OutlineInputBorder(
-                          borderSide: BorderSide(
-                              color: Color.fromRGBO(130, 130, 130, 1)),
+                          borderSide: BorderSide(color: Color.fromRGBO(130, 130, 130, 1)),
                         ),
                         // Focused border when the TextField is focused
                         focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                              color: Color.fromRGBO(130, 130, 130, 1),
-                              width: 1.5),
+                          borderSide: BorderSide(color: Color.fromRGBO(130, 130, 130, 1), width: 1.5),
                         ),
+                        errorStyle: AppStyle.errorFont
                       ),
                       onChanged: (value) {
                         formData.email = value;
@@ -130,21 +117,18 @@ class _SignInHttpState extends State<SignInHttp> {
                       decoration: InputDecoration(
                         labelText: "Password",
                         labelStyle: const TextStyle(
-                          color: Color.fromRGBO(130, 130, 130,
-                              1), // Color of the label when not focused
+                          color: Color.fromRGBO(130, 130, 130, 1), // Color of the label when not focused
                         ),
                         border: const OutlineInputBorder(
-                          borderSide: BorderSide(
-                              color: Color.fromRGBO(130, 130, 130, 1)),
+                          borderSide: BorderSide(color: Color.fromRGBO(130, 130, 130, 1)),
                         ),
                         // Focused border when the TextField is focused
                         focusedBorder: const OutlineInputBorder(
-                          borderSide: BorderSide(
-                              color: Color.fromRGBO(130, 130, 130, 1),
-                              width: 1.5),
+                          borderSide: BorderSide(color: Color.fromRGBO(130, 130, 130, 1), width: 1.5),
                         ),
+                        errorStyle: AppStyle.errorFont,
                         suffixIcon: IconButton(
-                          icon:  const Icon(
+                          icon: const Icon(
                             Icons.remove_red_eye,
                             color: Color.fromRGBO(130, 130, 130, 1),
                           ),
@@ -170,7 +154,7 @@ class _SignInHttpState extends State<SignInHttp> {
                           borderRadius: BorderRadius.circular(10), // 设置按钮的圆角半径
                         ),
                       ),
-                      child: const Text('Sign In'),
+                      child: const Text('Sign In', style: AppStyle.bigButtonFont),
                     ),
                     TextButton(
                       onPressed: () => Navigator.of(context).push(
@@ -187,7 +171,7 @@ class _SignInHttpState extends State<SignInHttp> {
                           borderRadius: BorderRadius.circular(10), // 设置按钮的圆角半径
                         ),
                       ),
-                      child: const Text('Sign Up'),
+                      child: const Text('Sign Up', style: AppStyle.bigButtonFont),
                     ),
                   ].expand(
                     (widget) => [

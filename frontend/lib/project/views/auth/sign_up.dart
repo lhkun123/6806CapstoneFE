@@ -3,6 +3,8 @@ import 'package:frontend/project/views/auth/sign_in.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:flutter/material.dart';
 
+import '../../constants/app_style.dart';
+
 import '../../util/validate.dart';
 @JsonSerializable()
 class FormData {
@@ -49,59 +51,76 @@ class _SignUpState extends State<SignUpHttp> {
   @override
   Widget build(BuildContext context) {
     return
-        Scaffold(
+      Scaffold(
             backgroundColor: Colors.white,
             appBar: AppBar(
-              backgroundColor: Colors.white,
+              backgroundColor: AppStyle.barBackgroundColor,
               elevation: 0.0,
-              title: const Text('Sign up to this system'),
+              title: const Text(
+                'Sign up',
+                style: AppStyle.barHeadingFont,
+              ),
+              centerTitle: true,
+              iconTheme: const IconThemeData(
+                color: Colors.white, // 返回箭头的颜色
+              ),
             ),
             body: Container(
-              padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 50.0),
+              padding: const EdgeInsets.all(16),
               child: Form(
                 key: _formKey,
                 child: Column(
-                  children: <Widget>[
-                    const SizedBox(height: 20.0),
+                  children: [
+                    const SizedBox(height: 200.0),
                     TextFormField(
                       controller: _emailController,
+                      autofocus: true,
                       decoration: const InputDecoration(
-                        filled: true,
                         labelText: 'Email',
-                        labelStyle: TextStyle(
-                          color: Colors.black, // Color of the label when not focused
+                        labelStyle: TextStyle(color: AppStyle.systemGreyColor), // Color of the label when not focused
+                        border: OutlineInputBorder(
+                          borderSide: BorderSide(color: AppStyle.systemGreyColor),
                         ),
+                        // Focused border when the TextField is focused
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: AppStyle.systemGreyColor, width: 1.5),
+                        ),
+                        errorStyle: AppStyle.errorFont,
                       ),
                       validator: (value) => Validator.validateEmail(value),
                     ),
-                    const SizedBox(height: 20.0),
+                    const SizedBox(height: 30.0),
                     TextFormField(
                       controller: _passwordController,
                       decoration: const InputDecoration(
-                        filled: true,
                         labelText: 'Password',
-                        labelStyle: TextStyle(
-                          color: Colors.black, // Color of the label when not focused
+                        labelStyle: TextStyle(color: AppStyle.systemGreyColor), // Color of the label when not focused
+                        border: OutlineInputBorder(
+                          borderSide: BorderSide(color: AppStyle.systemGreyColor),
                         ),
+                        // Focused border when the TextField is focused
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: AppStyle.systemGreyColor, width: 1.5),
+                        ),
+                        errorStyle: AppStyle.errorFont,
                       ),
                       obscureText: true,
                       validator: (value) => Validator.validatePassword(value),
                     ),
+                    const SizedBox(height: 10.0),
                     TextFormField(
                       controller: _confirmPasswordController,
                       decoration: const InputDecoration(
-                        filled: true,
                         labelText: 'Retype the Password',
-                        labelStyle: TextStyle(
-                          color: Colors.black, // Color of the label when not focused
-                        ),
+                        labelStyle: TextStyle(color: AppStyle.systemGreyColor), // Color of the label when not focused
                         border: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.black),
+                          borderSide: BorderSide(color: AppStyle.systemGreyColor),
                         ),
                         // Focused border when the TextField is focused
                         focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.black, width: 2.0),
+                          borderSide: BorderSide(color: AppStyle.systemGreyColor, width: 1.5),
                         ),
+                        errorStyle: AppStyle.errorFont,
                       ),
                       obscureText: true,
                       validator: (value) => Validator.validatePassword(value),
@@ -109,21 +128,31 @@ class _SignUpState extends State<SignUpHttp> {
                     ),
                     const SizedBox(height: 20.0),
                     TextButton(
-                    child: const Text('Register'),
-                    onPressed: () async {
-                      if (Validator.validatePasswordsMatch(_passwordController.text.trim(),_confirmPasswordController.text.trim())!=null) {
-                        ScaffoldMessenger.of(context)
-                            .showSnackBar(
-                            const SnackBar(content: Text('Passwords do NOT match!')));
-                      }
-                      else{
-                        Navigator.pushAndRemoveUntil(
-                          context,
-                          MaterialPageRoute(builder: (context) => const SignInHttp()),
-                              (Route<dynamic> route) => false,
-                        );
-                      }
-                    }),
+                      onPressed: () async {
+                        if (Validator.validatePasswordsMatch(_passwordController.text.trim(),_confirmPasswordController.text.trim())!=null) {
+                          ScaffoldMessenger.of(context)
+                              .showSnackBar(
+                              const SnackBar(content: Text('Passwords do NOT match!')));
+                        }
+                        else{
+                          Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(builder: (context) => const SignInHttp()),
+                                (Route<dynamic> route) => false,
+                          );
+                        }
+                      },
+                      style: TextButton.styleFrom(
+                        foregroundColor: AppStyle.buttonForegroundColor,
+                        elevation: 2,
+                        backgroundColor: AppStyle.buttonBackgroundColor,
+                        minimumSize: const Size(double.infinity, 55),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10), // 设置按钮的圆角半径
+                        ),
+                      ),
+                      child: const Text('Register', style: AppStyle.bigButtonFont),
+                    ),
                   ],
                 ),
               ),

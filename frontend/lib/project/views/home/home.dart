@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -5,10 +6,10 @@ import 'dart:convert';
 import 'package:frontend/project/constants/app_style.dart';
 import 'package:frontend/project/views/profile/profile.dart';
 import 'package:frontend/project/views/yelp/yelp_search.dart';
-import 'package:frontend/project/views/fields/fields_list_page.dart'; 
-import 'package:frontend/project/views/fields/field_detail_page.dart'; 
+import 'package:frontend/project/views/fields/fields_list_page.dart';
+import 'package:frontend/project/views/fields/field_detail_page.dart';
 
-import 'weatherDetail/weather_detail.dart'; 
+import 'weatherDetail/weather_detail.dart';
 
 class Home extends StatefulWidget {
 
@@ -50,7 +51,7 @@ class _HomeState extends State<Home> {
       final data = json.decode(response.body);
       setState(() {
         recommendationData = data;
-        print("Recommendation data: $recommendationData"); 
+        print("Recommendation data: $recommendationData");
       });
     } catch (error) {
       print('Error fetching recommendation data: $error');
@@ -59,9 +60,13 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-      length: 4, // Total number of tabs
-      child: Scaffold(
+    return MaterialApp(
+      home: DefaultTabController(
+        length: 4,  // Total number of tabs
+        child: Scaffold(
+          appBar: AppBar(
+
+          ),
 
         body: TabBarView(
           children: [
@@ -76,7 +81,7 @@ class _HomeState extends State<Home> {
           ],
         ),
         bottomNavigationBar: const Material(
-          color: AppStyle.BarBackgroundColor,
+          color: AppStyle.barBackgroundColor,
           child: TabBar(
             labelColor: AppStyle.labelColor, // Color of the selected tab
             unselectedLabelColor:
@@ -90,6 +95,7 @@ class _HomeState extends State<Home> {
             ],
           ),
         ),
+      ),
       ),
     );
   }
