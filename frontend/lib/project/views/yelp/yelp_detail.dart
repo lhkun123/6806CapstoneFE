@@ -59,7 +59,7 @@ class _YelpDetailState extends State<YelpDetail> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(detail?["name"] ?? 'Loading...', style: AppStyle.bigheadingFont),
+        title: Text(detail?["name"] ?? 'Loading...', style: AppStyle.bigHeadingFont),
         centerTitle: true
       ),
       body: detail == null
@@ -184,7 +184,7 @@ class _YelpDetailState extends State<YelpDetail> {
               Center(
                 child: IconButton(
                   onPressed: () {},
-                  icon: const Icon(CupertinoIcons.heart_solid, color: AppStyle.BarBackgroundColor),
+                  icon: const Icon(CupertinoIcons.heart_solid, color: AppStyle.barBackgroundColor),
                 ),
               ),
               const SizedBox(height: 16),
@@ -198,14 +198,14 @@ class _YelpDetailState extends State<YelpDetail> {
                         const SizedBox(height: 8),
                         IconButton(
                           icon: const Icon(Icons.facebook),
-                          color: AppStyle.BarBackgroundColor,
+                          color: AppStyle.barBackgroundColor,
                           onPressed: () {
                             // Handle Facebook share
                           },
                         ),
                         IconButton(
                           icon: const Icon(FontAwesomeIcons.twitter),
-                          color: AppStyle.BarBackgroundColor,
+                          color: AppStyle.barBackgroundColor,
                           onPressed: () {
                             // Handle Twitter share
                           },
@@ -224,7 +224,7 @@ class _YelpDetailState extends State<YelpDetail> {
                       duration: const Duration(milliseconds: 1000),
                       curve: Curves.linear,
                     ),
-                    child: const Icon(Icons.arrow_back_ios,color: AppStyle.BarBackgroundColor),
+                    child: const Icon(Icons.arrow_back_ios,color: AppStyle.barBackgroundColor),
                   ),
                   Expanded(
                     child: CarouselSlider(
@@ -250,7 +250,7 @@ class _YelpDetailState extends State<YelpDetail> {
                       duration: const Duration(milliseconds: 1000),
                       curve: Curves.linear,
                     ),
-                    child: const Icon(Icons.arrow_forward_ios,color: AppStyle.BarBackgroundColor),
+                    child: const Icon(Icons.arrow_forward_ios,color: AppStyle.barBackgroundColor),
 
                   ),
                 ],
