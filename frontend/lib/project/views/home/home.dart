@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/project/constants/api_request.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:frontend/project/constants/app_style.dart';
@@ -21,6 +22,7 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   Map<String, dynamic>? weatherData;
   Map<String, dynamic>? recommendationData;
+  ApiRequest apiRequest=ApiRequest();
 
   @override
   void initState() {
@@ -30,13 +32,21 @@ class _HomeState extends State<Home> {
 
   Future<void> fetchWeatherData() async {
     try {
-      final response = await http
-          .get(Uri.parse('http://localhost:8080/weather?city=Vancouver'));
-      final data = json.decode(response.body);
-      setState(() {
-        weatherData = data;
+      Map<String, dynamic> query = {
+        "url": "http://localhost:8080/weather",
+        "parameters":{
+            "city":"Vancouver"
+        }
+      };
+      await apiRequest.getRequest(query).then((response) {
+        if(response.statusCode == 200){
+          setState(() {
+            weatherData = response.data;
+          });
+        }
+        fetchRecommendationData(response.data['city']);
       });
-      fetchRecommendationData(data['city']);
+
     } catch (error) {
       print('Error fetching weather data: $error');
     }
@@ -44,12 +54,18 @@ class _HomeState extends State<Home> {
 
   Future<void> fetchRecommendationData(String city) async {
     try {
-      final response = await http
-          .get(Uri.parse('http://localhost:8080/recommendation?city=$city'));
-      final data = json.decode(response.body);
-      setState(() {
-        recommendationData = data;
-        print("Recommendation data: $recommendationData");
+      Map<String, dynamic> query = {
+        "url": "http://localhost:8080/recommendation",
+        "parameters":{
+          "city":city
+        }
+      };
+      await apiRequest.getRequest(query).then((response) {
+        if(response.statusCode == 200){
+          setState(() {
+            recommendationData = response.data;
+          });
+        }
       });
     } catch (error) {
       print('Error fetching recommendation data: $error');
