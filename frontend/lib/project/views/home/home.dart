@@ -7,6 +7,7 @@ import 'package:frontend/project/views/yelp/yelp_search.dart';
 import 'package:frontend/project/views/fields/fields_list_page.dart'; 
 import 'package:frontend/project/views/fields/field_detail_page.dart'; 
 
+import 'home_field_detail_page.dart';
 import 'weatherDetail/weather_detail.dart';
 
 class Home extends StatefulWidget {
@@ -61,20 +62,16 @@ class _HomeState extends State<Home> {
       home: DefaultTabController(
         length: 4,  // Total number of tabs
         child: Scaffold(
-          appBar: AppBar(
-
-          ),
-
         body: TabBarView(
           children: [
             weatherData == null
-                ? Center(child: CircularProgressIndicator())
+                ? const Center(child: CircularProgressIndicator())
                 : WeatherHome(
                     weatherData: weatherData!,
                     recommendationData: recommendationData), // 显示WeatherHome内容
-            YelpSearch(), // YelpSearch tab content
+            const YelpSearch(), // YelpSearch tab content
             FieldsListPage(), // FieldsListPage tab content
-            Profile(), // Profile tab content
+            const Profile(), // Profile tab content
           ],
         ),
         bottomNavigationBar: const Material(
@@ -102,7 +99,7 @@ class WeatherHome extends StatelessWidget {
   final Map<String, dynamic> weatherData;
   final Map<String, dynamic>? recommendationData;
 
-  WeatherHome({required this.weatherData, required this.recommendationData});
+  WeatherHome({super.key, required this.weatherData, required this.recommendationData});
 
   @override
   Widget build(BuildContext context) {
@@ -153,7 +150,7 @@ class WeatherHome extends StatelessWidget {
 class WeatherCard extends StatelessWidget {
   final Map<String, dynamic> weatherData;
 
-  const WeatherCard({required this.weatherData});
+  const WeatherCard({super.key, required this.weatherData});
 
   IconData getWeatherIcon(String weatherType) {
     switch (weatherType) {
@@ -203,23 +200,23 @@ class WeatherCard extends StatelessWidget {
                 children: [
                   Text(weatherData['city'],
                       style:
-                          TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+                          const TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
                   Row(
                     children: [
                       Icon(
                         getWeatherIcon(weatherData['weather_type']),
                         size: 32,
                       ),
-                      SizedBox(width: 8),
+                      const SizedBox(width: 8),
                       Text(
                         '${weatherData['temperature']}°C',
-                        style: TextStyle(fontSize: 32),
+                        style: const TextStyle(fontSize: 32),
                       ),
                     ],
                   ),
                 ],
               ),
-              Icon(Icons.arrow_forward_ios, size: 24, color: Colors.grey),
+              const Icon(Icons.arrow_forward_ios, size: 24, color: Colors.grey),
             ],
           ),
         ),
@@ -231,12 +228,12 @@ class WeatherCard extends StatelessWidget {
 class RecommendationCard extends StatelessWidget {
   final Map<String, dynamic> location;
 
-  const RecommendationCard({required this.location});
+  const RecommendationCard({super.key, required this.location});
 
   @override
   Widget build(BuildContext context) {
     return Card(
-      margin: EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+      margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
