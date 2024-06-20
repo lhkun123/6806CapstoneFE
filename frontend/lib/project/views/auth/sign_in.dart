@@ -63,11 +63,6 @@ class _SignInHttpState extends State<SignInHttp> {
     });
   }
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -91,7 +86,8 @@ class _SignInHttpState extends State<SignInHttp> {
                       decoration: const InputDecoration(
                         labelText: 'Email',
                         labelStyle: TextStyle(
-                          color: Color.fromRGBO(130, 130, 130, 1), // Color of the label when not focused
+                          color: Color.fromRGBO(130, 130, 130,
+                              1), // Color of the label when not focused
                         ),
                         border: OutlineInputBorder(
                           borderSide: BorderSide(color: Color.fromRGBO(130, 130, 130, 1)),
@@ -154,7 +150,7 @@ class _SignInHttpState extends State<SignInHttp> {
                           borderRadius: BorderRadius.circular(10), // 设置按钮的圆角半径
                         ),
                       ),
-                      child: const Text('Sign In', style: AppStyle.bigButtonFont),
+                      child: const Text('Sign In'),
                     ),
                     TextButton(
                       onPressed: () => Navigator.of(context).push(
@@ -171,7 +167,7 @@ class _SignInHttpState extends State<SignInHttp> {
                           borderRadius: BorderRadius.circular(10), // 设置按钮的圆角半径
                         ),
                       ),
-                      child: const Text('Sign Up', style: AppStyle.bigButtonFont),
+                      child: const Text('Sign Up'),
                     ),
                   ].expand(
                     (widget) => [

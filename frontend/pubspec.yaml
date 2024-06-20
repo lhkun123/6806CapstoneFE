@@ -31,6 +31,8 @@ dev_dependencies:
   json_serializable: ^6.8.0
 
 flutter:
+  assets:
+    - assets/image.png
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:

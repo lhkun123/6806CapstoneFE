@@ -8,16 +8,16 @@ import 'package:localstorage/localstorage.dart';
 import 'project/views/auth/sign_in.dart';
 
 Future<void> verifyToken() async {
-  if(localStorage.getItem("token")!=null){
+  if (localStorage.getItem("token") != null) {
     Map<String, dynamic> query = {
       "url": "http://localhost:8080/user-tokens",
       "token": localStorage.getItem("token")
     };
-    ApiRequest apiRequest=ApiRequest();
-    try{
-      await apiRequest.getRequest(query).then((response) {
-      });
-    }catch (e){
+    ApiRequest apiRequest = ApiRequest();
+    try {
+      await apiRequest.getRequest(query).then((response) {});
+      print(localStorage.getItem("token"));
+    } catch (e) {
       localStorage.removeItem("token");
     }
   }
@@ -43,7 +43,9 @@ class MyApp extends StatelessWidget {
         locale: DevicePreview.locale(context),
         builder: DevicePreview.appBuilder,
         debugShowCheckedModeBanner: false,
-        home: localStorage.getItem("token") == null ? const SignInHttp() : const Home(), //如果token有效则跳转至主页，无效则跳转至登录页(首页)
+        home: localStorage.getItem("token") == null
+            ? const SignInHttp()
+            : const Home(), //如果token有效则跳转至主页，无效则跳转至登录页(首页)
         theme: ThemeData(
           primaryColor: AppStyle.primaryColor,
           scaffoldBackgroundColor: Colors.white,
