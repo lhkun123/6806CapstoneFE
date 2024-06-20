@@ -4,7 +4,7 @@ class WeatherDetailItem extends StatelessWidget {
   final String label;
   final String value;
 
-  const WeatherDetailItem({required this.label, required this.value});
+  const WeatherDetailItem({super.key, required this.label, required this.value});
 
   @override
   Widget build(BuildContext context) {

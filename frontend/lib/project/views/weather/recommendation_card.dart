@@ -1,13 +1,10 @@
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
 import '../fields/home_field_detail_page.dart';
 
 class RecommendationCard extends StatelessWidget {
   final Map<String, dynamic> location;
-
-  const RecommendationCard({required this.location});
+  const RecommendationCard({super.key, required this.location});
 
   @override
   Widget build(BuildContext context) {

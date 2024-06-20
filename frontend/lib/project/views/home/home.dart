@@ -67,9 +67,9 @@ class _HomeState extends State<Home> {
               weatherData: weatherData!,
               recommendationData: recommendationData,
             ), // 显示WeatherHome内容
-            const YelpSearch(), // YelpSearch tab content
+            YelpSearch(), // YelpSearch tab content
             FieldsListPage(), // FieldsListPage tab content
-            const Profile(), // Profile tab content
+            Profile(), // Profile tab content
           ],
         ),
         bottomNavigationBar: const Material(

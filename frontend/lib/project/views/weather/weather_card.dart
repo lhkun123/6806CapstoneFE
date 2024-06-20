@@ -1,12 +1,10 @@
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/project/views/weather/weather_detail.dart';
-
 class WeatherCard extends StatelessWidget {
   final Map<String, dynamic> weatherData;
 
-  const WeatherCard({required this.weatherData});
+  const WeatherCard({super.key, required this.weatherData});
 
   IconData getWeatherIcon(String? weatherType) {
     switch (weatherType) {

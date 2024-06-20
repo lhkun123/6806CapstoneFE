@@ -7,7 +7,7 @@ import 'clothing_recommendation.dart';
 class WeatherDetailPage extends StatelessWidget {
   final Map<String, dynamic> weatherData;
 
-  WeatherDetailPage({required this.weatherData});
+  const WeatherDetailPage({super.key, required this.weatherData});
 
   IconData getWeatherIcon(String weatherType) {
     switch (weatherType) {

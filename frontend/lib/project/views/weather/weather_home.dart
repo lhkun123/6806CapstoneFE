@@ -1,4 +1,3 @@
-
 import 'package:flutter/cupertino.dart';
 import 'package:frontend/project/views/weather/recommendation_card.dart';
 import 'package:frontend/project/views/weather/weather_card.dart';
@@ -7,7 +6,7 @@ class WeatherHome extends StatelessWidget {
   final Map<String, dynamic> weatherData;
   final Map<String, dynamic>? recommendationData;
 
-  WeatherHome({required this.weatherData, required this.recommendationData});
+  WeatherHome({super.key, required this.weatherData, required this.recommendationData});
 
   @override
   Widget build(BuildContext context) {
