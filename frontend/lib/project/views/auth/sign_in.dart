@@ -49,19 +49,16 @@ class _SignInHttpState extends State<SignInHttp> {
     }
   };
   void _fetchToken() async {
-    await apiRequest.postRequest(query).then((response) {
-      if (response.data["code"] == "200") {
-        localStorage.setItem('token', response.data["data"]);
-      } else {
-        throw Exception('Failed to fetch token');
-      }
-      _showDialog(switch (response.data["code"]) {
-        "200" => 'Successfully signed in.',
-      "401" => 'Unable to sign in.',
-      _ => 'Something went wrong. Please try again.'
-    });
-    });
+      await apiRequest.postRequest(query).then((response) {
+        print(response.data);
+        if (response.data["msg"] == "Success!") {
+          localStorage.setItem('token', response.data["data"]);
+          _showDialog( 'Successfully signed in.');
+        }
+        });
+
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
