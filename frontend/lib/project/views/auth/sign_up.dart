@@ -1,9 +1,10 @@
 import 'package:flutter/cupertino.dart';
-import 'package:frontend/project/constants/api_request.dart';
 import 'package:frontend/project/views/auth/sign_in.dart';
 import 'package:flutter/material.dart';
 
+import '../../constants/api_request.dart';
 import '../../constants/app_style.dart';
+
 import '../../util/validate.dart';
 
 
@@ -19,27 +20,11 @@ class _SignUpState extends State<SignUpHttp> {
 
   final _formKey = GlobalKey<FormState>();
   bool loading = false;
+
+  // text field state
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _confirmPasswordController=TextEditingController();
-  ApiRequest apiRequest=ApiRequest();
-  late Map<String, dynamic> query = {
-    "url": "http://localhost:8080/users",
-    "body":{
-      "email":_emailController.text.trim(),
-      "password":_passwordController.text.trim()
-    }
-  };
-
-  void _register() async {
-    await apiRequest.postRequest(query).then((response) {
-      _showDialog(switch (response.data["code"]) {
-        "200" => 'Successfully registered as a new user',
-      "500" => 'Unable to sign in.',
-      _ => 'Something went wrong. Please try again.'
-    });
-    });
-  }
 
   @override
   void dispose() {
@@ -47,85 +32,132 @@ class _SignUpState extends State<SignUpHttp> {
     _passwordController.dispose();
     super.dispose();
   }
+  ApiRequest apiRequest=ApiRequest();
+  late Map<String, dynamic> query = {
+    "url": "http://localhost:8080/users",
+    "body":{
+      "email": _emailController.text.trim(),
+      "password":_passwordController.text.trim()
+    }
+  };
+  void _register() async {
+    await apiRequest.postRequest(query).then((response) {
+      print(response.data);
+      if (response.data["msg"] == "Success!") {
+        _showDialog('You have benn successfully registered as a new user');
+      }
+    });
+
+  }
+
   @override
   Widget build(BuildContext context) {
     return
-        Scaffold(
-            backgroundColor: Colors.white,
-            appBar: AppBar(
-              backgroundColor: Colors.white,
-              elevation: 0.0,
-              title: const Text('Sign up to this system'),
-            ),
-            body: Container(
-              padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 50.0),
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  children: <Widget>[
-                    const SizedBox(height: 20.0),
-                    TextFormField(
-                      controller: _emailController,
-                      decoration: const InputDecoration(
-                        filled: true,
-                        labelText: 'Email',
-                        labelStyle: TextStyle(
-                          color: Colors.black, // Color of the label when not focused
-                        ),
-                      ),
-                      validator: (value) => Validator.validateEmail(value),
+      Scaffold(
+        backgroundColor: Colors.white,
+        appBar: AppBar(
+          backgroundColor: AppStyle.barBackgroundColor,
+          elevation: 0.0,
+          title: const Text(
+            'Sign up',
+            style: AppStyle.barHeadingFont,
+          ),
+          centerTitle: true,
+          iconTheme: const IconThemeData(
+            color: Colors.white, // 返回箭头的颜色
+          ),
+        ),
+        body: Container(
+          padding: const EdgeInsets.all(16),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              children: [
+                const SizedBox(height: 200.0),
+                TextFormField(
+                  controller: _emailController,
+                  autofocus: true,
+                  decoration: const InputDecoration(
+                    labelText: 'Email',
+                    labelStyle: TextStyle(color: AppStyle.systemGreyColor), // Color of the label when not focused
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide(color: AppStyle.systemGreyColor),
                     ),
-                    const SizedBox(height: 20.0),
-                    TextFormField(
-                      controller: _passwordController,
-                      decoration: const InputDecoration(
-                        filled: true,
-                        labelText: 'Password',
-                        labelStyle: TextStyle(
-                          color: Colors.black, // Color of the label when not focused
-                        ),
-                      ),
-                      obscureText: true,
-                      validator: (value) => Validator.validatePassword(value),
+                    // Focused border when the TextField is focused
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: AppStyle.systemGreyColor, width: 1.5),
                     ),
-                    TextFormField(
-                      controller: _confirmPasswordController,
-                      decoration: const InputDecoration(
-                        filled: true,
-                        labelText: 'Retype the Password',
-                        labelStyle: TextStyle(
-                          color: Colors.black, // Color of the label when not focused
-                        ),
-                        border: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.black),
-                        ),
-                        // Focused border when the TextField is focused
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.black, width: 2.0),
-                        ),
-                      ),
-                      obscureText: true,
-                      validator: (value) => Validator.validatePassword(value),
-                    ),
-                    const SizedBox(height: 20.0),
-                    TextButton(
-                    child: const Text('Register'),
-                    onPressed: () async {
-                      if (Validator.validatePasswordsMatch(_passwordController.text.trim(),_confirmPasswordController.text.trim())!=null) {
-                        ScaffoldMessenger.of(context)
-                            .showSnackBar(
-                            const SnackBar(content: Text('Passwords do NOT match!')));
-                      }
-                      else{
-                        _register();
-                      }
-                    }),
-                  ],
+                    errorStyle: AppStyle.errorFont,
+                  ),
+                  validator: (value) => Validator.validateEmail(value),
                 ),
-              ),
+                const SizedBox(height: 30.0),
+                TextFormField(
+                  controller: _passwordController,
+                  decoration: const InputDecoration(
+                    labelText: 'Password',
+                    labelStyle: TextStyle(color: AppStyle.systemGreyColor), // Color of the label when not focused
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide(color: AppStyle.systemGreyColor),
+                    ),
+                    // Focused border when the TextField is focused
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: AppStyle.systemGreyColor, width: 1.5),
+                    ),
+                    errorStyle: AppStyle.errorFont,
+                  ),
+                  obscureText: true,
+                  validator: (value) => Validator.validatePassword(value),
+                ),
+                const SizedBox(height: 10.0),
+                TextFormField(
+                  controller: _confirmPasswordController,
+                  decoration: const InputDecoration(
+                    labelText: 'Retype the Password',
+                    labelStyle: TextStyle(color: AppStyle.systemGreyColor), // Color of the label when not focused
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide(color: AppStyle.systemGreyColor),
+                    ),
+                    // Focused border when the TextField is focused
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: AppStyle.systemGreyColor, width: 1.5),
+                    ),
+                    errorStyle: AppStyle.errorFont,
+                  ),
+                  obscureText: true,
+                  validator: (value) => Validator.validatePassword(value),
+
+                ),
+                const SizedBox(height: 20.0),
+                TextButton(
+                  onPressed: () async {
+                    if (Validator.validatePasswordsMatch(_passwordController.text.trim(),_confirmPasswordController.text.trim())!=null) {
+                      ScaffoldMessenger.of(context)
+                          .showSnackBar(
+                          const SnackBar(content: Text('Passwords do NOT match!')));
+                    }
+                    else{
+                      _register();
+                    }
+                  },
+                  style: TextButton.styleFrom(
+                    foregroundColor: AppStyle.buttonForegroundColor,
+                    elevation: 2,
+                    backgroundColor: AppStyle.buttonBackgroundColor,
+                    minimumSize: const Size(double.infinity, 55),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10), // 设置按钮的圆角半径
+                    ),
+                  ),
+                  child: const Text('Register', style: AppStyle.bigButtonFont),
+                ),
+              ],
             ),
-          );
+          ),
+        ),
+      );
   }
+
   void _showDialog(String message) {
     showDialog<void>(
       context: context,
@@ -134,7 +166,7 @@ class _SignUpState extends State<SignUpHttp> {
         actions: [
           CupertinoDialogAction(
             onPressed: () {
-              if(message=='Successfully registered as a new user') {
+              if(message=='You have benn successfully registered as a new user') {
                 Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(builder: (context) => const SignInHttp()),
