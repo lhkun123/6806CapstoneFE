@@ -44,7 +44,9 @@ class _SignUpState extends State<SignUpHttp> {
     await apiRequest.postRequest(query).then((response) {
       print(response.data);
       if (response.data["msg"] == "Success!") {
-        _showDialog('You have benn successfully registered as a new user');
+        _showDialog('You have been successfully registered as a new user');
+      }else{
+        _showDialog(response.data["msg"]);
       }
     });
 
@@ -172,6 +174,11 @@ class _SignUpState extends State<SignUpHttp> {
                   MaterialPageRoute(builder: (context) => const SignInHttp()),
                       (Route<dynamic> route) => false,
                 );
+              }else{
+                _emailController.text = '';
+                _passwordController.text = '';
+                _confirmPasswordController.text='';
+                Navigator.of(context).pop();
               }
             },
             child: const Text(

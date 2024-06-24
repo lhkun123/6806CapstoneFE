@@ -3,27 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:frontend/project/constants/api_request.dart';
 import 'package:frontend/project/views/auth/sign_up.dart';
 import 'package:http/http.dart' as http;
-import 'package:json_annotation/json_annotation.dart';
 import 'package:frontend/project/util/validate.dart';
 import 'package:localstorage/localstorage.dart';
 import '../../constants/app_style.dart';
 import '../home/home.dart';
 
-@JsonSerializable()
-class FormData {
-  String? email;
-  String? password;
 
-  FormData({
-    this.email,
-    this.password,
-  });
-
-  factory FormData.fromJson(Map<String, dynamic> json) =>
-      _$FormDataFromJson(json);
-
-  Map<String, dynamic> toJson() => _$FormDataToJson(this);
-}
 
 class SignInHttp extends StatefulWidget {
   final http.Client? httpClient;
@@ -38,22 +23,31 @@ class SignInHttp extends StatefulWidget {
 }
 
 class _SignInHttpState extends State<SignInHttp> {
-  FormData formData = FormData();
+  final _formKey = GlobalKey<FormState>();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
   late bool _isObscure = true;
   ApiRequest apiRequest=ApiRequest();
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
   late Map<String, dynamic> query = {
     "url": "http://localhost:8080/user-tokens",
     "body":{
-      "email":formData.email,
-      "password":formData.password
+      "email": _emailController.text.trim(),
+      "password":_passwordController.text.trim()
     }
   };
   void _fetchToken() async {
       await apiRequest.postRequest(query).then((response) {
-        print(response.data);
-        if (response.data["msg"] == "Success!") {
+        if (response.data["code"] == "200") {
           localStorage.setItem('token', response.data["data"]);
           _showDialog( 'Successfully signed in.');
+        }else{
+          _showDialog( response.data["msg"]);
         }
         });
 
@@ -66,6 +60,7 @@ class _SignInHttpState extends State<SignInHttp> {
         title: const Text('  '),
       ),
       body: Form(
+        key: _formKey,
         child: Scrollbar(
           child: SingleChildScrollView(
             padding: const EdgeInsets.all(16),
@@ -77,6 +72,19 @@ class _SignInHttpState extends State<SignInHttp> {
                     const Text('VanLife', style: AppStyle.hugeHeadingFont),
                     const Text('Simplifying Outdoor Fun in Vancouver.', style: AppStyle.sloganFont),
                     TextFormField(
+                      controller: _emailController,
+                      onChanged: (value) {
+                        _emailController.text = value;
+                        setState(() {
+                          query = {
+                            "url": "http://localhost:8080/user-tokens",
+                            "body":{
+                              "email": _emailController.text.trim(),
+                              "password":_passwordController.text.trim()
+                            }
+                          };
+                        });
+                      },
                       autofocus: true,
                       textInputAction: TextInputAction.next,
                       validator: (value) => Validator.validateEmail(value),
@@ -95,14 +103,22 @@ class _SignInHttpState extends State<SignInHttp> {
                         ),
                         errorStyle: AppStyle.errorFont
                       ),
-                      onChanged: (value) {
-                        formData.email = value;
-                      },
+
                     ),
                     TextFormField(
+                      controller: _passwordController,
                       obscureText: _isObscure, // 是否显示文字
                       onChanged: (value) {
-                        formData.password = value;
+                        _passwordController.text = value;
+                        setState(() {
+                          query = {
+                            "url": "http://localhost:8080/user-tokens",
+                            "body":{
+                              "email": _emailController.text.trim(),
+                              "password":_passwordController.text.trim()
+                            }
+                          };
+                        });
                       },
                       validator: (value) {
                         return Validator.validatePassword(value);
@@ -198,10 +214,9 @@ class _SignInHttpState extends State<SignInHttp> {
                       (Route<dynamic> route) => false,
                 );
               }else{
-                setState(() {
-                  formData.email="";
-                  formData.password="";
-                });
+                _emailController.text = '';
+                _passwordController.text = '';
+                Navigator.of(context).pop();
               }
             },
             child: const Text(
@@ -223,14 +238,3 @@ class _SignInHttpState extends State<SignInHttp> {
 // JsonSerializableGenerator
 // **************************************************************************
 
-FormData _$FormDataFromJson(Map<String, dynamic> json) {
-  return FormData(
-    email: json['email'] as String?,
-    password: json['password'] as String?,
-  );
-}
-
-Map<String, dynamic> _$FormDataToJson(FormData instance) => <String, dynamic>{
-      'email': instance.email,
-      'password': instance.password,
-    };
