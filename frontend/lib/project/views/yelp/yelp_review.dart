@@ -36,10 +36,10 @@ class _YelpReviewState extends State<YelpReview> {
     await apiRequest.getRequest(query).then((response) {
       if (response.statusCode == 200) {
         setState(() {
-          reviews = response.data["reviews"];
+          reviews = response.data["reviews"] ?? [];
         });
       } else {
-        throw Exception('Failed to fetch businesses');
+        throw Exception('Failed to fetch reviews');
       }
     });
   }
@@ -48,9 +48,16 @@ class _YelpReviewState extends State<YelpReview> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Reviews',style: AppStyle.headingFont),
+        title: const Text('Reviews', style: AppStyle.headingFont),
       ),
-      body: ListView.builder(
+      body: reviews.isEmpty
+          ? const Center(
+        child: Text(
+          "No review available",
+          style: AppStyle.bodyTextFont,
+        ),
+      )
+          : ListView.builder(
         padding: const EdgeInsets.all(16.0),
         itemCount: reviews.length,
         itemBuilder: (context, index) {
@@ -66,10 +73,12 @@ class _YelpReviewState extends State<YelpReview> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Image.network(
-                        review["user"]["image_url"],
+                        review["user"]["image_url"] ?? '',
                         fit: BoxFit.cover,
                         width: 50,
                         height: 50,
+                        errorBuilder: (context, error, stackTrace) =>
+                            const Icon(Icons.account_circle, size: 50),
                       ),
                       const SizedBox(width: 8), // Adjust spacing between image and name
                       Expanded(
@@ -77,7 +86,7 @@ class _YelpReviewState extends State<YelpReview> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              review["user"]["name"],
+                              review["user"]["name"] ?? 'Anonymous',
                               style: AppStyle.subheadingFont,
                             ),
                             const SizedBox(height: 4),
@@ -94,7 +103,7 @@ class _YelpReviewState extends State<YelpReview> {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    review["text"],
+                    review["text"] ?? '',
                     style: AppStyle.bodyTextFont,
                   ),
                 ],
@@ -106,4 +115,3 @@ class _YelpReviewState extends State<YelpReview> {
     );
   }
 }
-

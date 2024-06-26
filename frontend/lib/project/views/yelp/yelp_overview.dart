@@ -1,28 +1,28 @@
 import 'package:flutter/material.dart';
-
 import 'package:frontend/project/views/yelp/yelp_detail.dart';
 import 'package:frontend/project/views/yelp/yelp_map.dart';
 import 'package:frontend/project/views/yelp/yelp_review.dart';
 import '../../constants/app_style.dart';
+
 class YelpOverview extends StatefulWidget {
-  String alias,title,location;
+  String alias, title, location;
   double latitude, longitude;
   YelpOverview({super.key, required this.alias,required this.latitude, required this.longitude, required this.title,required this.location});
   @override
-  _YelpOverViewState createState() =>   _YelpOverViewState();
+  _YelpOverviewState createState() => _YelpOverviewState();
 }
 
-class _YelpOverViewState  extends State<YelpOverview> {
+class _YelpOverviewState extends State<YelpOverview> {
   @override
   void initState() {
-
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       home: DefaultTabController(
-        length: 3,  // Total number of tabs
+        length: 3, // Total number of tabs
         child: Scaffold(
           appBar: AppBar(
             leading: IconButton(
@@ -35,15 +35,20 @@ class _YelpOverViewState  extends State<YelpOverview> {
           body: TabBarView(
             children: [
               YelpDetail(alias: widget.alias), // Content of tab 1
-              YelpMap(latitude: widget.latitude,longitude: widget.longitude,location: widget.location,title: widget.title), // Content of tab 2
-              YelpReview(alias: widget.alias,), // Content of tab 3
+              YelpMap(
+                  latitude: widget.latitude,
+                  longitude: widget.longitude,
+                  location: widget.location,
+                  title: widget.title), // Content of tab 2
+              YelpReview(alias: widget.alias), // Content of tab 3
             ],
           ),
           bottomNavigationBar: const Material(
             color: AppStyle.barBackgroundColor,
             child: TabBar(
               labelColor: AppStyle.labelColor, // Color of the selected tab
-              unselectedLabelColor: AppStyle.unselectedLabelColor, // Color of the unselected ta
+              unselectedLabelColor:
+                  AppStyle.unselectedLabelColor, // Color of the unselected tab
               indicatorColor: AppStyle.indicatorColor,
               tabs: [
                 Tab(icon: Icon(Icons.info)),
