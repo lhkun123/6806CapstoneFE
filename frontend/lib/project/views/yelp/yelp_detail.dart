@@ -6,6 +6,8 @@ import 'package:localstorage/localstorage.dart';
 import '../../constants/api_key.dart';
 import '../../constants/api_request.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:url_launcher/url_launcher.dart';
+
 
 class YelpDetail extends StatefulWidget {
   String alias;
@@ -31,7 +33,6 @@ class _YelpDetailState extends State<YelpDetail> {
     super.initState();
     try {
       _fetchDetail();
-
     } on Exception catch (e) {
       print('Error: $e');
     }
@@ -112,6 +113,20 @@ class _YelpDetailState extends State<YelpDetail> {
         throw Exception('Failed to fetch detail!');
       }
     });
+  }
+
+  Future<void> _shareToFacebook() async {
+    final Uri _url = Uri.parse('https://www.facebook.com/sharer/sharer.php?u=https://www.yelp.com/biz/${widget.alias}');
+    if (!await launchUrl(_url)) {
+      throw 'Could not launch $_url';
+    }
+  }
+
+  Future<void> _shareToTwitter() async {
+    final Uri _url = Uri.parse('https://twitter.com/intent/tweet?url=https://www.yelp.com/biz/${widget.alias}');
+    if (!await launchUrl(_url)) {
+      throw 'Could not launch $_url';
+    }
   }
 
   @override
@@ -264,16 +279,12 @@ class _YelpDetailState extends State<YelpDetail> {
                         IconButton(
                           icon: const Icon(Icons.facebook),
                           color: AppStyle.barBackgroundColor,
-                          onPressed: () {
-                            // Handle Facebook share
-                          },
+                          onPressed: _shareToFacebook,
                         ),
                         IconButton(
                           icon: const Icon(FontAwesomeIcons.twitter),
                           color: AppStyle.barBackgroundColor,
-                          onPressed: () {
-                            // Handle Twitter share
-                          },
+                          onPressed: _shareToTwitter,
                         ),
                       ],
                     ),

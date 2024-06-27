@@ -9,7 +9,6 @@ import '../../constants/app_style.dart';
 import '../home/home.dart';
 
 
-
 class SignInHttp extends StatefulWidget {
   final http.Client? httpClient;
 
@@ -28,12 +27,14 @@ class _SignInHttpState extends State<SignInHttp> {
   final TextEditingController _passwordController = TextEditingController();
   late bool _isObscure = true;
   ApiRequest apiRequest=ApiRequest();
+
   @override
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
     super.dispose();
   }
+
   late Map<String, dynamic> query = {
     "url": "http://localhost:8080/user-tokens",
     "body":{
@@ -41,16 +42,18 @@ class _SignInHttpState extends State<SignInHttp> {
       "password":_passwordController.text.trim()
     }
   };
+
   void _fetchToken() async {
+    if (_formKey.currentState!.validate()) {
       await apiRequest.postRequest(query).then((response) {
         if (response.data["code"] == "200") {
           localStorage.setItem('token', response.data["data"]);
-          _showDialog( 'Successfully signed in.');
-        }else{
-          _showDialog( response.data["msg"]);
+          _showDialog('Successfully signed in.');
+        } else {
+          _showDialog(response.data["msg"]);
         }
-        });
-
+      });
+    }
   }
 
   @override
@@ -71,19 +74,12 @@ class _SignInHttpState extends State<SignInHttp> {
                     const SizedBox(height: 100),
                     const Text('VanLife', style: AppStyle.hugeHeadingFont),
                     const Text('Simplifying Outdoor Fun in Vancouver.', style: AppStyle.sloganFont),
+
+                    // Email Input Box
                     TextFormField(
                       controller: _emailController,
                       onChanged: (value) {
-                        _emailController.text = value;
-                        setState(() {
-                          query = {
-                            "url": "http://localhost:8080/user-tokens",
-                            "body":{
-                              "email": _emailController.text.trim(),
-                              "password":_passwordController.text.trim()
-                            }
-                          };
-                        });
+                        setState(() {});
                       },
                       autofocus: true,
                       textInputAction: TextInputAction.next,
@@ -105,20 +101,13 @@ class _SignInHttpState extends State<SignInHttp> {
                       ),
 
                     ),
+
+                    // Password Input Box
                     TextFormField(
                       controller: _passwordController,
-                      obscureText: _isObscure, // 是否显示文字
+                      obscureText: _isObscure,
                       onChanged: (value) {
-                        _passwordController.text = value;
-                        setState(() {
-                          query = {
-                            "url": "http://localhost:8080/user-tokens",
-                            "body":{
-                              "email": _emailController.text.trim(),
-                              "password":_passwordController.text.trim()
-                            }
-                          };
-                        });
+                        setState(() {});
                       },
                       validator: (value) {
                         return Validator.validatePassword(value);
@@ -126,7 +115,7 @@ class _SignInHttpState extends State<SignInHttp> {
                       decoration: InputDecoration(
                         labelText: "Password",
                         labelStyle: const TextStyle(
-                          color: Color.fromRGBO(130, 130, 130, 1), // Color of the label when not focused
+                          color: Color.fromRGBO(130, 130, 130, 1),
                         ),
                         border: const OutlineInputBorder(
                           borderSide: BorderSide(color: Color.fromRGBO(130, 130, 130, 1)),
@@ -142,7 +131,7 @@ class _SignInHttpState extends State<SignInHttp> {
                             color: Color.fromRGBO(130, 130, 130, 1),
                           ),
                           onPressed: () {
-                            // 修改 state 内部变量, 且需要界面内容更新, 需要使用 setState()
+                            // To modify the internal variables of state and update the interface content
                             setState(() {
                               _isObscure = !_isObscure;
                             });
@@ -150,6 +139,8 @@ class _SignInHttpState extends State<SignInHttp> {
                         ),
                       ),
                     ),
+
+                    // "Sign In" Button
                     TextButton(
                       onPressed: () async {
                         _fetchToken();
@@ -160,11 +151,13 @@ class _SignInHttpState extends State<SignInHttp> {
                         backgroundColor: AppStyle.buttonBackgroundColor,
                         minimumSize: const Size(double.infinity, 55),
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10), // 设置按钮的圆角半径
+                          borderRadius: BorderRadius.circular(10),
                         ),
                       ),
                       child: const Text('Sign In'),
                     ),
+
+                    // "Sign Up" Button
                     TextButton(
                       onPressed: () => Navigator.of(context).push(
                         MaterialPageRoute(
@@ -177,7 +170,7 @@ class _SignInHttpState extends State<SignInHttp> {
                         backgroundColor: AppStyle.buttonBackgroundColor,
                         minimumSize: const Size(double.infinity, 55),
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10), // 设置按钮的圆角半径
+                          borderRadius: BorderRadius.circular(10),
                         ),
                       ),
                       child: const Text('Sign Up'),
@@ -199,6 +192,7 @@ class _SignInHttpState extends State<SignInHttp> {
     );
   }
 
+  // Successful Login Notification
   void _showDialog(String message) {
     showDialog<void>(
       context: context,
