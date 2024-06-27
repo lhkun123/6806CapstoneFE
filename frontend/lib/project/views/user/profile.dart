@@ -28,8 +28,11 @@ class _ProfileState extends State<Profile> {
         setState(() {
           profileInformation = response.data["data"];
         });
-      } else {
-        throw Exception('Failed to fetch profile information');
+      } else if(response.data["code"] =="555") {
+        _showDialog("session expired");
+      }
+      else {
+        throw Exception('Failed to fetch favourite!');
       }
     });
   }
@@ -123,15 +126,16 @@ class _ProfileState extends State<Profile> {
         builder: (context) => CupertinoAlertDialog(
           title: const Text("Notification"),
           actions: [
-            CupertinoDialogAction(
-              onPressed: () {
-                Navigator.of(context).pop(); // Close the dialog
-              },
-              child: const Text(
-                "Cancel",
-                style: AppStyle.bodyTextFont,
+            if (message != "session expired")
+              CupertinoDialogAction(
+                onPressed: () {
+                  Navigator.of(context).pop(); // Close the dialog
+                },
+                child: const Text(
+                  "Cancel",
+                  style: AppStyle.bodyTextFont,
+                ),
               ),
-            ),
             CupertinoDialogAction(onPressed: (){
               localStorage.removeItem("token");
               Navigator.pushAndRemoveUntil(
