@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/project/constants/api_request.dart';
 import 'package:frontend/project/constants/app_style.dart';
-import 'package:frontend/project/views/profile/profile.dart';
+
 import 'package:frontend/project/views/yelp/yelp_search.dart';
 import 'package:frontend/project/views/fields/fields_list_page.dart';
+import '../user/profile.dart';
 import '../weather/weather_home.dart';
 
 class Home extends StatefulWidget {

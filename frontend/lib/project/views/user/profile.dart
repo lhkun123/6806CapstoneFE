@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:frontend/project/constants/api_request.dart';
 import 'package:frontend/project/constants/app_style.dart';
 import 'package:frontend/project/views/auth/sign_in.dart';
+import 'package:frontend/project/views/user/favourites.dart';
 import 'package:localstorage/localstorage.dart';
 
 class Profile extends StatefulWidget {
@@ -22,14 +23,15 @@ class _ProfileState extends State<Profile> {
   ApiRequest apiRequest=ApiRequest();
   void _fetchProfile() async {
     await apiRequest.getRequest(query).then((response) {
-      print(response.data);
-      print(response.data["data"]);
       if (response.data["code"] =="200") {
         setState(() {
           profileInformation = response.data["data"];
         });
-      } else {
-        throw Exception('Failed to fetch profile information');
+      } else if(response.data["code"] =="555") {
+        _showDialog("session expired");
+      }
+      else {
+        throw Exception('Failed to fetch favourite!');
       }
     });
   }
@@ -83,6 +85,7 @@ class _ProfileState extends State<Profile> {
                     title: 'Favorites',
                     value: '',
                     icon: Icons.favorite,
+
                   ),
                   const ProfileItem(
                     title: 'About',
@@ -123,15 +126,16 @@ class _ProfileState extends State<Profile> {
         builder: (context) => CupertinoAlertDialog(
           title: const Text("Notification"),
           actions: [
-            CupertinoDialogAction(
-              onPressed: () {
-                Navigator.of(context).pop(); // Close the dialog
-              },
-              child: const Text(
-                "Cancel",
-                style: AppStyle.bodyTextFont,
+            if (message != "session expired")
+              CupertinoDialogAction(
+                onPressed: () {
+                  Navigator.of(context).pop(); // Close the dialog
+                },
+                child: const Text(
+                  "Cancel",
+                  style: AppStyle.bodyTextFont,
+                ),
               ),
-            ),
             CupertinoDialogAction(onPressed: (){
               localStorage.removeItem("token");
               Navigator.pushAndRemoveUntil(
@@ -177,7 +181,13 @@ class ProfileItem extends StatelessWidget {
           subtitle: value.isNotEmpty ? Text(value, style: AppStyle.bodyTextFont) : null,
           trailing:  Icon(icon, color: Colors.blue),
           onTap: () {
-
+              if(title=="Favorites"){
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => const Favourites(),
+                  ),
+                );
+              }
           },
         ),
         const Divider(),
