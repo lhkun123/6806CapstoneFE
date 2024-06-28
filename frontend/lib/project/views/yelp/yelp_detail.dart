@@ -367,6 +367,7 @@ class _YelpDetailState extends State<YelpDetail> {
                 favourite = !favourite;
                 Navigator.of(context).pop();
               }else{
+                localStorage.removeItem("token");
                 Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(builder: (context) => const SignInHttp()),

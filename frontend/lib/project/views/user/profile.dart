@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:frontend/project/constants/api_request.dart';
 import 'package:frontend/project/constants/app_style.dart';
 import 'package:frontend/project/views/auth/sign_in.dart';
+import 'package:frontend/project/views/user/favourites.dart';
 import 'package:localstorage/localstorage.dart';
 
 class Profile extends StatefulWidget {
@@ -22,8 +23,6 @@ class _ProfileState extends State<Profile> {
   ApiRequest apiRequest=ApiRequest();
   void _fetchProfile() async {
     await apiRequest.getRequest(query).then((response) {
-      print(response.data);
-      print(response.data["data"]);
       if (response.data["code"] =="200") {
         setState(() {
           profileInformation = response.data["data"];
@@ -86,6 +85,7 @@ class _ProfileState extends State<Profile> {
                     title: 'Favorites',
                     value: '',
                     icon: Icons.favorite,
+
                   ),
                   const ProfileItem(
                     title: 'About',
@@ -181,7 +181,13 @@ class ProfileItem extends StatelessWidget {
           subtitle: value.isNotEmpty ? Text(value, style: AppStyle.bodyTextFont) : null,
           trailing:  Icon(icon, color: Colors.blue),
           onTap: () {
-
+              if(title=="Favorites"){
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => const Favourites(),
+                  ),
+                );
+              }
           },
         ),
         const Divider(),
