@@ -156,7 +156,7 @@ class _FavouritesState extends State<Favourites> {
                           onPressed: (context) {
                             Navigator.of(context).push(
                               MaterialPageRoute(
-                                builder: (context) => YelpDetail(alias: entertainment[index]["alias"]),
+                                builder: (context) => YelpDetail(alias: entertainment[index]["alias"],title: entertainment[index]["name"],),
                               ),
                             );
                           },
