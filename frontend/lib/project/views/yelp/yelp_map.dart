@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import '../../constants/app_style.dart';
+
 class YelpMap extends StatefulWidget {
   double latitude, longitude;
-  String location,title;
+  String location, title;
   YelpMap({super.key, required this.latitude,required this.longitude,required this.location, required this.title});
   @override
   _YelpMapState createState() => _YelpMapState();

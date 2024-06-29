@@ -62,11 +62,11 @@ class _SignUpState extends State<SignUpHttp> {
           elevation: 0.0,
           title: const Text(
             'Sign up',
-            style: AppStyle.barHeadingFont,
+            style: AppStyle.barHeadingFont2,
           ),
           centerTitle: true,
           iconTheme: const IconThemeData(
-            color: Colors.white, // 返回箭头的颜色
+            color: Colors.white,
           ),
         ),
         body: Container(
@@ -75,7 +75,7 @@ class _SignUpState extends State<SignUpHttp> {
             key: _formKey,
             child: Column(
               children: [
-                const SizedBox(height: 200.0),
+                const SizedBox(height: 150.0),
                 TextFormField(
                   controller: _emailController,
                   autofocus: true,

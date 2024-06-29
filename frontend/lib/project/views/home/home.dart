@@ -73,33 +73,34 @@ class _HomeState extends State<Home> {
     return MaterialApp(
       home: DefaultTabController(
         length: 4,  // Total number of tabs
-        child:  weatherData.isEmpty ? const Center(child: CircularProgressIndicator()) :Scaffold(
-        body: TabBarView(
-          children: [
-                 WeatherHome(
-                    weatherData: weatherData,
-                    recommendationData: recommendationData), // 显示WeatherHome内容
-            const YelpSearch(), // YelpSearch tab content
-            FieldsListPage(), // FieldsListPage tab content
-            const Profile(), // Profile tab content
-          ],
-        ),
-        bottomNavigationBar: const Material(
-          color: AppStyle.barBackgroundColor,
-          child: TabBar(
-            labelColor: AppStyle.labelColor, // Color of the selected tab
-            unselectedLabelColor:
-                AppStyle.unselectedLabelColor, // Color of the unselected tab
-            indicatorColor: AppStyle.indicatorColor,
-            tabs: [
-              Tab(icon: Icon(Icons.home)),
-              Tab(icon: Icon(Icons.business)),
-              Tab(icon: Icon(Icons.wb_sunny)),
-              Tab(icon: Icon(Icons.person)),
+        child:  weatherData.isEmpty ? const Center(child: CircularProgressIndicator()) :
+        Scaffold(
+          body: TabBarView(
+            children: [
+                   WeatherHome(
+                      weatherData: weatherData,
+                      recommendationData: recommendationData), // 显示WeatherHome内容
+              const YelpSearch(), // YelpSearch tab content
+              FieldsListPage(), // FieldsListPage tab content
+              const Profile(), // Profile tab content
             ],
           ),
+          bottomNavigationBar: const Material(
+            color: AppStyle.barBackgroundColor,
+            child: TabBar(
+              labelColor: AppStyle.labelColor, // Color of the selected tab
+              unselectedLabelColor:
+                  AppStyle.unselectedLabelColor, // Color of the unselected tab
+              indicatorColor: AppStyle.indicatorColor,
+              tabs: [
+                Tab(icon: Icon(Icons.home)),
+                Tab(icon: Icon(Icons.restaurant)),
+                Tab(icon: Icon(Icons.forest)),
+                Tab(icon: Icon(Icons.person)),
+              ],
+            ),
+          ),
         ),
-      ),
       ),
     );
   }

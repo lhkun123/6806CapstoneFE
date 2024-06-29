@@ -44,8 +44,16 @@ class _ProfileState extends State<Profile> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Profile', style: AppStyle.bigHeadingFont),
+        backgroundColor: AppStyle.barBackgroundColor,
+        elevation: 0.0,
+        title: const Text(
+          'Profile',
+          style: AppStyle.barHeadingFont2,
+        ),
         centerTitle: true,
+        iconTheme: const IconThemeData(
+          color: Colors.white,
+        ),
       ),
       body: profileInformation.isEmpty
           ? const Center(
@@ -108,7 +116,7 @@ class _ProfileState extends State<Profile> {
                         borderRadius: BorderRadius.circular(10), // 设置按钮的圆角半径
                       ),
                     ),
-                    child: const Text('Log Out'),
+                    child: const Text('Log Out', style: AppStyle.bigButtonFont),
                   ),
                 ],
               ),

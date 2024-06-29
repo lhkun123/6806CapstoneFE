@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import '../../constants/app_style.dart';
 
 class FieldDetailPage extends StatelessWidget {
   final Map<String, dynamic> field;
@@ -25,8 +26,21 @@ class FieldDetailPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(field['name'] ?? 'Field Details'),
+        backgroundColor: AppStyle.barBackgroundColor,
+        elevation: 0.0,
+        title: Text(field['name'] ?? 'Field Details', style: AppStyle.barHeadingFont2),
+        centerTitle: true,
+        iconTheme: const IconThemeData(
+          color: Colors.white,
+        ),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.white),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
       ),
+
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),

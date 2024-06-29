@@ -12,8 +12,8 @@ import '../auth/sign_in.dart';
 
 
 class YelpDetail extends StatefulWidget {
-  String alias;
-  YelpDetail({super.key, required this.alias});
+  String alias, title;
+  YelpDetail({super.key, required this.alias, required this.title});
 
   @override
   _YelpDetailState createState() => _YelpDetailState();
@@ -43,6 +43,7 @@ class _YelpDetailState extends State<YelpDetail> {
   @override
   void dispose() {
     detail?.clear();
+    imgList.clear();
     super.dispose();
   }
 

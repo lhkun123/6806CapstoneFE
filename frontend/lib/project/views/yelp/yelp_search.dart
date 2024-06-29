@@ -165,44 +165,52 @@ class _YelpSearchState extends State<YelpSearch> {
     return Scaffold(
       backgroundColor: Colors.white, // Set the background color to white
       appBar: AppBar(
-        title: Row(
-          children: [
-            const Text('Entertainment', style: AppStyle.bigHeadingFont),
-            const SizedBox(width: 8),
-            GestureDetector(
-              onTap: () {
-                if (!autoLocation) {
-                  _determinePosition();
-                } else {
-                  setState(() {
-                    autoLocation = !autoLocation;
-                  });
-                }
-              },
-              child: Icon(
-                autoLocation ? Icons.location_on : Icons.location_off,
-                color: AppStyle.barBackgroundColor,
-              ),
-            ),
-            InkWell(
-              onTap: () {
-                setState(() {
-                  if (!autoLocation) {
-                    _showDialog();
-                  }
-                });
-              },
-              child: Row(
-                children: [
-                  Text(searchQuery["parameters"]["location"], style: AppStyle.subheadingFont),
-                ],
-              ),
-            ),
-          ],
+        backgroundColor: AppStyle.barBackgroundColor,
+        elevation: 0.0,
+        centerTitle: true,
+        iconTheme: const IconThemeData(
+          color: Colors.white,
         ),
+        title: const Text('Entertainment', style: AppStyle.barHeadingFont2),
       ),
       body: Column(
         children: [
+        Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Row(
+            children: [
+              GestureDetector(
+                onTap: () {
+                  if (!autoLocation) {
+                    _determinePosition();
+                  } else {
+                    setState(() {
+                      autoLocation = !autoLocation;
+                    });
+                  }
+                },
+                child: Icon(
+                  autoLocation ? Icons.location_on : Icons.location_off,
+                  color: AppStyle.barBackgroundColor,
+                  size: 25,
+                ),
+              ),
+              InkWell(
+                onTap: () {
+                  setState(() {
+                    if (!autoLocation) {
+                      _showDialog();
+                    }
+                  });
+                },
+                child: Row(
+                  children: [
+                    Text(searchQuery["parameters"]["location"], style: AppStyle.bodyTextFont),
+                  ],
+                ),
+              ),
+            ],),
+          ),
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: Row(
@@ -349,7 +357,12 @@ class _YelpSearchState extends State<YelpSearch> {
                     onTap: () {
                       Navigator.of(context).push(
                         MaterialPageRoute(
-                          builder: (context) => YelpOverview(alias: businesses[index]["alias"] ?? "", latitude: businesses[index]["coordinates"]["latitude"] ?? 0, longitude: businesses[index]["coordinates"]["longitude"] ?? 0, location: businesses[index]["location"]["address1"], title: businesses[index]["name"],),
+                          builder: (context) => YelpOverview(
+                            alias: businesses[index]["alias"] ?? "",
+                            latitude: businesses[index]["coordinates"]["latitude"] ?? 0,
+                            longitude: businesses[index]["coordinates"]["longitude"] ?? 0,
+                            location: businesses[index]["location"]["address1"],
+                            title: businesses[index]["name"],),
                         ),
                       );
                     },
@@ -359,8 +372,8 @@ class _YelpSearchState extends State<YelpSearch> {
             ),
           ),
         ],
-      ),
-    );
+        ),
+      );
   }
 
   void _showDialog() {

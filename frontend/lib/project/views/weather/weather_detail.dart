@@ -3,6 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'weather_detail_item.dart';
 import 'clothing_recommendation.dart';
+import '../../constants/app_style.dart';
 
 class WeatherDetailPage extends StatelessWidget {
   final Map<String, dynamic> weatherData;
@@ -60,7 +61,22 @@ class WeatherDetailPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Weather Details'),
+        backgroundColor: AppStyle.barBackgroundColor,
+        elevation: 0.0,
+        title: const Text(
+          'Weather',
+          style: AppStyle.barHeadingFont2,
+        ),
+        centerTitle: true,
+        iconTheme: const IconThemeData(
+          color: Colors.white,
+        ),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.white),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
       ),
       body: Container(
         color: Color(0xFFE0F7FA),

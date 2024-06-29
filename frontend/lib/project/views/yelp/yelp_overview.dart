@@ -21,26 +21,32 @@ class _YelpOverviewState extends State<YelpOverview> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: DefaultTabController(
+      home: Scaffold(
+        appBar: AppBar(
+          backgroundColor: AppStyle.barBackgroundColor,
+          elevation: 0.0,
+          title: Text(widget.title, style: AppStyle.barHeadingFont2),
+          centerTitle: true,
+          iconTheme: const IconThemeData(color: Colors.white),
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back, color: Colors.white),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+        ) ,
+      body: DefaultTabController(
         length: 3, // Total number of tabs
         child: Scaffold(
-          appBar: AppBar(
-            leading: IconButton(
-              icon: const Icon(Icons.arrow_back, color: AppStyle.barBackgroundColor),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ),
           body: TabBarView(
             children: [
-              YelpDetail(alias: widget.alias), // Content of tab 1
+              YelpDetail(alias: widget.alias, title: widget.title), // Content of tab 1
               YelpMap(
                   latitude: widget.latitude,
                   longitude: widget.longitude,
                   location: widget.location,
                   title: widget.title), // Content of tab 2
-              YelpReview(alias: widget.alias), // Content of tab 3
+              YelpReview(alias: widget.alias, title: widget.title), // Content of tab 3
             ],
           ),
           bottomNavigationBar: const Material(
@@ -60,6 +66,7 @@ class _YelpOverviewState extends State<YelpOverview> {
           ),
         ),
       ),
+    )
     );
   }
 }
