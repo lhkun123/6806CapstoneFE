@@ -7,8 +7,8 @@ import '../../constants/api_key.dart';
 import '../../constants/api_request.dart';
 
 class YelpReview extends StatefulWidget {
-  const YelpReview({super.key, required this.alias});
-  final String alias;
+  final String alias, title;
+  const YelpReview({super.key, required this.alias, required this.title});
 
   @override
   State<YelpReview> createState() => _YelpReviewState();
@@ -47,9 +47,6 @@ class _YelpReviewState extends State<YelpReview> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Reviews', style: AppStyle.headingFont),
-      ),
       body: reviews.isEmpty
           ? const Center(
         child: Text(

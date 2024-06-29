@@ -71,8 +71,8 @@ class _SignInHttpState extends State<SignInHttp> {
               child: Column(
                 children: [
                   ...[
-                    const SizedBox(height: 100),
-                    const Text('VanLife', style: AppStyle.hugeHeadingFont),
+                    const SizedBox(height: 60),
+                    Image.asset('assets/logo2.png', height: 100),
                     const Text('Simplifying Outdoor Fun in Vancouver.', style: AppStyle.sloganFont),
 
                     // Email Input Box
@@ -154,7 +154,7 @@ class _SignInHttpState extends State<SignInHttp> {
                           borderRadius: BorderRadius.circular(10),
                         ),
                       ),
-                      child: const Text('Sign In'),
+                      child: const Text('Sign In', style: AppStyle.bigButtonFont),
                     ),
 
                     // "Sign Up" Button
@@ -173,7 +173,7 @@ class _SignInHttpState extends State<SignInHttp> {
                           borderRadius: BorderRadius.circular(10),
                         ),
                       ),
-                      child: const Text('Sign Up'),
+                      child: const Text('Sign Up', style: AppStyle.bigButtonFont),
                     ),
                   ].expand(
                     (widget) => [

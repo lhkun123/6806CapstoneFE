@@ -3,6 +3,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import '../../constants/api_request.dart';
 import 'field_detail_page.dart';
+import '../../constants/app_style.dart';
 
 class FieldsListPage extends StatefulWidget {
   @override
@@ -70,7 +71,16 @@ class _FieldsListPageState extends State<FieldsListPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Fields List'),
+        backgroundColor: AppStyle.barBackgroundColor,
+        elevation: 0.0,
+        title: const Text(
+          'Attractions',
+          style: AppStyle.barHeadingFont2,
+        ),
+        centerTitle: true,
+        iconTheme: const IconThemeData(
+          color: Colors.white,
+        ),
       ),
       body: Column(
         children: [

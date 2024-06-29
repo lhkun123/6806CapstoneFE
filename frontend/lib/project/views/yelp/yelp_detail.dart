@@ -10,8 +10,8 @@ import 'package:url_launcher/url_launcher.dart';
 
 
 class YelpDetail extends StatefulWidget {
-  String alias;
-  YelpDetail({super.key, required this.alias});
+  String alias, title;
+  YelpDetail({super.key, required this.alias, required this.title});
 
   @override
   _YelpDetailState createState() => _YelpDetailState();
@@ -41,6 +41,7 @@ class _YelpDetailState extends State<YelpDetail> {
   @override
   void dispose() {
     detail?.clear();
+    imgList.clear();
     super.dispose();
   }
 
@@ -76,9 +77,7 @@ class _YelpDetailState extends State<YelpDetail> {
       }
     };
     if(!favourite){
-
       await apiRequest.postRequest(queryFavourite).then((response) {
-
         if (response.statusCode == 200) {
           setState(() {
               favourite=true;
@@ -132,10 +131,6 @@ class _YelpDetailState extends State<YelpDetail> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(detail?["name"] ?? 'Loading...', style: AppStyle.bigHeadingFont),
-        centerTitle: true
-      ),
       body: detail == null
           ? const Center(
         child: CircularProgressIndicator(

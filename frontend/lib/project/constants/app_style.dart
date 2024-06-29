@@ -17,10 +17,17 @@ class AppStyle {
     color: Color.fromRGBO(130, 130, 130, 1),
   );
 
-  static const barHeadingFont = TextStyle(
+  static const barHeadingFont1 = TextStyle(
     fontFamily: 'Roboto',
     fontWeight: FontWeight.normal,
-    fontSize: 22,
+    fontSize: 24,
+    color: Colors.white,
+  );
+
+  static const barHeadingFont2 = TextStyle(
+    fontFamily: 'Roboto',
+    fontWeight: FontWeight.normal,
+    fontSize: 20,
     color: Colors.white,
   );
 
@@ -28,6 +35,13 @@ class AppStyle {
     fontFamily: 'Roboto',
     fontWeight: FontWeight.normal,
     fontSize: 18,
+    color: Colors.white,
+  );
+
+  static const smallBarFont = TextStyle(
+    fontFamily: 'Roboto',
+    fontWeight: FontWeight.normal,
+    fontSize: 10,
     color: Colors.white,
   );
 

@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:frontend/project/views/weather/recommendation_card.dart';
 import 'package:frontend/project/views/weather/weather_card.dart';
+import '../../constants/app_style.dart';
 
 class WeatherHome extends StatelessWidget {
   Map<String, dynamic> weatherData;
@@ -14,6 +15,7 @@ class WeatherHome extends StatelessWidget {
         recommendationData.isEmpty || recommendationData['fields']==null;
 
     return SingleChildScrollView(
+      padding: const EdgeInsets.all(16),
       child: Column(
         children: [
           WeatherCard(weatherData: weatherData),
@@ -21,27 +23,22 @@ class WeatherHome extends StatelessWidget {
           if (badWeather)
             Column(
               children: [
-                const Text("The weather is not good for outdoor activities.",
-                    style:
-                    TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                const Text("The weather is not good for outdoor activities.", style: AppStyle.bigHeadingFont),
                 const SizedBox(height: 10),
-                const Text("You can choose indoor activities.",
-                    style: TextStyle(fontSize: 16)),
+                const Text("You can choose indoor activities.", style: AppStyle.headingFont),
                 const SizedBox(height: 10),
-                Image.asset('assets/image.png'), // 确保你的图片路径正确
+                Image.asset('assets/image.png'),
               ],
             )
           else
             Column(
               children: [
-                const Text("Today's Recommendation",
-                    style:
-                    TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                const Text("Today's Recommendation", style: AppStyle.bigHeadingFont),
                 const SizedBox(height: 10),
                 Text(
                   recommendationData['advice'] ??
                       'No recommendations available.',
-                  style: const TextStyle(fontSize: 16),
+                  style: AppStyle.headingFont,
                 ),
                 if (recommendationData.isNotEmpty)
                   for (var location in recommendationData['fields'])
