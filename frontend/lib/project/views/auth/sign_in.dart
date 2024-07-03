@@ -146,9 +146,9 @@ class _SignInHttpState extends State<SignInHttp> {
                         _fetchToken();
                       },
                       style: TextButton.styleFrom(
-                        foregroundColor: AppStyle.buttonForegroundColor,
+                        foregroundColor: AppStyle.primaryColor,
                         elevation: 2,
-                        backgroundColor: AppStyle.buttonBackgroundColor,
+                        backgroundColor: AppStyle.barBackgroundColor,
                         minimumSize: const Size(double.infinity, 55),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
@@ -165,9 +165,9 @@ class _SignInHttpState extends State<SignInHttp> {
                         ),
                       ),
                       style: TextButton.styleFrom(
-                        foregroundColor: AppStyle.buttonForegroundColor,
+                        foregroundColor: AppStyle.primaryColor,
                         elevation: 2,
-                        backgroundColor: AppStyle.buttonBackgroundColor,
+                        backgroundColor: AppStyle.barBackgroundColor,
                         minimumSize: const Size(double.infinity, 55),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),

@@ -15,7 +15,6 @@ class WeatherHome extends StatelessWidget {
         recommendationData.isEmpty || recommendationData['fields']==null;
 
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(16),
       child: Column(
         children: [
           WeatherCard(weatherData: weatherData),
@@ -33,16 +32,16 @@ class WeatherHome extends StatelessWidget {
           else
             Column(
               children: [
-                const Text("Today's Recommendation", style: AppStyle.bigHeadingFont),
+                const Text("Today's Recommendation", style: AppStyle.themeHeadingFont),
                 const SizedBox(height: 10),
                 Text(
                   recommendationData['advice'] ??
                       'No recommendations available.',
-                  style: AppStyle.headingFont,
+                  style: AppStyle.bodyTextFont,
                 ),
                 if (recommendationData.isNotEmpty)
-                  for (var location in recommendationData['fields'])
-                    RecommendationCard(location: location),
+                  for (var field in recommendationData['fields'])
+                    RecommendationCard(field: field),
               ],
             ),
         ],

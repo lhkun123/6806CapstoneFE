@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import '../../constants/app_style.dart';
+import 'package:flutter_star/star.dart';
+import 'package:flutter_star/star_score.dart';
 
 class FieldDetailPage extends StatelessWidget {
   final Map<String, dynamic> field;
@@ -24,7 +26,10 @@ class FieldDetailPage extends StatelessWidget {
     if (field['previewImageUrl5'] != null)
       imageUrls.add(field['previewImageUrl5']);
 
+    print(imageUrls);
+
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: AppStyle.barBackgroundColor,
         elevation: 0.0,
@@ -66,18 +71,47 @@ class FieldDetailPage extends StatelessWidget {
                     );
                   }).toList(),
                 ),
-              SizedBox(height: 16),
-              Text(field['name'] ?? 'No Name',
-                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
-              Text(field['location'] ?? 'No Location'),
-              Text('Rating: ${field['rating'] ?? 'No Rating'}'),
-              Text('Difficulty: ${field['difficulty'] ?? 'No Difficulty'}'),
-              Text('Distance: ${field['distance'] ?? 'No Distance'} km'),
-              Text(
-                  'Estimated Time: ${field['estimatedTime'] ?? 'No Estimated Time'}'),
-              SizedBox(height: 16),
-              Text('Description', style: TextStyle(fontSize: 20)),
-              Text(field['description'] ?? 'No Description'),
+              const SizedBox(height: 16),
+              Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        const Icon(Icons.location_on, color: AppStyle.barBackgroundColor, size: 21),
+                        const SizedBox(width: 5),
+                        Text(field['location'] ?? 'No Location', style: AppStyle.themeTextFont),
+                      ],
+                    ),
+                    const SizedBox(height: 5),
+                    Row(
+                      children: [
+                        StarScore(
+                          score: field['rating'],
+                          star: Star(
+                              fillColor: Colors.yellow,
+                              emptyColor: Colors.grey.withAlpha(88),
+                              size: 12
+                          ),
+                        ),
+                        const SizedBox(width: 16),
+                        Text('${field['distance'] ?? 'No Distance'} km'),
+                        const SizedBox(width: 16),
+                        Text('${field['difficulty'] ?? 'No Difficulty'}'),
+
+                      ],
+                    ),
+                    const SizedBox(height: 5),
+                    Text('Estimated Time: ${field['estimated_time'] ?? 'No Estimated Time'}'),
+                    const SizedBox(height: 32),
+                    const Text('Description', style: AppStyle.themeBigTextFont),
+                    const SizedBox(height: 5),
+                    Text(field['description'] ?? 'No Description', style: AppStyle.bodyTextFont),
+                  ],
+                ),
+              ),
+
             ],
           ),
         ),

@@ -192,9 +192,10 @@ class _YelpSearchState extends State<YelpSearch> {
                 child: Icon(
                   autoLocation ? Icons.location_on : Icons.location_off,
                   color: AppStyle.barBackgroundColor,
-                  size: 25,
+                  size: 22,
                 ),
               ),
+              const SizedBox(width: 6),
               InkWell(
                 onTap: () {
                   setState(() {
@@ -209,171 +210,175 @@ class _YelpSearchState extends State<YelpSearch> {
                   ],
                 ),
               ),
-            ],),
+            ],
           ),
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Row(
-              children: [
-                SizedBox(
-                  width: 320, height: 50,
-                  child: SearchAnchor(
-                    viewBackgroundColor: AppStyle.primaryColor,
-                    dividerColor: AppStyle.primaryColor,
-                    builder: (BuildContext context, SearchController controller) {
-                      return SearchBar(
-                        controller: controller,
-                        backgroundColor: WidgetStateProperty.all<Color>(AppStyle.primaryColor),
-                        padding: const WidgetStatePropertyAll<EdgeInsets>(
-                          EdgeInsets.symmetric(horizontal: 16.0),
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 0.0, horizontal: 16.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SizedBox(
+                width: 340, height: 40,
+                child: SearchAnchor(
+                  viewBackgroundColor: AppStyle.primaryColor,
+                  dividerColor: AppStyle.primaryColor,
+                  builder: (BuildContext context, SearchController controller) {
+                    return SearchBar(
+                      controller: controller,
+                      backgroundColor: WidgetStateProperty.all<Color>(AppStyle.primaryColor),
+                      padding: const WidgetStatePropertyAll<EdgeInsets>(
+                        EdgeInsets.symmetric(horizontal: 16.0),
+                      ),
+                      onTap: () {
+                        controller.openView();
+                      },
+                      onChanged: (keyword) {
+                        controller.openView();
+                      },
+                      leading: const Icon(Icons.search),
+                    );
+                  },
+                  suggestionsBuilder: (BuildContext context, SearchController controller) async {
+                    final List<String> options = await _fetchAutocompleteList(
+                        controller.text);
+                    return options.map((String keyword) => ListTile(
+                      title: Text(keyword),
+                      onTap: () {
+                        setState(() {
+                          _searchByKeyword(keyword);
+                          controller.closeView(keyword);
+                        });
+                      },
+                    )).toList();
+                  },
+                ),
+              )
+            ],
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Row(
+            children: [
+              Expanded(
+                child: Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Text('Sort by:  ', style: AppStyle.bodyTextFont),
+                        const SizedBox(width: 8),
+                        DropdownButton<String>(
+                          style: AppStyle.bodyTextFont,
+                          value: selectedSortCategory,
+                          onChanged: (String? newValue) {
+                            setState(() {
+                              _sortByCategory(newValue!);
+                            });
+                          },
+                          items: <String>['Default', 'Rating', 'Distance', 'Reviews']
+                              .map<DropdownMenuItem<String>>((String value) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: Text(value),
+                            );
+                          }).toList(),
                         ),
-                        onTap: () {
-                          controller.openView();
-                        },
-                        onChanged: (keyword) {
-                          controller.openView();
-                        },
-                        leading: const Icon(Icons.search),
-                      );
-                    },
-                    suggestionsBuilder: (BuildContext context, SearchController controller) async {
-                      final List<String> options = await _fetchAutocompleteList(
-                          controller.text);
-                      return options.map((String keyword) => ListTile(
-                        title: Text(keyword),
-                        onTap: () {
-                          setState(() {
-                            _searchByKeyword(keyword);
-                            controller.closeView(keyword);
-                          });
-                        },
-                      )).toList();
-                    },
-                  ),
-                )
-              ],
-            ),
+                        const SizedBox(width: 16),
+                        const Text('Category:  ', style: AppStyle.bodyTextFont),
+                        const SizedBox(width: 8),
+                        DropdownButton<String>(
+                          style: AppStyle.bodyTextFont,
+                          value: selectedBusinessCategory,
+                          onChanged: (String? newValue) {
+                            setState(() {
+                              _searchByCategory(newValue!);
+                            });
+                          },
+                          items: <String>["All", 'Food', 'Arts & Entertainment', 'Hotels & Travel', 'Health & Medical']
+                              .map<DropdownMenuItem<String>>((String value) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: Text(value),
+                            );
+                          }).toList(),
+                        ),
+                      ],
+                    )
+                  ],
+                ),
+              ),
+            ],
           ),
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Row(
-              children: [
-                Expanded(
-                  child: Column(
+        ),
+        Expanded(
+          child: businesses.isEmpty
+              ? const Center(
+            child: CircularProgressIndicator(
+              color: AppStyle.barBackgroundColor,
+            ),
+          )
+              : Scrollbar(
+            thumbVisibility: true,
+            controller: _scrollController,  // Attach the ScrollController
+            child: ListView.builder(
+              controller: _scrollController,  // Attach the ScrollController
+              itemCount: businesses.length,
+              itemBuilder: (context, index) {
+                business = businesses[index];
+                return ListTile(
+                  leading: Image.network(
+                    business['image_url'],
+                    width: 50,
+                    height: 50,
+                    fit: BoxFit.cover,
+                  ),
+                  title: Row(
                     children: [
-                      Row(
-                        children: [
-                          const Text('Sort by:  ', style: AppStyle.bodyTextFont),
-                          const SizedBox(height: 8),
-                          DropdownButton<String>(
-                            style: AppStyle.bodyTextFont,
-                            value: selectedSortCategory,
-                            onChanged: (String? newValue) {
-                              setState(() {
-                                _sortByCategory(newValue!);
-                              });
-                            },
-                            items: <String>['Default', 'Rating', 'Distance', 'Reviews']
-                                .map<DropdownMenuItem<String>>((String value) {
-                              return DropdownMenuItem<String>(
-                                value: value,
-                                child: Text(value),
-                              );
-                            }).toList(),
-                          ),
-                          const Text('Category:  ', style: AppStyle.bodyTextFont),
-                          const SizedBox(height: 8),
-                          DropdownButton<String>(
-                            style: AppStyle.bodyTextFont,
-                            value: selectedBusinessCategory,
-                            onChanged: (String? newValue) {
-                              setState(() {
-                                _searchByCategory(newValue!);
-                              });
-                            },
-                            items: <String>["All", 'Food', 'Arts & Entertainment', 'Hotels & Travel', 'Health & Medical']
-                                .map<DropdownMenuItem<String>>((String value) {
-                              return DropdownMenuItem<String>(
-                                value: value,
-                                child: Text(value),
-                              );
-                            }).toList(),
-                          ),
-                        ],
-                      )
+                      Expanded(
+                        child: Text("${business['name']}"),
+                      ),
+                      StarScore(
+                        score: business['rating'],
+                        star: Star(
+                            fillColor: Colors.yellow,
+                            emptyColor: Colors.grey.withAlpha(88),
+                            size: 12
+                        ),
+                      ),
                     ],
                   ),
-                ),
-              ],
+                  subtitle: Row(
+                    children: [
+                      Text('${business['review_count']} reviews', style: AppStyle.bodyTextFont),
+                      const SizedBox(width: 10),
+                      Text("${(business['distance'] / 1609.0).toStringAsFixed(2)} mi", style: AppStyle.bodyTextFont),
+                      const SizedBox(width: 5),
+                      business["is_closed"] ? const Icon(Icons.clear_rounded, color: Colors.red,) : const Icon(Icons.check, color: Colors.green,)
+                    ],
+                  ),
+                  trailing: const Icon(Icons.arrow_forward_ios, color: AppStyle.barBackgroundColor),
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => YelpOverview(
+                          alias: businesses[index]["alias"] ?? "",
+                          latitude: businesses[index]["coordinates"]["latitude"] ?? 0,
+                          longitude: businesses[index]["coordinates"]["longitude"] ?? 0,
+                          location: businesses[index]["location"]["address1"],
+                          title: businesses[index]["name"],),
+                      ),
+                    );
+                  },
+                );
+              },
             ),
           ),
-          Expanded(
-            child: businesses.isEmpty
-                ? const Center(
-              child: CircularProgressIndicator(
-                color: AppStyle.indicatorColor,
-              ),
-            )
-                : Scrollbar(
-              thumbVisibility: true,
-              controller: _scrollController,  // Attach the ScrollController
-              child: ListView.builder(
-                controller: _scrollController,  // Attach the ScrollController
-                itemCount: businesses.length,
-                itemBuilder: (context, index) {
-                  business = businesses[index];
-                  return ListTile(
-                    leading: Image.network(
-                      business['image_url'],
-                      width: 50,
-                      height: 50,
-                      fit: BoxFit.cover,
-                    ),
-                    title: Row(
-                      children: [
-                        Expanded(
-                          child: Text("${index + 1}. ${business['name']}"),
-                        ),
-                        StarScore(
-                          score: business['rating'],
-                          star: Star(
-                              fillColor: Colors.yellow,
-                              emptyColor: Colors.grey.withAlpha(88),
-                              size: 12
-                          ),
-                        ),
-                      ],
-                    ),
-                    subtitle: Row(
-                      children: [
-                        Text('${business['review_count']} reviews', style: AppStyle.bodyTextFont),
-                        const SizedBox(width: 10),
-                        Text("${(business['distance'] / 1609.0).toStringAsFixed(2)} mi", style: AppStyle.bodyTextFont),
-                        const SizedBox(width: 5),
-                        business["is_closed"] ? const Icon(Icons.clear_rounded, color: Colors.red,) : const Icon(Icons.check, color: Colors.green,)
-                      ],
-                    ),
-                    trailing: const Icon(Icons.arrow_forward_ios, color: AppStyle.barBackgroundColor),
-                    onTap: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => YelpOverview(
-                            alias: businesses[index]["alias"] ?? "",
-                            latitude: businesses[index]["coordinates"]["latitude"] ?? 0,
-                            longitude: businesses[index]["coordinates"]["longitude"] ?? 0,
-                            location: businesses[index]["location"]["address1"],
-                            title: businesses[index]["name"],),
-                        ),
-                      );
-                    },
-                  );
-                },
-              ),
-            ),
-          ),
-        ],
         ),
-      );
+      ],
+      ),
+    );
   }
 
   void _showDialog() {

@@ -30,7 +30,7 @@ class _HomeState extends State<Home> {
       Map<String, dynamic> query = {
         "url": "http://localhost:8080/weather",
         "parameters":{
-            "city":"Vancouver"
+          "city":"Vancouver"
         }
       };
       await apiRequest.getRequest(query).then((response) {
@@ -74,11 +74,12 @@ class _HomeState extends State<Home> {
         length: 4,  // Total number of tabs
         child:  weatherData.isEmpty ? const Center(child: CircularProgressIndicator()) :
         Scaffold(
+          backgroundColor: Colors.white,
           body: TabBarView(
             children: [
-                   WeatherHome(
-                      weatherData: weatherData,
-                      recommendationData: recommendationData), // 显示WeatherHome内容
+              WeatherHome(
+                  weatherData: weatherData,
+                  recommendationData: recommendationData),
               const YelpSearch(), // YelpSearch tab content
               FieldsListPage(), // FieldsListPage tab content
               const Profile(), // Profile tab content
@@ -87,10 +88,9 @@ class _HomeState extends State<Home> {
           bottomNavigationBar: const Material(
             color: AppStyle.barBackgroundColor,
             child: TabBar(
-              labelColor: AppStyle.labelColor, // Color of the selected tab
-              unselectedLabelColor:
-                  AppStyle.unselectedLabelColor, // Color of the unselected tab
-              indicatorColor: AppStyle.indicatorColor,
+              labelColor: AppStyle.primaryColor, // Color of the selected tab
+              unselectedLabelColor: AppStyle.unselectedLabelColor, // Color of the unselected tab
+              indicatorColor: AppStyle.barBackgroundColor,
               tabs: [
                 Tab(icon: Icon(Icons.home)),
                 Tab(icon: Icon(Icons.restaurant)),

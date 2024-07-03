@@ -52,10 +52,10 @@ class _YelpOverviewState extends State<YelpOverview> {
           bottomNavigationBar: const Material(
             color: AppStyle.barBackgroundColor,
             child: TabBar(
-              labelColor: AppStyle.labelColor, // Color of the selected tab
+              labelColor: AppStyle.primaryColor, // Color of the selected tab
               unselectedLabelColor:
                   AppStyle.unselectedLabelColor, // Color of the unselected tab
-              indicatorColor: AppStyle.indicatorColor,
+              indicatorColor: AppStyle.barBackgroundColor,
               tabs: [
                 Tab(icon: Icon(Icons.info)),
                 Tab(icon: Icon(IconData(0xe3ac, fontFamily: 'MaterialIcons'))),
