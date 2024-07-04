@@ -45,6 +45,15 @@ class _SignInHttpState extends State<SignInHttp> {
 
   void _fetchToken() async {
     if (_formKey.currentState!.validate()) {
+      setState(() {
+        query = {
+          "url": "http://localhost:8080/user-tokens",
+          "body":{
+            "email": _emailController.text.trim(),
+            "password":_passwordController.text.trim()
+          }
+        };
+      });
       await apiRequest.postRequest(query).then((response) {
         if (response.data["code"] == "200") {
           localStorage.setItem('token', response.data["data"]);
@@ -74,7 +83,6 @@ class _SignInHttpState extends State<SignInHttp> {
                     const SizedBox(height: 60),
                     Image.asset('assets/logo2.png', height: 100),
                     const Text('Simplifying Outdoor Fun in Vancouver.', style: AppStyle.sloganFont),
-
                     // Email Input Box
                     TextFormField(
                       controller: _emailController,
@@ -227,8 +235,4 @@ class _SignInHttpState extends State<SignInHttp> {
     );
   }
 }
-
-// **************************************************************************
-// JsonSerializableGenerator
-// **************************************************************************
 
