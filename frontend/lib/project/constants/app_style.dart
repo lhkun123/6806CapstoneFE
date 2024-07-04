@@ -51,7 +51,41 @@ class AppStyle {
     fontSize: 22,
     color: Colors.black,
   );
-  // Fonts
+
+  static const tempFont = TextStyle(
+    fontFamily: 'Roboto',
+    fontWeight: FontWeight.normal,
+    fontSize: 32,
+    color: Color.fromRGBO(56, 137, 242, 1),
+  );
+
+  static const themeHeadingFont = TextStyle(
+      fontFamily: 'Roboto',
+      fontWeight: FontWeight.bold,
+      fontSize: 22,
+      color: Color.fromRGBO(56, 137, 242, 1),
+  );
+
+  static const themeBigTextFont = TextStyle(
+    fontFamily: 'Roboto',
+    fontWeight: FontWeight.normal ,
+    fontSize: 17,
+    color: Color.fromRGBO(56, 137, 242, 1),
+  );
+
+  static const themeTextFont = TextStyle(
+    fontFamily: 'Roboto',
+    fontWeight: FontWeight.normal ,
+    fontSize: 14,
+    color: Color.fromRGBO(56, 137, 242, 1),
+  );
+
+  static const bigBlackFont = TextStyle(
+    fontFamily: 'Roboto',
+    fontWeight: FontWeight.bold,
+    fontSize: 20,
+    color: Colors.black,
+  );
 
   static const headingFont = TextStyle(
     fontFamily: 'Roboto',
@@ -64,6 +98,13 @@ class AppStyle {
     fontFamily: 'Roboto',
     fontWeight: FontWeight.bold,
     fontSize: 14,
+    color: Colors.black,
+  );
+
+  static const bigTextFont = TextStyle(
+    fontFamily: 'Roboto',
+    fontWeight: FontWeight.normal,
+    fontSize: 17,
     color: Colors.black,
   );
 
@@ -91,17 +132,9 @@ class AppStyle {
 
   // Colors
   static const primaryColor = Colors.white;
-  static const cardBackgroundColor = Color.fromRGBO(56, 137, 242, 1);
-  static const largeBackgroundColor = Color.fromRGBO(56, 137, 242, 1); // 也用作小按钮颜色
   static const textColor = Colors.black;
-  static const labelColor = Colors.white;
   static const unselectedLabelColor= Color.fromRGBO(242, 242, 235, 0.5);
-  static const indicatorColor = Color.fromRGBO(56, 137, 242, 1);
-  static const buttonBackgroundColor = Color.fromRGBO(56, 137, 242, 1);
-  static const buttonForegroundColor=Colors.white;
   static const barBackgroundColor = Color.fromRGBO(56, 137, 242, 1);
   static const systemGreyColor = Color.fromRGBO(130, 130, 130, 1);
-
-
-
+  static const lightBackgroundColor = Color.fromRGBO(141, 185, 242, 1);
 }

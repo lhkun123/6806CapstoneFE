@@ -146,7 +146,7 @@ class _YelpDetailState extends State<YelpDetail> {
       body: detail == null
           ? const Center(
         child: CircularProgressIndicator(
-          color: AppStyle.indicatorColor,
+          color: AppStyle.barBackgroundColor,
         ),
       )
           : SingleChildScrollView(

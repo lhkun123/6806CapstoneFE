@@ -143,9 +143,9 @@ class _SignUpState extends State<SignUpHttp> {
                     }
                   },
                   style: TextButton.styleFrom(
-                    foregroundColor: AppStyle.buttonForegroundColor,
+                    foregroundColor: AppStyle.primaryColor,
                     elevation: 2,
-                    backgroundColor: AppStyle.buttonBackgroundColor,
+                    backgroundColor: AppStyle.barBackgroundColor,
                     minimumSize: const Size(double.infinity, 55),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10), // 设置按钮的圆角半径

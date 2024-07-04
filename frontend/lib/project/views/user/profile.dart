@@ -65,22 +65,11 @@ class _ProfileState extends State<Profile> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: AppStyle.barBackgroundColor,
-        elevation: 0.0,
-        title: const Text(
-          'Profile',
-          style: AppStyle.barHeadingFont2,
-        ),
-        centerTitle: true,
-        iconTheme: const IconThemeData(
-          color: Colors.white,
-        ),
-      ),
+      backgroundColor: Colors.white,
       body: profileInformation.isEmpty
           ? const Center(
         child: CircularProgressIndicator(
-          color: AppStyle.indicatorColor,
+          color: AppStyle.barBackgroundColor,
         ),
       )
           : SingleChildScrollView(
@@ -143,9 +132,9 @@ class _ProfileState extends State<Profile> {
                       _showDialog('Are you sure to exit the system?');
                     },
                     style: TextButton.styleFrom(
-                      foregroundColor: AppStyle.buttonForegroundColor,
+                      foregroundColor: AppStyle.primaryColor,
                       elevation: 2,
-                      backgroundColor: AppStyle.buttonBackgroundColor,
+                      backgroundColor: AppStyle.barBackgroundColor,
                       minimumSize: const Size(double.infinity, 55),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
