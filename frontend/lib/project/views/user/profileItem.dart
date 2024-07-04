@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:frontend/project/constants/api_request.dart';
 import 'package:localstorage/localstorage.dart';
 
 import '../../constants/app_style.dart';
@@ -17,6 +18,7 @@ class ProfileItem  extends StatefulWidget {
   State<ProfileItem > createState() => _ProfileItemState();
 }
 class _ProfileItemState extends State<ProfileItem> {
+
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +39,7 @@ class _ProfileItemState extends State<ProfileItem> {
                 ),
               );
             }else if(widget.title=="Birthday" || widget.title=='Gender' || widget.title=='Username'){
-                _showDialog("Modify you Profile");
+                _showDialog("Modify your profile");
             }
           },
         ),
@@ -46,10 +48,27 @@ class _ProfileItemState extends State<ProfileItem> {
     );
   }
   void _showDialog(String message) {
+    final TextEditingController _userNameController = TextEditingController();
+    ApiRequest apiRequest=ApiRequest();
+    late Map<String, dynamic> query = {
+      "url": "http://localhost:8080/user-infos",
+      "body":{
+        "nick": _userNameController.text.trim(),
+      },
+      "token": localStorage.getItem("token")
+    };
+    void updateUserInfo() async {
+      await apiRequest.putRequest(query).then((response) {
+        if (response.data["msg"] == "Success!") {
+        }else{
+
+        }
+      });
+    }
     showDialog<void>(
       context: context,
       builder: (context) => CupertinoAlertDialog(
-        title: const Text("Notification"),
+        title: Text(message),
         actions: [
           if (message != "session expired")
             CupertinoDialogAction(
@@ -63,17 +82,17 @@ class _ProfileItemState extends State<ProfileItem> {
             ),
           CupertinoDialogAction(
             onPressed: () {
-              localStorage.removeItem("token");
-              Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(builder: (context) => const SignInHttp()),
-                    (Route<dynamic> route) => false,
-              );
+              updateUserInfo();
+              Navigator.of(context).pop();
             },
             child: const Text("OK", style: AppStyle.bodyTextFont),
           ),
         ],
-        content: Text(message, style: AppStyle.bodyTextFont),
+          content: CupertinoTextField(
+            controller: _userNameController,
+            enabled: true,
+            style: AppStyle.bodyTextFont,
+          )
       ),
     );
   }

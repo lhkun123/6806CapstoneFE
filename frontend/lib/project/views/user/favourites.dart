@@ -127,7 +127,7 @@ class _FavouritesState extends State<Favourites> {
             child: entertainment.isEmpty
                 ? const Center(
               child: CircularProgressIndicator(
-                color: AppStyle.indicatorColor,
+                color: AppStyle.unselectedLabelColor,
               ),
             )
                 : Scrollbar(
@@ -160,7 +160,7 @@ class _FavouritesState extends State<Favourites> {
                               ),
                             );
                           },
-                          backgroundColor: AppStyle.cardBackgroundColor,
+                          backgroundColor: AppStyle.unselectedLabelColor,
                           foregroundColor: Colors.white,
                           icon: Icons.details,
                           label: 'Detail',

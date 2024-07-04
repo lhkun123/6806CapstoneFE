@@ -28,7 +28,11 @@ class ApiRequest{
   Future<Response> putRequest(Map<String,dynamic> query) async {
     final response =await dio.put(
         query["url"],
-        queryParameters: query["parameters"]
+      options: Options(headers: {
+        "Content-Type": "application/json",
+        "Authorization": query["token"],
+      }),
+        data: jsonEncode(query["body"]),
     );
     return response;
   }
