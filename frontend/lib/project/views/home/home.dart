@@ -14,14 +14,26 @@ class Home extends StatefulWidget {
   _HomeState createState() => _HomeState();
 }
 
-class _HomeState extends State<Home> {
+class _HomeState extends State<Home> with SingleTickerProviderStateMixin{
   Map<String, dynamic> weatherData={};
   Map<String, dynamic> recommendationData={};
   ApiRequest apiRequest=ApiRequest();
+  late TabController _tabController;
+
+  final List<String> _titles = [
+    'Home',
+    'Entertainment',
+    'Attractions',
+    'Profile'
+  ];
 
   @override
   void initState() {
     super.initState();
+    _tabController = TabController(length: 4, vsync: this);
+    _tabController.addListener(() {
+      setState(() {});
+    });
     fetchWeatherData();
   }
 
@@ -68,14 +80,30 @@ class _HomeState extends State<Home> {
   }
 
   @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return MaterialApp(
       home: DefaultTabController(
         length: 4,  // Total number of tabs
         child:  weatherData.isEmpty ? const Center(child: CircularProgressIndicator()) :
         Scaffold(
+          appBar: AppBar(
+            backgroundColor: AppStyle.barBackgroundColor,
+            elevation: 0.0,
+            title: Text(_titles[_tabController.index], style: AppStyle.barHeadingFont2),
+            centerTitle: true,
+            iconTheme: const IconThemeData(
+              color: Colors.white,
+            ),
+          ),
           backgroundColor: Colors.white,
           body: TabBarView(
+            controller: _tabController,
             children: [
               WeatherHome(
                   weatherData: weatherData,
@@ -85,13 +113,14 @@ class _HomeState extends State<Home> {
               const Profile(), // Profile tab content
             ],
           ),
-          bottomNavigationBar: const Material(
+          bottomNavigationBar: Material(
             color: AppStyle.barBackgroundColor,
             child: TabBar(
+              controller: _tabController,
               labelColor: AppStyle.primaryColor, // Color of the selected tab
               unselectedLabelColor: AppStyle.unselectedLabelColor, // Color of the unselected tab
               indicatorColor: AppStyle.barBackgroundColor,
-              tabs: [
+              tabs: const [
                 Tab(icon: Icon(Icons.home)),
                 Tab(icon: Icon(Icons.restaurant)),
                 Tab(icon: Icon(Icons.forest)),

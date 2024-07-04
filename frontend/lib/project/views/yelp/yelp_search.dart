@@ -164,15 +164,6 @@ class _YelpSearchState extends State<YelpSearch> {
     Map<String, dynamic> business;
     return Scaffold(
       backgroundColor: Colors.white, // Set the background color to white
-      appBar: AppBar(
-        backgroundColor: AppStyle.barBackgroundColor,
-        elevation: 0.0,
-        centerTitle: true,
-        iconTheme: const IconThemeData(
-          color: Colors.white,
-        ),
-        title: const Text('Entertainment', style: AppStyle.barHeadingFont2),
-      ),
       body: Column(
         children: [
         Padding(
@@ -314,12 +305,12 @@ class _YelpSearchState extends State<YelpSearch> {
         ),
         Expanded(
           child: businesses.isEmpty
-              ? const Center(
-            child: CircularProgressIndicator(
-              color: AppStyle.barBackgroundColor,
-            ),
-          )
-              : Scrollbar(
+            ? const Center(
+              child: CircularProgressIndicator(
+                color: AppStyle.barBackgroundColor,
+              ),
+            )
+            : Scrollbar(
             thumbVisibility: true,
             controller: _scrollController,  // Attach the ScrollController
             child: ListView.builder(
@@ -327,38 +318,14 @@ class _YelpSearchState extends State<YelpSearch> {
               itemCount: businesses.length,
               itemBuilder: (context, index) {
                 business = businesses[index];
-                return ListTile(
-                  leading: Image.network(
-                    business['image_url'],
-                    width: 50,
-                    height: 50,
-                    fit: BoxFit.cover,
+                return Card(
+                  color: Colors.white,
+                  margin: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 16.0),
+                  elevation: 2.0,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10.0),
                   ),
-                  title: Row(
-                    children: [
-                      Expanded(
-                        child: Text("${business['name']}"),
-                      ),
-                      StarScore(
-                        score: business['rating'],
-                        star: Star(
-                            fillColor: Colors.yellow,
-                            emptyColor: Colors.grey.withAlpha(88),
-                            size: 12
-                        ),
-                      ),
-                    ],
-                  ),
-                  subtitle: Row(
-                    children: [
-                      Text('${business['review_count']} reviews', style: AppStyle.bodyTextFont),
-                      const SizedBox(width: 10),
-                      Text("${(business['distance'] / 1609.0).toStringAsFixed(2)} mi", style: AppStyle.bodyTextFont),
-                      const SizedBox(width: 5),
-                      business["is_closed"] ? const Icon(Icons.clear_rounded, color: Colors.red,) : const Icon(Icons.check, color: Colors.green,)
-                    ],
-                  ),
-                  trailing: const Icon(Icons.arrow_forward_ios, color: AppStyle.barBackgroundColor),
+                child: InkWell(
                   onTap: () {
                     Navigator.of(context).push(
                       MaterialPageRoute(
@@ -371,6 +338,52 @@ class _YelpSearchState extends State<YelpSearch> {
                       ),
                     );
                   },
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    children: [
+                      Image.network(
+                      business['image_url'],
+                      width: 50,
+                      height: 50,
+                      fit: BoxFit.cover,
+                    ),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Text("${business['name']}", style: AppStyle.subheadingFont,),
+                            ),
+                            StarScore(
+                              score: business['rating'],
+                              star: Star(
+                                  fillColor: Colors.yellow,
+                                  emptyColor: Colors.grey.withAlpha(88),
+                                  size: 12
+                              ),
+                            ),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            Text('${business['review_count']} reviews', style: AppStyle.bodyTextFont),
+                            const SizedBox(width: 10),
+                            Text("${(business['distance'] / 1609.0).toStringAsFixed(2)} mi", style: AppStyle.bodyTextFont),
+                            const SizedBox(width: 5),
+                            business["is_closed"] ? const Icon(Icons.clear_rounded, color: Colors.red,) : const Icon(Icons.check, color: Colors.green,)
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                  ],
+                  ),
+                ),
+                ),
                 );
               },
             ),

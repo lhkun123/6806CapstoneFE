@@ -32,7 +32,7 @@ class WeatherHome extends StatelessWidget {
           else
             Column(
               children: [
-                const Text("Today's Recommendation", style: AppStyle.themeHeadingFont),
+                const Text("Today's Recommendation", style: AppStyle.bigHeadingFont),
                 const SizedBox(height: 10),
                 Text(
                   recommendationData['advice'] ??

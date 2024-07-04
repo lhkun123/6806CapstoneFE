@@ -42,18 +42,6 @@ class _ProfileState extends State<Profile> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(
-        backgroundColor: AppStyle.barBackgroundColor,
-        elevation: 0.0,
-        title: const Text(
-          'Profile',
-          style: AppStyle.barHeadingFont2,
-        ),
-        centerTitle: true,
-        iconTheme: const IconThemeData(
-          color: Colors.white,
-        ),
-      ),
       body: profileInformation.isEmpty
           ? const Center(
         child: CircularProgressIndicator(

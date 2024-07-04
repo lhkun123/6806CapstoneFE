@@ -52,11 +52,11 @@ class AppStyle {
     color: Colors.black,
   );
 
-  static const themeBigFont = TextStyle(
+  static const tempFont = TextStyle(
     fontFamily: 'Roboto',
     fontWeight: FontWeight.normal,
     fontSize: 32,
-    color: Colors.black,
+    color: Color.fromRGBO(56, 137, 242, 1),
   );
 
   static const themeHeadingFont = TextStyle(

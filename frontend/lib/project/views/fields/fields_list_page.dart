@@ -118,18 +118,6 @@ class _FieldsListPageState extends State<FieldsListPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(
-        backgroundColor: AppStyle.barBackgroundColor,
-        elevation: 0.0,
-        title: const Text(
-          'Attractions',
-          style: AppStyle.barHeadingFont2,
-        ),
-        centerTitle: true,
-        iconTheme: const IconThemeData(
-          color: Colors.white,
-        ),
-      ),
       body: Column(
         children: [
           Padding(
