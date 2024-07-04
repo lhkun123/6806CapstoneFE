@@ -39,6 +39,7 @@ class WeatherHome extends StatelessWidget {
                       'No recommendations available.',
                   style: AppStyle.bodyTextFont,
                 ),
+                const SizedBox(height: 10),
                 if (recommendationData.isNotEmpty)
                   for (var field in recommendationData['fields'])
                     RecommendationCard(field: field),

@@ -24,6 +24,7 @@ class RecommendationCard extends StatelessWidget {
 
       child: Card(
         color: Colors.white,
+        elevation: 2.0,
         margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
