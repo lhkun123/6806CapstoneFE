@@ -1,3 +1,6 @@
+import 'package:cloudinary_flutter/cloudinary_context.dart';
+import 'package:cloudinary_flutter/cloudinary_object.dart';
+import 'package:cloudinary_url_gen/cloudinary.dart';
 import 'package:device_preview/device_preview.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/project/constants/api_request.dart';
@@ -16,7 +19,6 @@ Future<void> verifyToken() async {
     ApiRequest apiRequest = ApiRequest();
     try {
       await apiRequest.getRequest(query).then((response) {});
-      print(localStorage.getItem("token"));
     } catch (e) {
       localStorage.removeItem("token");
     }
@@ -25,6 +27,7 @@ Future<void> verifyToken() async {
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  CloudinaryObject.fromCloudName(cloudName: "dtbg6plsq");
   await initLocalStorage();
   await verifyToken();
   runApp(

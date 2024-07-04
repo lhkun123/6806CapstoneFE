@@ -1,45 +1,67 @@
+import 'dart:convert';
+import 'dart:io';
+import 'dart:typed_data';
+import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:frontend/project/constants/api_request.dart';
 import 'package:frontend/project/constants/app_style.dart';
 import 'package:frontend/project/views/auth/sign_in.dart';
 import 'package:frontend/project/views/user/favourites.dart';
+import 'package:frontend/project/views/user/profileItem.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:localstorage/localstorage.dart';
+import 'package:http/http.dart' as http;
 
 class Profile extends StatefulWidget {
   const Profile({
     super.key,
   });
+
   @override
   State<Profile> createState() => _ProfileState();
 }
 
 class _ProfileState extends State<Profile> {
-  late Map<String, dynamic> profileInformation={};
+  late Map<String, dynamic> profileInformation = {};
+  DateTime selectedDate = DateTime.now();
   Map<String, dynamic> query = {
     "url": "http://localhost:8080/users",
     "token": localStorage.getItem("token")
   };
-  ApiRequest apiRequest=ApiRequest();
+  ApiRequest apiRequest = ApiRequest();
+  File? image;
   void _fetchProfile() async {
     await apiRequest.getRequest(query).then((response) {
-      if (response.data["code"] =="200") {
+      if (response.data["code"] == "200") {
         setState(() {
           profileInformation = response.data["data"];
         });
-      } else if(response.data["code"] =="555") {
+      } else if (response.data["code"] == "555") {
         _showDialog("session expired");
-      }
-      else {
-        throw Exception('Failed to fetch favourite!');
+      } else {
+        throw Exception('Failed to fetch profile!');
       }
     });
   }
+
+  Future<void> _pickImage() async {
+    final ImagePicker picker = ImagePicker();
+    final XFile? pickedFile = await picker.pickImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      setState(() {
+          image=File(pickedFile.path);
+      });
+    }
+  }
+
   @override
   void initState() {
     super.initState();
     _fetchProfile();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -60,14 +82,29 @@ class _ProfileState extends State<Profile> {
         child: CircularProgressIndicator(
           color: AppStyle.indicatorColor,
         ),
-      ) :
-      SingleChildScrollView(
+      )
+          : SingleChildScrollView(
         child: Column(
           children: [
             const SizedBox(height: 20),
-            const CircleAvatar(
-              radius: 60,
-              backgroundImage: NetworkImage('https://upload.wikimedia.org/wikipedia/commons/3/3a/Cat03.jpg'), // Replace with your image URL
+            Stack(
+              children: [
+                CircleAvatar(
+                  radius: 60,
+                  backgroundImage:
+                      NetworkImage(profileInformation["avatar"])
+                ),
+                Positioned(
+                  bottom: 0,
+                  right: 0,
+                  child: IconButton(
+                    icon: const Icon(Icons.camera_alt),
+                    onPressed: () {
+                      _pickImage();
+                    },
+                  ),
+                ),
+              ],
             ),
             const SizedBox(height: 20),
             Padding(
@@ -83,29 +120,27 @@ class _ProfileState extends State<Profile> {
                     title: 'Birthday',
                     value: profileInformation["birth"],
                     icon: Icons.cake,
+
                   ),
                   ProfileItem(
                     title: 'Gender',
                     value: '',
-                    icon: profileInformation["gender"]=="0" ? Icons.female:Icons.male,
+                    icon: profileInformation["gender"] == "0" ? Icons.female : Icons.male,
                   ),
-                  const ProfileItem(
+                   ProfileItem(
                     title: 'Favorites',
                     value: '',
                     icon: Icons.favorite,
-
                   ),
-                  const ProfileItem(
+                   ProfileItem(
                     title: 'About',
                     value: '',
                     icon: Icons.arrow_forward_ios,
                   ),
                   const SizedBox(height: 20),
                   ElevatedButton(
-                    onPressed: () async{
-                      _showDialog(
-                        'Are you sure to exit the system?'
-                    );
+                    onPressed: () async {
+                      _showDialog('Are you sure to exit the system?');
                     },
                     style: TextButton.styleFrom(
                       foregroundColor: AppStyle.buttonForegroundColor,
@@ -113,7 +148,7 @@ class _ProfileState extends State<Profile> {
                       backgroundColor: AppStyle.buttonBackgroundColor,
                       minimumSize: const Size(double.infinity, 55),
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10), // 设置按钮的圆角半径
+                        borderRadius: BorderRadius.circular(10),
                       ),
                     ),
                     child: const Text('Log Out', style: AppStyle.bigButtonFont),
@@ -127,24 +162,24 @@ class _ProfileState extends State<Profile> {
     );
   }
 
-
   void _showDialog(String message) {
     showDialog<void>(
-        context: context,
-        builder: (context) => CupertinoAlertDialog(
-          title: const Text("Notification"),
-          actions: [
-            if (message != "session expired")
-              CupertinoDialogAction(
-                onPressed: () {
-                  Navigator.of(context).pop(); // Close the dialog
-                },
-                child: const Text(
-                  "Cancel",
-                  style: AppStyle.bodyTextFont,
-                ),
+      context: context,
+      builder: (context) => CupertinoAlertDialog(
+        title: const Text("Notification"),
+        actions: [
+          if (message != "session expired")
+            CupertinoDialogAction(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text(
+                "Cancel",
+                style: AppStyle.bodyTextFont,
               ),
-            CupertinoDialogAction(onPressed: (){
+            ),
+          CupertinoDialogAction(
+            onPressed: () {
               localStorage.removeItem("token");
               Navigator.pushAndRemoveUntil(
                 context,
@@ -152,55 +187,11 @@ class _ProfileState extends State<Profile> {
                     (Route<dynamic> route) => false,
               );
             },
-                child: const Text("OK",
-                    style:AppStyle.bodyTextFont
-                )),
-          ],
-          content: Text(message,
-              style:AppStyle.bodyTextFont
+            child: const Text("OK", style: AppStyle.bodyTextFont),
           ),
-        )
+        ],
+        content: Text(message, style: AppStyle.bodyTextFont),
+      ),
     );
   }
 }
-
-class ProfileItem extends StatelessWidget {
-  final String title;
-  final String value;
-
-  final IconData icon;
-
-  const ProfileItem({
-    super.key,
-    required this.title,
-    required this.value,
-    required this.icon,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        ListTile(
-          title: Text(
-            title,
-            style: AppStyle.subheadingFont,
-          ),
-          subtitle: value.isNotEmpty ? Text(value, style: AppStyle.bodyTextFont) : null,
-          trailing:  Icon(icon, color: Colors.blue),
-          onTap: () {
-              if(title=="Favorites"){
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => const Favourites(),
-                  ),
-                );
-              }
-          },
-        ),
-        const Divider(),
-      ],
-    );
-  }
-}
-
