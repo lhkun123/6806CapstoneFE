@@ -60,6 +60,7 @@ class WeatherDetailPage extends StatelessWidget {
     String svgString = getClothingSvg(clothingType);
 
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: AppStyle.barBackgroundColor,
         elevation: 0.0,
@@ -79,7 +80,6 @@ class WeatherDetailPage extends StatelessWidget {
         ),
       ),
       body: Container(
-        color: Color(0xFFE0F7FA),
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,

@@ -34,11 +34,12 @@ class WeatherCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      margin: const EdgeInsets.all(16.0),
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: GestureDetector(
+    return Align(
+      alignment: Alignment.center,
+      child: SizedBox(
+        width: 340,
+        height: 150,
+        child: InkWell(
           onTap: () {
             Navigator.push(
               context,
@@ -48,33 +49,35 @@ class WeatherCard extends StatelessWidget {
               ),
             );
           },
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+          child: Card(
+            color: Colors.white,
+            margin: const EdgeInsets.all(16.0),
+            child: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Text(
                     weatherData['city'] ?? 'Unknown city',
-                    style: AppStyle.bigHeadingFont,
+                    style: AppStyle.tempFont,
                   ),
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Icon(
                         getWeatherIcon(weatherData['weather_type']),
+                        color: AppStyle.barBackgroundColor,
                         size: 32,
                       ),
-                      SizedBox(width: 8),
+                      const SizedBox(width: 8),
                       Text(
-                        '${weatherData['temperature'] ?? 'N/A'}°C',
-                        style: TextStyle(fontSize: 32),
+                        '${weatherData['temperature'] ?? 'N/A'}°C', style: AppStyle.tempFont,
                       ),
                     ],
                   ),
                 ],
               ),
-              const Icon(Icons.arrow_forward_ios, size: 24, color: AppStyle.barBackgroundColor),
-            ],
+            ),
           ),
         ),
       ),
