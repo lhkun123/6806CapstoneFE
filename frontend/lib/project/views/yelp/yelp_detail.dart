@@ -8,8 +8,6 @@ import '../../constants/api_request.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../auth/sign_in.dart';
-
 
 class YelpDetail extends StatefulWidget {
   String alias, title;
@@ -83,7 +81,7 @@ class _YelpDetailState extends State<YelpDetail> {
     };
     if(!favourite){
       await apiRequest.postRequest(queryFavourite).then((response) {
-        if (response.data["code"] =="200") {
+        if (response.statusCode == 200) {
           setState(() {
               favourite=true;
           });
@@ -139,10 +137,7 @@ class _YelpDetailState extends State<YelpDetail> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(detail?["name"] ?? 'Loading...', style: AppStyle.bigHeadingFont),
-        centerTitle: true
-      ),
+      backgroundColor: Colors.white,
       body: detail == null
           ? const Center(
         child: CircularProgressIndicator(
@@ -363,18 +358,9 @@ class _YelpDetailState extends State<YelpDetail> {
             ),
           CupertinoDialogAction(
             onPressed: () {
-              if(message!="session expired") {
-                _addOrRemoveFavorite();
-                favourite = !favourite;
-                Navigator.of(context).pop();
-              }else{
-                localStorage.removeItem("token");
-                Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(builder: (context) => const SignInHttp()),
-                      (Route<dynamic> route) => false,
-                );
-              }
+              _addOrRemoveFavorite();
+              favourite = !favourite;
+              Navigator.of(context).pop();
             },
             child: const Text(
               "OK",
