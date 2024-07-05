@@ -139,10 +139,7 @@ class _YelpDetailState extends State<YelpDetail> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(detail?["name"] ?? 'Loading...', style: AppStyle.bigHeadingFont),
-        centerTitle: true
-      ),
+      backgroundColor: Colors.white,
       body: detail == null
           ? const Center(
         child: CircularProgressIndicator(
