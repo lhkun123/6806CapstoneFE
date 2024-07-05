@@ -1,6 +1,4 @@
-import 'package:cloudinary_flutter/cloudinary_context.dart';
 import 'package:cloudinary_flutter/cloudinary_object.dart';
-import 'package:cloudinary_url_gen/cloudinary.dart';
 import 'package:device_preview/device_preview.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/project/constants/api_request.dart';
@@ -69,7 +67,6 @@ class MyApp extends StatelessWidget {
           "/signup":(context)=> const SignUpHttp(),
           "/home":(context)=> const Home()
         }
-
     );
   }
 }

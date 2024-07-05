@@ -3,17 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_star/star.dart';
 import 'package:flutter_star/star_score.dart';
 import 'package:frontend/project/constants/api_request.dart';
-import 'package:frontend/project/views/yelp/yelp_detail.dart';
 import 'package:localstorage/localstorage.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
 import '../../constants/api_key.dart';
 import '../../constants/app_style.dart';
 import '../auth/sign_in.dart';
+import '../yelp/yelp_overview.dart';
 
 class Favourites extends StatefulWidget {
   const Favourites({super.key});
-
   @override
   _FavouritesState createState() => _FavouritesState();
 }
@@ -23,20 +22,18 @@ class _FavouritesState extends State<Favourites> {
   late List<Map<String, dynamic>> entertainment = [];
   late List<dynamic> entertainmentList = [];
   ApiRequest apiRequest = ApiRequest();
-
   Future<void> _fetchFavourite() async {
     Map<String, dynamic> queryFavourite = {
       "url": "http://localhost:8080/favorites",
       "token": localStorage.getItem("token")
     };
     await apiRequest.getRequest(queryFavourite).then((response) {
+      print( response.data);
       if (response.data["code"] == "200") {
-        if (response.data["data"]["entertainment"] != null) {
           setState(() {
-            entertainmentList = response.data["data"]["entertainment"];
+            entertainmentList = response.data["data"]["entertainment"] ?? [];
           });
           _fetchDetail();
-        }
       } else if (response.data["code"] == "555") {
         _showDialog("session expired",0);
       } else {
@@ -47,6 +44,7 @@ class _FavouritesState extends State<Favourites> {
 
   Future<void> _fetchDetail() async {
     Map<String, dynamic> query;
+    print(entertainmentList.length);
     List<Map<String, dynamic>> results = List<Map<String, dynamic>>.filled(
         entertainmentList.length, {}, growable: true);
     for (int i = 0; i < entertainmentList.length; i++) {
@@ -61,7 +59,10 @@ class _FavouritesState extends State<Favourites> {
             "name": response.data["name"],
             "image_url": response.data["image_url"],
             "review_count": response.data["review_count"],
-            "alias": response.data["alias"]
+            "alias": response.data["alias"],
+            "latitude": response.data["coordinates"]["latitude"] ?? 0,
+            "longitude": response.data["coordinates"]["longitude"] ?? 0,
+            "location": response.data["location"]["address1"],
           };
         } else {
           throw Exception('Failed to fetch detail!');
@@ -72,9 +73,7 @@ class _FavouritesState extends State<Favourites> {
       entertainment = results;
     });
   }
-
   late Map<String, dynamic> favourite;
-
   void _removeFavorite(int index) async {
     Map<String, dynamic> queryFavourite = {
       "url": "http://localhost:8080/favorites",
@@ -156,8 +155,15 @@ class _FavouritesState extends State<Favourites> {
                           onPressed: (context) {
                             Navigator.of(context).push(
                               MaterialPageRoute(
-                                builder: (context) => YelpDetail(alias: entertainment[index]["alias"],title: entertainment[index]["name"],),
+                                builder: (context) => YelpOverview(
+                                  alias: favourite["alias"] ?? "",
+                                  latitude: favourite["latitude"] ?? 0,
+                                  longitude: favourite["longitude"] ?? 0,
+                                  location: favourite["location"],
+                                  title: favourite["name"],),
                               ),
+                            ).then(
+                                    (value)=>_fetchFavourite()
                             );
                           },
                           backgroundColor: AppStyle.unselectedLabelColor,

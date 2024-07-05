@@ -136,6 +136,7 @@ class _YelpDetailState extends State<YelpDetail> {
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: detail == null

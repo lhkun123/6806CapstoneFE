@@ -1,14 +1,10 @@
-import 'dart:convert';
 import 'dart:io';
-import 'dart:typed_data';
-import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:frontend/project/constants/api_request.dart';
 import 'package:frontend/project/constants/app_style.dart';
 import 'package:frontend/project/views/auth/sign_in.dart';
-import 'package:frontend/project/views/user/favourites.dart';
 import 'package:frontend/project/views/user/profileItem.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:localstorage/localstorage.dart';
@@ -104,27 +100,47 @@ class _ProfileState extends State<Profile> {
                     title: 'Username',
                     value: profileInformation["nick"],
                     icon: Icons.verified_user,
+                    changeProfileCallBack: (value){
+                      setState(() {
+                        profileInformation["nick"]=value;
+                      });
+                    },
                   ),
                   ProfileItem(
                     title: 'Birthday',
                     value: profileInformation["birth"],
                     icon: Icons.cake,
-
+                    changeProfileCallBack: (value){
+                      setState(() {
+                        profileInformation["birth"]=value;
+                      });
+                    },
                   ),
                   ProfileItem(
                     title: 'Gender',
                     value: '',
                     icon: profileInformation["gender"] == "0" ? Icons.female : Icons.male,
+                    changeProfileCallBack: (value){
+                      setState(() {
+                        profileInformation["gender"]=value;
+                      });
+                    },
                   ),
                    ProfileItem(
                     title: 'Favorites',
                     value: '',
                     icon: Icons.favorite,
+                     changeProfileCallBack: (value){
+
+                     },
                   ),
                    ProfileItem(
                     title: 'About',
                     value: '',
                     icon: Icons.arrow_forward_ios,
+                     changeProfileCallBack: (value){
+
+                     },
                   ),
                   const SizedBox(height: 20),
                   ElevatedButton(
