@@ -7,6 +7,8 @@ import '../../constants/api_key.dart';
 import '../../constants/api_request.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter_star/star.dart';
+import 'package:flutter_star/star_score.dart';
 
 import '../auth/sign_in.dart';
 
@@ -29,6 +31,7 @@ class _YelpDetailState extends State<YelpDetail> {
   bool favourite=false;
   List<String> imgList = [];
   CarouselController buttonCarouselController = CarouselController();
+
 
   @override
   void initState() {
@@ -119,6 +122,7 @@ class _YelpDetailState extends State<YelpDetail> {
       } else {
         throw Exception('Failed to fetch detail!');
       }
+      print(detail);
     });
   }
 
@@ -136,166 +140,30 @@ class _YelpDetailState extends State<YelpDetail> {
     }
   }
 
+  Future<void> _viewYelp() async {
+    final Uri _url = Uri.parse(detail!["url"]);
+    if (!await launchUrl(_url)) {
+      throw 'Could not launch $_url';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
       body: detail == null
-          ? const Center(
+      ? const Center(
         child: CircularProgressIndicator(
           color: AppStyle.barBackgroundColor,
         ),
       )
-          : SingleChildScrollView(
+      : SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(height: 8),
-              Row(
-                children: [
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text(
-                          'Address',
-                          style: AppStyle.subheadingFont,
-                        ),
-                        Text(
-                          detail!["location"]["display_address"].join(),
-                          style: AppStyle.bodyTextFont,
-                        ),
-                      ],
-                    ),
-                  ),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        const Text(
-                          'Category',
-                          style: AppStyle.subheadingFont,
-                        ),
-                        Text(
-                          detail!["categories"][0]["title"],
-                          style: AppStyle.bodyTextFont,
-                          textAlign: TextAlign.right,
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 16),
-              Row(
-                children: [
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text(
-                          'Phone',
-                          style: AppStyle.subheadingFont,
-                        ),
-                        Text(
-                          detail!["display_phone"] == "" ? "Not Available" : detail!["display_phone"],
-                          style: AppStyle.bodyTextFont,
-                        ),
-                      ],
-                    ),
-                  ),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        const Text(
-                          'Price',
-                          style: AppStyle.subheadingFont,
-                        ),
-                        Text(
-                          detail!["price"],
-                          style: AppStyle.bodyTextFont,
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 16),
-              Row(
-                children: [
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text(
-                          'Status',
-                          style: AppStyle.subheadingFont,
-                        ),
-                        Text(
-                          detail!["hours"][0]["is_open_now"] ? "Open Now" : "Closed",
-                          style: AppStyle.bodyTextFont,
-                        ),
-                      ],
-                    ),
-                  ),
-                  const Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        Text(
-                          'Visit Yelp for more',
-                          style: AppStyle.subheadingFont,
-                        ),
-                        Text(
-                          'Business Link',
-                          style: AppStyle.bodyTextFont,
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 16),
-              Center(
-                child: IconButton(
-                  onPressed: () {
-                    if(favourite){
-                      _showDialog("Are you sure to remove this from your favourite list?");
-                    }else{
-                      _showDialog("${detail?["name"]} has been added to you favourite list!");
-                    }
-                  },
-                   icon: Icon(CupertinoIcons.heart_solid, color: favourite? Colors.red:AppStyle.barBackgroundColor),
-                ),
-              ),
-              const SizedBox(height: 16),
-              Center(
-                child: Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Text('Share to:'),
-                        const SizedBox(height: 8),
-                        IconButton(
-                          icon: const Icon(Icons.facebook),
-                          color: AppStyle.barBackgroundColor,
-                          onPressed: _shareToFacebook,
-                        ),
-                        IconButton(
-                          icon: const Icon(FontAwesomeIcons.twitter),
-                          color: AppStyle.barBackgroundColor,
-                          onPressed: _shareToTwitter,
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 16),
+              const SizedBox(height: 48),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -335,13 +203,139 @@ class _YelpDetailState extends State<YelpDetail> {
                   ),
                 ],
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: 30),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          detail!["categories"][0]["title"],
+                          style: AppStyle.bigTextFont,
+                        ),
+                        detail!["price"] != null && detail!["price"].isNotEmpty
+                            ? Row(
+                          children: [
+                            const SizedBox(width: 8),
+                            const Text('·', style: AppStyle.bigHeadingFont),
+                            const SizedBox(width: 8),
+                            Text(
+                              detail!["price"],
+                              style: AppStyle.bigTextFont,
+                            ),
+                          ],
+                        )
+                        : Container(),
+                        const SizedBox(width: 8),
+                        const Text('·', style: AppStyle.bigHeadingFont),
+                        const SizedBox(width: 8),
+                        Text(
+                          detail!["hours"][0]["is_open_now"] ? "Open Now" : "Closed",
+                          style:  TextStyle(
+                            fontSize: 17.0,
+                            color: detail!["hours"][0]["is_open_now"] ? Colors.green : Colors.red,
+                          ),
+                        ),
+                      ],
+                    ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      StarScore(
+                        score: detail!['rating'],
+                        star: Star(
+                            fillColor: Colors.yellow,
+                            emptyColor: Colors.grey.withAlpha(88),
+                            size: 12
+                        ),
+                      ),
+                      const SizedBox(width: 4),
+                      Text(
+                        detail!['rating'].toString(),
+                        style: AppStyle.bodyTextFont,
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 24),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Icon(Icons.phone, color: AppStyle.barBackgroundColor, size: 20),
+                      const SizedBox(width: 4),
+                      Text(
+                        detail!["display_phone"] == "" ? "Not Available" : detail!["display_phone"],
+                        style: AppStyle.bodyTextFont,
+                      ),
+                      const SizedBox(width: 16),
+                    ],
+                  ),
+                  const SizedBox(height: 4),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Icon(Icons.location_on, color: AppStyle.barBackgroundColor, size: 20),
+                      const SizedBox(width: 4),
+                      Flexible(
+                        child: Text(
+                          detail!["location"]["display_address"].join(", "),
+                          style: AppStyle.bodyTextFont,
+                          textAlign: TextAlign.center
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 20),
+                  Center(
+                    child: IconButton(
+                      onPressed: () {
+                        if(favourite){
+                          _showDialog("Are you sure to remove this from your favourite list?");
+                        }else{
+                          _showDialog("${detail?["name"]} has been added to you favourite list!");
+                        }
+                      },
+                      icon: Icon(
+                        CupertinoIcons.heart_solid,
+                        color: favourite? Colors.red:AppStyle.barBackgroundColor,
+                        size: 42,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 48),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      IconButton(
+                        icon: const Icon(Icons.facebook),
+                        color: AppStyle.barBackgroundColor,
+                        onPressed: _shareToFacebook,
+                      ),
+                      const SizedBox(width: 16),
+                      IconButton(
+                        icon: const Icon(FontAwesomeIcons.twitter),
+                        color: AppStyle.barBackgroundColor,
+                        onPressed: _shareToTwitter,
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 16),
+                  InkWell(
+                    onTap: _viewYelp,
+                    child: const Text(
+                      'Visit Yelp for more',
+                      style: AppStyle.themeTextFont,
+                    ),
+                  ),
+                ],
+              ),
             ],
           ),
         ),
       ),
     );
   }
+
   void _showDialog(String message) {
     showDialog<void>(
       context: context,

@@ -47,6 +47,7 @@ class _YelpReviewState extends State<YelpReview> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       body: reviews.isEmpty
           ? const Center(
         child: Text(
@@ -60,6 +61,7 @@ class _YelpReviewState extends State<YelpReview> {
         itemBuilder: (context, index) {
           final review = reviews[index];
           return Card(
+            color: Colors.white,
             margin: const EdgeInsets.symmetric(vertical: 8.0),
             child: Padding(
               padding: const EdgeInsets.all(16.0),
