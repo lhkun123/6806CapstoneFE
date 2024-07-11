@@ -1,6 +1,6 @@
-import 'dart:io';
-
-
+import 'dart:convert';
+import 'dart:html';
+import 'dart:typed_data';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -29,6 +29,9 @@ class _ProfileState extends State<Profile> {
   Uint8List imageFile=Uint8List.fromList([]);
   Map<String, dynamic> query = {
     "url": "http://localhost:8080/users",
+    "body":{
+
+    },
     "token": localStorage.getItem("token")
   };
   ApiRequest apiRequest = ApiRequest();
@@ -37,6 +40,7 @@ class _ProfileState extends State<Profile> {
       if (response.data["code"] == "200") {
         setState(() {
           profileInformation = response.data["data"];
+          imageFile=Uint8List.fromList(response.data["data"]["avatar"].codeUnits);
         });
       } else if (response.data["code"] == "555") {
         _showDialog("session expired");
@@ -46,21 +50,34 @@ class _ProfileState extends State<Profile> {
     });
   }
   Future<void> _pickImage() async {
-
       final ImagePicker picker = ImagePicker();
       XFile? image = await picker.pickImage(source: ImageSource.gallery);
       if (image != null) {
         var f = await image.readAsBytes();
         setState(() {
           imageFile=f;
+          query["body"]["avatar"]=imageFile;
+          _uploadAvatar();
         });
       } else {
         print("No file selected");
       }
   }
-
   Future<void> _uploadAvatar() async {
-
+    Map<String, dynamic> localQuery = {
+      "url": "http://localhost:8080/user-infos",
+      "body":{
+        "avatar":String.fromCharCodes(imageFile)
+      },
+      "token": localStorage.getItem("token")
+    };
+    await apiRequest.putRequest(localQuery).then((response) {
+      if (response.data["msg"] == "Success!") {
+        setState(() {
+          profileInformation["avatar"]=imageFile;
+        });
+      }
+    });
   }
 
   @override
@@ -89,8 +106,8 @@ class _ProfileState extends State<Profile> {
                   child:ClipOval(
                       child: SizedBox.fromSize(
                         size: const Size.fromRadius(60), // Image radius
-                        child:imageFile.isEmpty
-                            ? Image.network(profileInformation["avatar"],fit: BoxFit.cover,)
+                        child:profileInformation["avatar"]==""
+                            ? Image.network("https://res.cloudinary.com/dtbg6plsq/image/upload/v1720025432/capstone/ihipntnftlf1hh3uplnf.jpg",fit: BoxFit.cover,)
                             :Image.memory(imageFile,fit: BoxFit.cover,
                         ),
                       ),

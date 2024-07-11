@@ -35,7 +35,6 @@ class _FieldsListPageState extends State<FieldsListPage> {
         "url": "http://localhost:8080/api/fields",
       };
       await apiRequest.getRequest(query).then((response) {
-        print(response.data["data"]);
         if (response.statusCode==200) {
           setState(() {
             fields = response.data["data"];
