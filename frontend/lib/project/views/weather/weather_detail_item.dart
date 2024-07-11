@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/project/constants/app_style.dart';
 
 class WeatherDetailItem extends StatelessWidget {
   final String label;
@@ -14,11 +15,12 @@ class WeatherDetailItem extends StatelessWidget {
         children: [
           Text(
             label,
-            style: TextStyle(fontSize: 14, color: Colors.grey),
+            style: AppStyle.sloganFont,
           ),
+          const SizedBox(height: 8),
           Text(
             value,
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            style: AppStyle.bigBlackFont,
           ),
         ],
       ),

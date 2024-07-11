@@ -53,23 +53,23 @@ class WeatherCard extends StatelessWidget {
             color: Colors.white,
             margin: const EdgeInsets.all(16.0),
             child: Center(
-              child: Column(
+              child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Text(
-                    weatherData['city'] ?? 'Unknown city',
-                    style: AppStyle.tempFont,
+                  Icon(
+                    getWeatherIcon(weatherData['weather_type']),
+                    color: AppStyle.barBackgroundColor,
+                    size: 68,
                   ),
-                  Row(
+                  const SizedBox(width: 24),
+                  Column(
                     mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Icon(
-                        getWeatherIcon(weatherData['weather_type']),
-                        color: AppStyle.barBackgroundColor,
-                        size: 32,
+                      Text(
+                        weatherData['city'] ?? 'Unknown city',
+                        style: AppStyle.tempFont,
                       ),
-                      const SizedBox(width: 8),
                       Text(
                         '${weatherData['temperature'] ?? 'N/A'}°C', style: AppStyle.tempFont,
                       ),

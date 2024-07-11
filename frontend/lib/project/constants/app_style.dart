@@ -5,7 +5,7 @@ class AppStyle {
   static const hugeHeadingFont = TextStyle(
     fontFamily: 'Roboto',
     fontWeight: FontWeight.bold,
-    fontSize: 57,
+    fontSize: 42,
     color: Color.fromRGBO(56, 137, 242, 1),
     height: 0.8
   );
@@ -50,6 +50,13 @@ class AppStyle {
     fontWeight: FontWeight.bold,
     fontSize: 22,
     color: Colors.black,
+  );
+
+  static const tempBigFont = TextStyle(
+    fontFamily: 'Roboto',
+    fontWeight: FontWeight.normal,
+    fontSize: 42,
+    color: Color.fromRGBO(56, 137, 242, 1),
   );
 
   static const tempFont = TextStyle(

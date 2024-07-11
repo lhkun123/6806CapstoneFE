@@ -69,9 +69,6 @@ class WeatherDetailPage extends StatelessWidget {
           style: AppStyle.barHeadingFont2,
         ),
         centerTitle: true,
-        iconTheme: const IconThemeData(
-          color: Colors.white,
-        ),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () {
@@ -79,43 +76,37 @@ class WeatherDetailPage extends StatelessWidget {
           },
         ),
       ),
+
       body: Container(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Text(
-              weatherData['city'],
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-              ),
-              textAlign: TextAlign.center,
-            ),
-            SizedBox(height: 20),
+            const SizedBox(height: 38),
+            Text(weatherData['city'],style: AppStyle.tempBigFont,textAlign: TextAlign.center),
+            const SizedBox(height: 20),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Icon(
                   getWeatherIcon(weatherData['weather_type']),
+                  color: AppStyle.barBackgroundColor,
                   size: 48,
                 ),
-                SizedBox(width: 8),
+                const SizedBox(width: 16),
                 Text(
                   '${double.parse(weatherData['temperature'].toString())}°C',
-                  style: TextStyle(
-                    fontSize: 48,
-                    fontWeight: FontWeight.bold,
+                  style: AppStyle.tempBigFont
                   ),
-                ),
               ],
             ),
+            // const SizedBox(height: 8),
             Text(
               weatherData['weather_condition'],
-              style: TextStyle(fontSize: 24),
+              style: AppStyle.tempFont,
               textAlign: TextAlign.center,
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             Expanded(
               child: GridView.count(
                 crossAxisCount: 2,
@@ -155,24 +146,33 @@ class WeatherDetailPage extends StatelessWidget {
                 ],
               ),
             ),
-            SizedBox(height: 20),
-            Text(
+            const Text(
               'Clothing Recommendation',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              style: AppStyle.themeHeadingFont,
             ),
-            SizedBox(height: 10),
-            svgString.isNotEmpty
-                ? SvgPicture.string(
-                    svgString,
-                    width: 50,
-                    height: 50,
-                  )
-                : Container(),
-            Text(
-              clothingRecommendation,
-              style: TextStyle(fontSize: 16),
-              textAlign: TextAlign.center,
+            const SizedBox(height: 20),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const SizedBox(width: 20),
+                svgString.isNotEmpty
+                    ? SvgPicture.string(
+                        svgString,
+                        width: 50,
+                        height: 50,
+                        color: AppStyle.barBackgroundColor,
+                      )
+                    : Container(),
+                const SizedBox(width: 28),
+                SizedBox(
+                  width: 230,
+                  child: Text(
+                      clothingRecommendation,
+                  ),
+                ),
+              ],
             ),
+            const SizedBox(height: 36),
           ],
         ),
       ),
