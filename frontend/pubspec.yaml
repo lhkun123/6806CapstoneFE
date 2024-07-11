@@ -28,7 +28,11 @@ dependencies:
   cloudinary_flutter: ^1.0.0
   cloudinary_url_gen: ^1.0.0
   image_picker: ^1.1.2
+  image_picker_for_web: ^3.0.4
+  flutter_picker: ^2.1.0
   flutter_datetime_picker_plus: ^2.1.0
+  http_parser: ^4.0.2
+  flutter_blob: ^0.0.1
 dev_dependencies:
   flutter_test:
     sdk: flutter

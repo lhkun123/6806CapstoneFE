@@ -1,4 +1,7 @@
 import 'dart:io';
+
+
+import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -7,8 +10,9 @@ import 'package:frontend/project/constants/app_style.dart';
 import 'package:frontend/project/views/auth/sign_in.dart';
 import 'package:frontend/project/views/user/profileItem.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:flutter/foundation.dart' show  Uint8List;
 import 'package:localstorage/localstorage.dart';
-import 'package:http/http.dart' as http;
+
 
 class Profile extends StatefulWidget {
   const Profile({
@@ -22,12 +26,12 @@ class Profile extends StatefulWidget {
 class _ProfileState extends State<Profile> {
   late Map<String, dynamic> profileInformation = {};
   DateTime selectedDate = DateTime.now();
+  Uint8List imageFile=Uint8List.fromList([]);
   Map<String, dynamic> query = {
     "url": "http://localhost:8080/users",
     "token": localStorage.getItem("token")
   };
   ApiRequest apiRequest = ApiRequest();
-  File? image;
   void _fetchProfile() async {
     await apiRequest.getRequest(query).then((response) {
       if (response.data["code"] == "200") {
@@ -41,15 +45,22 @@ class _ProfileState extends State<Profile> {
       }
     });
   }
-
   Future<void> _pickImage() async {
-    final ImagePicker picker = ImagePicker();
-    final XFile? pickedFile = await picker.pickImage(source: ImageSource.gallery);
-    if (pickedFile != null) {
-      setState(() {
-          image=File(pickedFile.path);
-      });
-    }
+
+      final ImagePicker picker = ImagePicker();
+      XFile? image = await picker.pickImage(source: ImageSource.gallery);
+      if (image != null) {
+        var f = await image.readAsBytes();
+        setState(() {
+          imageFile=f;
+        });
+      } else {
+        print("No file selected");
+      }
+  }
+
+  Future<void> _uploadAvatar() async {
+
   }
 
   @override
@@ -57,7 +68,6 @@ class _ProfileState extends State<Profile> {
     super.initState();
     _fetchProfile();
   }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -76,8 +86,15 @@ class _ProfileState extends State<Profile> {
               children: [
                 CircleAvatar(
                   radius: 60,
-                  backgroundImage:
-                      NetworkImage(profileInformation["avatar"])
+                  child:ClipOval(
+                      child: SizedBox.fromSize(
+                        size: const Size.fromRadius(60), // Image radius
+                        child:imageFile.isEmpty
+                            ? Image.network(profileInformation["avatar"],fit: BoxFit.cover,)
+                            :Image.memory(imageFile,fit: BoxFit.cover,
+                        ),
+                      ),
+                      ),
                 ),
                 Positioned(
                   bottom: 0,
@@ -131,7 +148,6 @@ class _ProfileState extends State<Profile> {
                     value: '',
                     icon: Icons.favorite,
                      changeProfileCallBack: (value){
-
                      },
                   ),
                    ProfileItem(

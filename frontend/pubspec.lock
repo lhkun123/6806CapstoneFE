@@ -318,6 +318,14 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_blob:
+    dependency: "direct main"
+    description:
+      name: flutter_blob
+      sha256: ed1e43efcb955fd0a73dd98b0e5e8c8ec2c547218af87861f3f1c44845397d03
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.1"
   flutter_cache_manager:
     dependency: transitive
     description:
@@ -395,6 +403,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.2.1"
+  flutter_picker:
+    dependency: "direct main"
+    description:
+      name: flutter_picker
+      sha256: "2f94c6eefba8697b07e3cd008b75f06b4ba7053cb26d23ae0fcd5932b7dc75af"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.1.0"
   flutter_plugin_android_lifecycle:
     dependency: transitive
     description:
@@ -574,7 +590,7 @@ packages:
     source: hosted
     version: "1.2.1"
   http_parser:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: http_parser
       sha256: "2aa08ce0341cc9b354a498388e30986515406668dbcc4f7c950c3e715496693b"
@@ -601,12 +617,12 @@ packages:
     dependency: transitive
     description:
       name: image_picker_android
-      sha256: "4161e1f843d8480d2e9025ee22411778c3c9eb7e40076dcf2da23d8242b7b51c"
+      sha256: ff39a10ab4f48f4ac70776d0494a97bf073cd2570892cd46bc8a5cac162c25db
       url: "https://pub.dev"
     source: hosted
-    version: "0.8.12+3"
+    version: "0.8.12+4"
   image_picker_for_web:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: image_picker_for_web
       sha256: "5d6eb13048cd47b60dbf1a5495424dea226c5faf3950e20bf8120a58efb5b5f3"
