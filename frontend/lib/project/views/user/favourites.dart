@@ -115,16 +115,14 @@ class _FavouritesState extends State<Favourites> {
   late Map<String, dynamic> favourite;
 
   void _removeFavorite(String name, int index) async {
+    print(name);
+    print(entertainmentList[index]);
     Map<String, dynamic> queryFavourite = {
       "url": "http://localhost:8080/favorites",
       "token": localStorage.getItem("token"),
-      "body": {
-        "alias": name != "field" ? entertainmentList[index] : fieldList[index],
-        "category": "entertainment"
-      },
       "parameters": {
         "alias": name != "field" ? entertainmentList[index] : fieldList[index],
-        "category": "entertainment"
+        "category":name
       }
     };
     await apiRequest.deleteRequest(queryFavourite).then((response) {
@@ -198,7 +196,7 @@ class _FavouritesState extends State<Favourites> {
                       children: [
                         SlidableAction(
                           onPressed: (context) {
-                            _showDialog("Are you sure to remove this item from your favourite list?", index, "favourite");
+                            _showDialog("Are you sure to remove this item from your favourite list?", index, "entertainment");
                           },
                           backgroundColor: const Color(0xFFFE4A49),
                           foregroundColor: Colors.white,
@@ -217,8 +215,7 @@ class _FavouritesState extends State<Favourites> {
                                   title: favourite["name"],
                                 ),
                               ),
-                            ).then(
-                                    (value) => _fetchFavourite()
+                            ).then((value) => _fetchFavourite()
                             );
                           },
                           backgroundColor: AppStyle.barBackgroundColor,
@@ -289,7 +286,6 @@ class _FavouritesState extends State<Favourites> {
                 itemCount: field.length,
                 itemBuilder: (context, index) {
                   favourite = field[index];
-                  print(favourite);
                   return Slidable(
                     key: ValueKey(favourite['name']),
                     endActionPane: ActionPane(
