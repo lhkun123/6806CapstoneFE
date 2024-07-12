@@ -52,7 +52,7 @@ class RecommendationCard extends StatelessWidget {
                   Row(
                     children: [
                       StarScore(
-                        score: field['rating'],
+                        score: field['rating'].toDouble(),
                         star: Star(
                             fillColor: Colors.yellow,
                             emptyColor: Colors.grey.withAlpha(88),

@@ -112,7 +112,6 @@ class _FieldsListPageState extends State<FieldsListPage> {
       _fetchFields();
     });
   }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -227,6 +226,7 @@ class _FieldsListPageState extends State<FieldsListPage> {
                 final field = filteredFields[index];
                 return InkWell(
                   onTap: () {
+                    print(field);
                     Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -265,7 +265,7 @@ class _FieldsListPageState extends State<FieldsListPage> {
                                 Row(
                                   children: [
                                     StarScore(
-                                      score: field['rating'],
+                                      score: field['rating'].toDouble(),
                                       star: Star(
                                           fillColor: Colors.yellow,
                                           emptyColor: Colors.grey.withAlpha(88),
