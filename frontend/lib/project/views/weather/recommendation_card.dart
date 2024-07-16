@@ -73,7 +73,9 @@ class RecommendationCard extends StatelessWidget {
                     children: [
                       const Icon(Icons.location_on, color: AppStyle.barBackgroundColor, size: 20),
                       const SizedBox(width: 8),
-                      Text(field['location'] ?? 'No Location'),
+                      Flexible(
+                        child: Text(field['location'] ?? 'No Location'),
+                      ),
                     ],
                   ),
                 ],

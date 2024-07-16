@@ -151,207 +151,224 @@ class _FavouritesState extends State<Favourites> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        title: const Text("Your favourites", style: AppStyle.headingFont),
+        backgroundColor: AppStyle.barBackgroundColor,
+        elevation: 0.0,
+        title: const Text(
+          'Your Favourites',
+          style: AppStyle.barHeadingFont2,
+        ),
+        centerTitle: true,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.white),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
       ),
       body: entertainmentList.isEmpty && fieldList.isEmpty
-          ? const Center(
+        ? const Center(
         child: Text(
           "You have not added any item to your favourite list",
-          style: AppStyle.subheadingFont,
+          style: AppStyle.sloganFont,
         ),
       )
-          : Column(
-        children: [
-          if (entertainmentList.isNotEmpty)
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
-              child: Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  "Entertainment",
-                  style: AppStyle.subheadingFont,
+        : Padding(
+          padding: const EdgeInsets.all(16.0),
+            child: Column(
+            children: [
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    "Entertainment",
+                    style: AppStyle.themeSmallHeadingFont,
+                  ),
                 ),
               ),
-            ),
-          Expanded(
-            child: entertainment.isEmpty
-                ? const Center(
-              child: CircularProgressIndicator(
-                color: AppStyle.unselectedLabelColor,
-              ),
-            )
-                : Scrollbar(
-              thumbVisibility: true,
-              controller: _entertainmentScrollController,
-              child: ListView.builder(
-                controller: _entertainmentScrollController,
-                itemCount: entertainment.length,
-                itemBuilder: (context, index) {
-                  favourite = entertainment[index];
-                  return Slidable(
-                    key: ValueKey(favourite['alias']),
-                    endActionPane: ActionPane(
-                      motion: const ScrollMotion(),
-                      children: [
-                        SlidableAction(
-                          onPressed: (context) {
-                            _showDialog("Are you sure to remove this item from your favourite list?", index, "entertainment");
-                          },
-                          backgroundColor: const Color(0xFFFE4A49),
-                          foregroundColor: Colors.white,
-                          icon: Icons.delete,
-                          label: 'Delete',
+              const SizedBox(height: 8),
+              Expanded(
+                child: entertainment.isEmpty
+                    ? const Center(
+                  child: CircularProgressIndicator(
+                    color: AppStyle.unselectedLabelColor,
+                  ),
+                )
+                    : Scrollbar(
+                  thumbVisibility: true,
+                  controller: _entertainmentScrollController,
+                  child: ListView.builder(
+                    controller: _entertainmentScrollController,
+                    itemCount: entertainment.length,
+                    itemBuilder: (context, index) {
+                      favourite = entertainment[index];
+                      return Slidable(
+                        key: ValueKey(favourite['alias']),
+                        endActionPane: ActionPane(
+                          motion: const ScrollMotion(),
+                          children: [
+                            SlidableAction(
+                              onPressed: (context) {
+                                _showDialog("Are you sure to remove this item from your favourite list?", index, "entertainment");
+                              },
+                              backgroundColor: const Color(0xFFFE4A49),
+                              foregroundColor: Colors.white,
+                              icon: Icons.delete,
+                              label: 'Delete',
+                            ),
+                            SlidableAction(
+                              onPressed: (context) {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (context) => YelpOverview(
+                                      alias: favourite["alias"] ?? "",
+                                      latitude: favourite["latitude"] ?? 0,
+                                      longitude: favourite["longitude"] ?? 0,
+                                      location: favourite["location"],
+                                      title: favourite["name"],
+                                    ),
+                                  ),
+                                ).then((value) => _fetchFavourite()
+                                );
+                              },
+                              backgroundColor: AppStyle.barBackgroundColor,
+                              foregroundColor: Colors.white,
+                              icon: Icons.details,
+                              label: 'Detail',
+                            ),
+                          ],
                         ),
-                        SlidableAction(
-                          onPressed: (context) {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) => YelpOverview(
-                                  alias: favourite["alias"] ?? "",
-                                  latitude: favourite["latitude"] ?? 0,
-                                  longitude: favourite["longitude"] ?? 0,
-                                  location: favourite["location"],
-                                  title: favourite["name"],
-                                ),
+                        child: ListTile(
+                          leading: Image.network(
+                            favourite['image_url'],
+                            width: 50,
+                            height: 50,
+                            fit: BoxFit.cover,
+                          ),
+                          title: Row(
+                            children: [
+                              Expanded(
+                                child: Text("${favourite['name']}", style: AppStyle.subheadingFont),
                               ),
-                            ).then((value) => _fetchFavourite()
-                            );
-                          },
-                          backgroundColor: AppStyle.barBackgroundColor,
-                          foregroundColor: Colors.white,
-                          icon: Icons.details,
-                          label: 'Detail',
-                        ),
-                      ],
-                    ),
-                    child: ListTile(
-                      leading: Image.network(
-                        favourite['image_url'],
-                        width: 50,
-                        height: 50,
-                        fit: BoxFit.cover,
-                      ),
-                      title: Row(
-                        children: [
-                          Expanded(
-                            child: Text("${index + 1}. ${favourite['name']}"),
+                              StarScore(
+                                score: favourite['rating'],
+                                star: Star(
+                                    fillColor: Colors.yellow,
+                                    emptyColor: Colors.grey.withAlpha(88),
+                                    size: 12),
+                              ),
+                            ],
                           ),
-                          StarScore(
-                            score: favourite['rating'],
-                            star: Star(
-                                fillColor: Colors.yellow,
-                                emptyColor: Colors.grey.withAlpha(88),
-                                size: 12),
+                          subtitle: Row(
+                            children: [
+                              Text('${favourite['review_count']} reviews',
+                                  style: AppStyle.bodyTextFont),
+                              const SizedBox(width: 10),
+                            ],
                           ),
-                        ],
-                      ),
-                      subtitle: Row(
-                        children: [
-                          Text('${favourite['review_count']} reviews',
-                              style: AppStyle.bodyTextFont),
-                          const SizedBox(width: 10),
-                        ],
-                      ),
 
-                    ),
-                  );
-                },
-              ),
-            ),
-          ),
-          if (fieldList.isNotEmpty)
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
-              child: Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  "Trails",
-                  style: AppStyle.subheadingFont,
+                        ),
+                      );
+                    },
+                  ),
                 ),
               ),
-            ),
-          Expanded(
-            child: fieldList.isEmpty
-                ? const Center(
-              child: CircularProgressIndicator(
-                color: AppStyle.unselectedLabelColor,
+              const SizedBox(height: 16),
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    "Trails",
+                    style: AppStyle.themeSmallHeadingFont,
+                  ),
+                ),
               ),
-            )
-                : Scrollbar(
-              thumbVisibility: true,
-              controller: _fieldScrollController,
-              child: ListView.builder(
-                controller: _fieldScrollController,
-                itemCount: field.length,
-                itemBuilder: (context, index) {
-                  favourite = field[index];
-                  return Slidable(
-                    key: ValueKey(favourite['name']),
-                    endActionPane: ActionPane(
-                      motion: const ScrollMotion(),
-                      children: [
-                        SlidableAction(
-                          onPressed: (context) {
-                            _showDialog("Are you sure to remove this item from your favourite list?", index, "field");
-                          },
-                          backgroundColor: const Color(0xFFFE4A49),
-                          foregroundColor: Colors.white,
-                          icon: Icons.delete,
-                          label: 'Delete',
+              const SizedBox(height: 8),
+              Expanded(
+                child: fieldList.isEmpty
+                    ? const Center(
+                  child: CircularProgressIndicator(
+                    color: AppStyle.unselectedLabelColor,
+                  ),
+                )
+                    : Scrollbar(
+                  thumbVisibility: true,
+                  controller: _fieldScrollController,
+                  child: ListView.builder(
+                    controller: _fieldScrollController,
+                    itemCount: field.length,
+                    itemBuilder: (context, index) {
+                      favourite = field[index];
+                      return Slidable(
+                        key: ValueKey(favourite['name']),
+                        endActionPane: ActionPane(
+                          motion: const ScrollMotion(),
+                          children: [
+                            SlidableAction(
+                              onPressed: (context) {
+                                _showDialog("Are you sure to remove this item from your favourite list?", index, "field");
+                              },
+                              backgroundColor: const Color(0xFFFE4A49),
+                              foregroundColor: Colors.white,
+                              icon: Icons.delete,
+                              label: 'Delete',
+                            ),
+                            SlidableAction(
+                              onPressed: (context) {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                      builder: (context) => FieldDetailPage(field: field[index])
+                                  ),
+                                ).then(
+                                        (value) => _fetchFavourite()
+                                );
+                              },
+                              backgroundColor: AppStyle.barBackgroundColor,
+                              foregroundColor: Colors.white,
+                              icon: Icons.details,
+                              label: 'Detail',
+                            ),
+                          ],
                         ),
-                        SlidableAction(
-                          onPressed: (context) {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                  builder: (context) => FieldDetailPage(field: field[index])
+                        child: ListTile(
+                          leading: Image.network(
+                            favourite['imageUrl'],
+                            width: 50,
+                            height: 50,
+                            fit: BoxFit.cover,
+                          ),
+                          title: Row(
+                            children: [
+                              Expanded(
+                                child: Text("${favourite['name']}", style: AppStyle.subheadingFont),
                               ),
-                            ).then(
-                                    (value) => _fetchFavourite()
-                            );
-                          },
-                          backgroundColor: AppStyle.barBackgroundColor,
-                          foregroundColor: Colors.white,
-                          icon: Icons.details,
-                          label: 'Detail',
+                              StarScore(
+                                score: favourite['rating'].toDouble(),
+                                star: Star(
+                                    fillColor: Colors.yellow,
+                                    emptyColor: Colors.grey.withAlpha(88),
+                                    size: 12),
+                              ),
+                            ],
+                          ),
+                          subtitle: Row(
+                            children: [
+                              Text('${favourite['distance']} mi',
+                                  style: AppStyle.bodyTextFont),
+                              const SizedBox(width: 10),
+                            ],
+                          ),
                         ),
-                      ],
-                    ),
-                    child: ListTile(
-                      leading: Image.network(
-                        favourite['imageUrl'],
-                        width: 50,
-                        height: 50,
-                        fit: BoxFit.cover,
-                      ),
-                      title: Row(
-                        children: [
-                          Expanded(
-                            child: Text("${index + 1}. ${favourite['name']}"),
-                          ),
-                          StarScore(
-                            score: favourite['rating'].toDouble(),
-                            star: Star(
-                                fillColor: Colors.yellow,
-                                emptyColor: Colors.grey.withAlpha(88),
-                                size: 12),
-                          ),
-                        ],
-                      ),
-                      subtitle: Row(
-                        children: [
-                          Text('${favourite['distance']} mi',
-                              style: AppStyle.bodyTextFont),
-                          const SizedBox(width: 10),
-                        ],
-                      ),
-                    ),
-                  );
-                },
+                      );
+                    },
+                  ),
+                ),
               ),
-            ),
+            ],
           ),
-        ],
       ),
     );
   }

@@ -48,6 +48,8 @@ class _FieldsListPageState extends State<FieldsListPage> {
     } catch (error) {
       print('Error fetching fields data: $error');
     }
+
+    print(fields);
   }
 
   Future<List<String>> _fetchAutocompleteList(String keyword) async {
@@ -173,6 +175,7 @@ class _FieldsListPageState extends State<FieldsListPage> {
                           const Text('Sort by:  ', style: AppStyle.bodyTextFont),
                           const SizedBox(width: 8),
                           DropdownButton<String>(
+                            dropdownColor: Colors.white,
                             style: AppStyle.bodyTextFont,
                             value: sortBy,
                             onChanged: (value) {
@@ -193,6 +196,7 @@ class _FieldsListPageState extends State<FieldsListPage> {
                           const Text('Category:  ', style: AppStyle.bodyTextFont),
                           const SizedBox(width: 8),
                           DropdownButton<String>(
+                            dropdownColor: Colors.white,
                             style: AppStyle.bodyTextFont,
                             value: 'All',
                             onChanged: (value) {
@@ -280,13 +284,15 @@ class _FieldsListPageState extends State<FieldsListPage> {
                                   ],
                                 ),
                                 const SizedBox(height: 5),
-                                Text('Estimated Time: ${field['estimated_time'] ?? 'No Estimated Time'}'),
+                                Text('Estimated Time: ${field['estimatedTime'] ?? 'No Estimated Time'}'),
                                 const SizedBox(height: 5),
                                 Row(
                                   children: [
                                     const Icon(Icons.location_on, color: AppStyle.barBackgroundColor, size: 20),
                                     const SizedBox(width: 8),
-                                    Text(field['location'] ?? 'No Location'),
+                                    Flexible(
+                                      child: Text(field['location'] ?? 'No Location'),
+                                    ),
                                   ],
                                 ),
                               ],

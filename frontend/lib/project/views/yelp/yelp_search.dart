@@ -26,6 +26,7 @@ class _YelpSearchState extends State<YelpSearch> {
       "location": "Vancouver"
     },
     "token": ApiKey.YELP_API_KEY
+
   };
 
   String selectedSortCategory = "Default";
@@ -261,6 +262,7 @@ class _YelpSearchState extends State<YelpSearch> {
                         const Text('Sort by:  ', style: AppStyle.bodyTextFont),
                         const SizedBox(width: 8),
                         DropdownButton<String>(
+                          dropdownColor: Colors.white,
                           style: AppStyle.bodyTextFont,
                           value: selectedSortCategory,
                           onChanged: (String? newValue) {
@@ -280,6 +282,7 @@ class _YelpSearchState extends State<YelpSearch> {
                         const Text('Category:  ', style: AppStyle.bodyTextFont),
                         const SizedBox(width: 8),
                         DropdownButton<String>(
+                          dropdownColor: Colors.white,
                           style: AppStyle.bodyTextFont,
                           value: selectedBusinessCategory,
                           onChanged: (String? newValue) {
@@ -356,7 +359,7 @@ class _YelpSearchState extends State<YelpSearch> {
                         Row(
                           children: [
                             Expanded(
-                              child: Text("${business['name']}", style: AppStyle.subheadingFont,),
+                              child: Text("${business['name']}", style: AppStyle.subheadingFont),
                             ),
                             StarScore(
                               score: business['rating'],
@@ -372,9 +375,8 @@ class _YelpSearchState extends State<YelpSearch> {
                           children: [
                             Text('${business['review_count']} reviews', style: AppStyle.bodyTextFont),
                             const SizedBox(width: 10),
-                            Text("${(business['distance'] / 1609.0).toStringAsFixed(2)} mi", style: AppStyle.bodyTextFont),
-                            const SizedBox(width: 5),
-                            business["is_closed"] ? const Icon(Icons.clear_rounded, color: Colors.red,) : const Icon(Icons.check, color: Colors.green,)
+                            Text("${(business['distance'] / 1000.0).toStringAsFixed(2)} km", style: AppStyle.bodyTextFont),
+                            const SizedBox(width: 5)
                           ],
                         ),
                       ],

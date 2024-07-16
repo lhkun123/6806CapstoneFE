@@ -51,7 +51,6 @@ class _FieldDetailState extends State<FieldDetailPage> {
         throw Exception('Failed to fetch favourite!');
       }
     });
-
   }
   void _fetchField() async {
     List<String> urls = [];
@@ -70,6 +69,7 @@ class _FieldDetailState extends State<FieldDetailPage> {
       imageUrls=urls;
     });
   }
+
   void _addOrRemoveFavorite() async {
     Map<String, dynamic> queryFavourite = {
       "url": "http://localhost:8080/favorites",
@@ -108,11 +108,9 @@ class _FieldDetailState extends State<FieldDetailPage> {
       });
     }
   }
+
   @override
   Widget build(BuildContext context) {
-
-
-
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -130,7 +128,6 @@ class _FieldDetailState extends State<FieldDetailPage> {
           },
         ),
       ),
-
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -166,7 +163,10 @@ class _FieldDetailState extends State<FieldDetailPage> {
                       children: [
                         const Icon(Icons.location_on, color: AppStyle.barBackgroundColor, size: 21),
                         const SizedBox(width: 5),
-                        Text(widget.field['location'] ?? 'No Location', style: AppStyle.themeTextFont),
+                        Flexible(
+                          child:
+                          Text(widget.field['location'] ?? 'No Location', style: AppStyle.themeTextFont),
+                        ),
                       ],
                     ),
                     const SizedBox(height: 5),
@@ -184,16 +184,15 @@ class _FieldDetailState extends State<FieldDetailPage> {
                         Text('${widget.field['distance'] ?? 'No Distance'} km'),
                         const SizedBox(width: 16),
                         Text('${widget.field['difficulty'] ?? 'No Difficulty'}'),
-
                       ],
                     ),
                     const SizedBox(height: 5),
-                    Text('Estimated Time: ${widget.field['estimated_time'] ?? 'No Estimated Time'}'),
+                    Text('Estimated Time: ${widget.field['estimatedTime'] ?? 'No Estimated Time'}'),
                     const SizedBox(height: 32),
                     const Text('Description', style: AppStyle.themeBigTextFont),
                     const SizedBox(height: 5),
                     Text(widget.field['description'] ?? 'No Description', style: AppStyle.bodyTextFont),
-                    const SizedBox(height: 5),
+                    const SizedBox(height: 16),
                     Center(
                       child: IconButton(
                         onPressed: () {

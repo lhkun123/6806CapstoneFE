@@ -73,6 +73,13 @@ class AppStyle {
       color: Color.fromRGBO(56, 137, 242, 1),
   );
 
+  static const themeSmallHeadingFont = TextStyle(
+    fontFamily: 'Roboto',
+    fontWeight: FontWeight.normal ,
+    fontSize: 19,
+    color: Color.fromRGBO(56, 137, 242, 1),
+  );
+
   static const themeBigTextFont = TextStyle(
     fontFamily: 'Roboto',
     fontWeight: FontWeight.normal ,
