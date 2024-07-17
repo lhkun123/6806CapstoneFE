@@ -2,9 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
-import 'package:localstorage/localstorage.dart';
 import '../../constants/api_request.dart';
-import '../auth/sign_in.dart';
 import 'weather_detail_item.dart';
 import 'clothing_recommendation.dart';
 import '../../constants/app_style.dart';
@@ -23,6 +21,7 @@ class _WeatherDetailPageState extends State<WeatherDetailPage>{
   late String clothingRecommendation;
   late String clothingType;
   late String svgString;
+  bool loading=false;
   Future<void> _fetchRecommendationFromGPT() async {
     Map<String, dynamic> searchQuery = {
       "url": "http://localhost:8080/weather-recommendation",
@@ -32,6 +31,9 @@ class _WeatherDetailPageState extends State<WeatherDetailPage>{
     };
     await apiRequest.getRequest(searchQuery).then((response) {
       if (response.statusCode == 200) {
+          setState(() {
+            loading=false;
+          });
           _showDialog(response.data["data"]["recommendation"]);
       } else {
         throw Exception('Failed to fetch businesses');
@@ -212,8 +214,13 @@ class _WeatherDetailPageState extends State<WeatherDetailPage>{
                 SizedBox(
                     width: 30,
                     height: 30,
-                    child: InkWell(
+                    child: loading? const CircularProgressIndicator(
+                      color: AppStyle.barBackgroundColor,
+                    ) : InkWell(
                         onTap: () {
+                          setState(() {
+                            loading=true;
+                          });
                            _fetchRecommendationFromGPT();
                         },
                         child: Image.network("https://upload.wikimedia.org/wikipedia/commons/thumb/e/ef/ChatGPT-Logo.svg/1920px-ChatGPT-Logo.svg.png",fit: BoxFit.cover,),
