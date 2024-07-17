@@ -23,10 +23,7 @@ dependencies:
   flutter_launcher_icons: ^0.13.1
   localstorage: ^5.0.0
   flutter_svg: ^2.0.10+1 # 添加 flutter_svg 依赖
-  flutter_chat_ui: ^1.6.14
   flutter_slidable: ^3.1.0
-  cloudinary_flutter: ^1.0.0
-  cloudinary_url_gen: ^1.0.0
   image_picker: ^1.1.2
   image_picker_for_web: ^3.0.4
   flutter_picker: ^2.1.0

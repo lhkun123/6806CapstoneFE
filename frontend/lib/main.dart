@@ -1,4 +1,3 @@
-import 'package:cloudinary_flutter/cloudinary_object.dart';
 import 'package:device_preview/device_preview.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/project/constants/api_request.dart';
@@ -25,7 +24,6 @@ Future<void> verifyToken() async {
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  CloudinaryObject.fromCloudName(cloudName: "dtbg6plsq");
   await initLocalStorage();
   await verifyToken();
   runApp(
