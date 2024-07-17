@@ -17,7 +17,6 @@ class YelpSearch extends StatefulWidget {
 class _YelpSearchState extends State<YelpSearch> {
   List<dynamic> businesses = [];
   bool autoLocation = false;
-  bool emptyResult=false;
   ApiRequest apiRequest = ApiRequest();
   Map<String, dynamic> searchQuery = {
     "url": "https://api.yelp.com/v3/businesses/search",
@@ -44,18 +43,11 @@ class _YelpSearchState extends State<YelpSearch> {
   }
 
   void _fetchBusinesses() async {
-
     await apiRequest.getRequest(searchQuery).then((response) {
       if (response.statusCode == 200) {
         setState(() {
           businesses = response.data["businesses"];
-          if(businesses.isEmpty){
-            emptyResult=true;
-          }else{
-            emptyResult=false;
-          }
         });
-        print(emptyResult);
       } else {
         throw Exception('Failed to fetch businesses');
       }
@@ -150,18 +142,7 @@ class _YelpSearchState extends State<YelpSearch> {
 
   void _searchByCategory(String category) {
     setState(() {
-      emptyResult=false;
-      if(category=="All"){
-        searchQuery["parameters"]["categories"]="All";
-      }else if(category=='Food'){
-        searchQuery["parameters"]["categories"]="food, All";
-      }else if(category=='Arts & Entertainment'){
-        searchQuery["parameters"]["categories"]="arts, All";
-      }else if (category=='Hotels & Travel'){
-        searchQuery["parameters"]["categories"]="hotelstravel, All";
-      }else if (category=='Health & Medical'){
-        searchQuery["parameters"]["categories"]="health, All";
-      }
+      searchQuery["parameters"]["categories"] = category;
       _fetchBusinesses();
       selectedBusinessCategory = category;
     });
@@ -240,15 +221,12 @@ class _YelpSearchState extends State<YelpSearch> {
                       padding: const WidgetStatePropertyAll<EdgeInsets>(
                         EdgeInsets.symmetric(horizontal: 16.0),
                       ),
-
                       onTap: () {
                         controller.openView();
                       },
-                      textInputAction: TextInputAction.search,
                       onChanged: (keyword) {
                         controller.openView();
                       },
-
                       leading: const Icon(Icons.search),
                     );
                   },
@@ -326,9 +304,8 @@ class _YelpSearchState extends State<YelpSearch> {
           ),
         ),
         Expanded(
-          child:emptyResult ? const Center(
-            child: Text("No result available"),  // Show this text when no results are found
-          ) :  (businesses.isEmpty && !emptyResult) ? const Center(
+          child: businesses.isEmpty
+            ? const Center(
               child: CircularProgressIndicator(
                 color: AppStyle.barBackgroundColor,
               ),

@@ -115,6 +115,8 @@ class _FavouritesState extends State<Favourites> {
   late Map<String, dynamic> favourite;
 
   void _removeFavorite(String name, int index) async {
+    print(name);
+    print(entertainmentList[index]);
     Map<String, dynamic> queryFavourite = {
       "url": "http://localhost:8080/favorites",
       "token": localStorage.getItem("token"),
