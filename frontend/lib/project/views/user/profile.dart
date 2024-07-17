@@ -114,7 +114,7 @@ class _ProfileState extends State<Profile> {
                   bottom: 0,
                   right: 0,
                   child: IconButton(
-                    icon: const Icon(Icons.camera_alt),
+                    icon: const Icon(Icons.camera_alt, color: AppStyle.barBackgroundColor,),
                     onPressed: () {
                       _pickImage();
                     },

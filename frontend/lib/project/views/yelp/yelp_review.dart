@@ -92,8 +92,10 @@ class _YelpReviewState extends State<YelpReview> {
                             StarScore(
                               score: review["rating"].toDouble(),
                               star: Star(
-                                  fillColor: Colors.yellow,
-                                  emptyColor: Colors.grey.withAlpha(88)),
+                                fillColor: Colors.yellow,
+                                emptyColor: Colors.grey.withAlpha(88),
+                                size: 15
+                              ),
                             ),
                           ],
                         ),
