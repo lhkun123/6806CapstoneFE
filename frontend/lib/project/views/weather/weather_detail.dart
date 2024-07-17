@@ -1,15 +1,55 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
+import 'package:localstorage/localstorage.dart';
+import '../../constants/api_request.dart';
+import '../auth/sign_in.dart';
 import 'weather_detail_item.dart';
 import 'clothing_recommendation.dart';
 import '../../constants/app_style.dart';
 
-class WeatherDetailPage extends StatelessWidget {
+class WeatherDetailPage extends StatefulWidget {
   final Map<String, dynamic> weatherData;
 
   const WeatherDetailPage({super.key, required this.weatherData});
+  @override
+  _WeatherDetailPageState createState() => _WeatherDetailPageState();
+}
 
+class _WeatherDetailPageState extends State<WeatherDetailPage>{
+  ApiRequest apiRequest=ApiRequest();
+  late Map<String, String> clothingRecommendationData;
+  late String clothingRecommendation;
+  late String clothingType;
+  late String svgString;
+  Future<void> _fetchRecommendationFromGPT() async {
+    Map<String, dynamic> searchQuery = {
+      "url": "http://localhost:8080/weather-recommendation",
+      "parameters":{
+        "city":"vancouver"
+      }
+    };
+    await apiRequest.getRequest(searchQuery).then((response) {
+      if (response.statusCode == 200) {
+          _showDialog(response.data["data"]["recommendation"]);
+      } else {
+        throw Exception('Failed to fetch businesses');
+      }
+    });
+  }
+  @override
+  void initState() {
+    super.initState();
+    setState(() {
+      clothingRecommendationData =
+          recommendClothing(widget.weatherData);
+      clothingRecommendation = clothingRecommendationData['recommendation']!;
+      clothingType = clothingRecommendationData['iconPath']!;
+      svgString = getClothingSvg(clothingType);
+    });
+
+  }
   IconData getWeatherIcon(String weatherType) {
     switch (weatherType) {
       case 'clear_sky':
@@ -52,13 +92,6 @@ class WeatherDetailPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Map<String, String> clothingRecommendationData =
-        recommendClothing(weatherData);
-    String clothingRecommendation =
-        clothingRecommendationData['recommendation']!;
-    String clothingType = clothingRecommendationData['iconPath']!;
-    String svgString = getClothingSvg(clothingType);
-
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -83,26 +116,26 @@ class WeatherDetailPage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             const SizedBox(height: 38),
-            Text(weatherData['city'],style: AppStyle.tempBigFont,textAlign: TextAlign.center),
+            Text(widget.weatherData['city'],style: AppStyle.tempBigFont,textAlign: TextAlign.center),
             const SizedBox(height: 20),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Icon(
-                  getWeatherIcon(weatherData['weather_type']),
+                  getWeatherIcon(widget.weatherData['weather_type']),
                   color: AppStyle.barBackgroundColor,
                   size: 48,
                 ),
                 const SizedBox(width: 16),
                 Text(
-                  '${double.parse(weatherData['temperature'].toString())}°C',
+                  '${double.parse(widget.weatherData['temperature'].toString())}°C',
                   style: AppStyle.tempBigFont
                   ),
               ],
             ),
             // const SizedBox(height: 8),
             Text(
-              weatherData['weather_condition'],
+              widget.weatherData['weather_condition'],
               style: AppStyle.tempFont,
               textAlign: TextAlign.center,
             ),
@@ -118,29 +151,29 @@ class WeatherDetailPage extends StatelessWidget {
                   WeatherDetailItem(
                     label: 'Feels like',
                     value:
-                        '${double.parse(weatherData['feels_like'].toString())}°C',
+                        '${double.parse(widget.weatherData['feels_like'].toString())}°C',
                   ),
                   WeatherDetailItem(
                     label: 'Wind speed',
                     value:
-                        '${double.parse(weatherData['wind_speed'].toString())} km/h',
+                        '${double.parse(widget.weatherData['wind_speed'].toString())} km/h',
                   ),
                   WeatherDetailItem(
                     label: 'Humidity',
-                    value: '${int.parse(weatherData['humidity'].toString())}%',
+                    value: '${int.parse(widget.weatherData['humidity'].toString())}%',
                   ),
                   WeatherDetailItem(
                     label: 'Sunrise',
                     value: DateFormat('HH:mm:ss').format(
                       DateTime.fromMillisecondsSinceEpoch(
-                          int.parse(weatherData['sunrise'].toString()) * 1000),
+                          int.parse(widget.weatherData['sunrise'].toString()) * 1000),
                     ),
                   ),
                   WeatherDetailItem(
                     label: 'Sunset',
                     value: DateFormat('HH:mm:ss').format(
                       DateTime.fromMillisecondsSinceEpoch(
-                          int.parse(weatherData['sunset'].toString()) * 1000),
+                          int.parse(widget.weatherData['sunset'].toString()) * 1000),
                     ),
                   ),
                 ],
@@ -173,8 +206,40 @@ class WeatherDetailPage extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 36),
+            Row(
+              mainAxisAlignment:MainAxisAlignment.center,
+              children: [
+                SizedBox(
+                    width: 30,
+                    height: 30,
+                    child: InkWell(
+                        onTap: () {
+                           _fetchRecommendationFromGPT();
+                        },
+                        child: Image.network("https://upload.wikimedia.org/wikipedia/commons/thumb/e/ef/ChatGPT-Logo.svg/1920px-ChatGPT-Logo.svg.png",fit: BoxFit.cover,),
+                    )
+                )
+              ],
+            )
           ],
         ),
+      ),
+    );
+  }
+  void _showDialog(String message) {
+    showDialog<void>(
+      context: context,
+      builder: (context) => CupertinoAlertDialog(
+        title: const Text("Recommendation from GPT"),
+        actions: [
+          CupertinoDialogAction(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: const Text("OK", style: AppStyle.bodyTextFont),
+          ),
+        ],
+        content: Text(message, style: AppStyle.bodyTextFont),
       ),
     );
   }

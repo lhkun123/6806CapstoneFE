@@ -85,7 +85,6 @@ class _FavouritesState extends State<Favourites> {
       };
       await apiRequest.getRequest(query).then((response) {
         if (response.statusCode == 200) {
-          print(response.data["data"]);
           fieldResults[i] = {
             "rating": response.data["data"]["rating"],
             "name": response.data["data"]["name"],

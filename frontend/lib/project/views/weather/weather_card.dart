@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:frontend/project/views/weather/weather_detail.dart';
 import '../../constants/app_style.dart';
 
+
 class WeatherCard extends StatelessWidget {
   final Map<String, dynamic> weatherData;
 
