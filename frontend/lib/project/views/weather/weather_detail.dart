@@ -143,40 +143,41 @@ class _WeatherDetailPageState extends State<WeatherDetailPage>{
             ),
             const SizedBox(height: 20),
             Expanded(
-              child: GridView.count(
-                crossAxisCount: 2,
-                childAspectRatio: 2.5,
-                crossAxisSpacing: 20,
-                mainAxisSpacing: 20,
-                padding: const EdgeInsets.all(8.0),
+              child: ListView(
+                padding: const EdgeInsets.all(20.0),
                 children: [
-                  WeatherDetailItem(
-                    label: 'Feels like',
-                    value:
-                        '${double.parse(widget.weatherData['feels_like'].toString())}°C',
-                  ),
-                  WeatherDetailItem(
-                    label: 'Wind speed',
-                    value:
-                        '${double.parse(widget.weatherData['wind_speed'].toString())} km/h',
-                  ),
-                  WeatherDetailItem(
-                    label: 'Humidity',
-                    value: '${int.parse(widget.weatherData['humidity'].toString())}%',
-                  ),
-                  WeatherDetailItem(
-                    label: 'Sunrise',
-                    value: DateFormat('HH:mm:ss').format(
-                      DateTime.fromMillisecondsSinceEpoch(
-                          int.parse(widget.weatherData['sunrise'].toString()) * 1000),
-                    ),
-                  ),
-                  WeatherDetailItem(
-                    label: 'Sunset',
-                    value: DateFormat('HH:mm:ss').format(
-                      DateTime.fromMillisecondsSinceEpoch(
-                          int.parse(widget.weatherData['sunset'].toString()) * 1000),
-                    ),
+                  Wrap(
+                    alignment: WrapAlignment.center,
+                    spacing: 90,
+                    runSpacing: 20,
+                    children: [
+                      WeatherDetailItem(
+                        label: 'Feels like',
+                        value: '${double.parse(widget.weatherData['feels_like'].toString())}°C',
+                      ),
+                      WeatherDetailItem(
+                        label: 'Wind speed',
+                        value: '${double.parse(widget.weatherData['wind_speed'].toString())} km/h',
+                      ),
+                      WeatherDetailItem(
+                        label: 'Sunrise',
+                        value: DateFormat('HH:mm:ss').format(
+                          DateTime.fromMillisecondsSinceEpoch(
+                              int.parse(widget.weatherData['sunrise'].toString()) * 1000),
+                        ),
+                      ),
+                      WeatherDetailItem(
+                        label: 'Sunset',
+                        value: DateFormat('HH:mm:ss').format(
+                          DateTime.fromMillisecondsSinceEpoch(
+                              int.parse(widget.weatherData['sunset'].toString()) * 1000),
+                        ),
+                      ),
+                      WeatherDetailItem(
+                        label: 'Humidity',
+                        value: '${int.parse(widget.weatherData['humidity'].toString())}%',
+                      ),
+                    ],
                   ),
                 ],
               ),
@@ -223,7 +224,7 @@ class _WeatherDetailPageState extends State<WeatherDetailPage>{
                           });
                            _fetchRecommendationFromGPT();
                         },
-                        child: Image.network("https://upload.wikimedia.org/wikipedia/commons/thumb/e/ef/ChatGPT-Logo.svg/1920px-ChatGPT-Logo.svg.png",fit: BoxFit.cover,),
+                        child: Image.network("https://upload.wikimedia.org/wikipedia/commons/thumb/e/ef/ChatGPT-Logo.svg/1920px-ChatGPT-Logo.svg.png",fit: BoxFit.cover, color: AppStyle.barBackgroundColor,),
                     )
                 )
               ],
