@@ -18,7 +18,7 @@ class WeatherDetailPage extends StatefulWidget {
 class _WeatherDetailPageState extends State<WeatherDetailPage> {
   ApiRequest apiRequest = ApiRequest();
   late Map<String, String> clothingRecommendationData;
-  late String clothingRecommendation;
+  String clothingRecommendation="";
   late String clothingType;
   late String svgString;
   bool loading = false;
@@ -36,9 +36,8 @@ class _WeatherDetailPageState extends State<WeatherDetailPage> {
           loading = false;
         });
         clothingRecommendation = response.data["data"]["recommendation"];
-        print(clothingRecommendation);
       } else {
-        throw Exception('Failed to fetch businesses');
+        throw Exception('Failed to fetch recommendation');
       }
     });
   }
@@ -50,7 +49,6 @@ class _WeatherDetailPageState extends State<WeatherDetailPage> {
     setState(() {
       clothingRecommendationData =
           recommendClothing(widget.weatherData);
-      clothingRecommendation = '';
       clothingType = clothingRecommendationData['iconPath']!;
       svgString = getClothingSvg(clothingType);
     });
@@ -224,7 +222,9 @@ class _WeatherDetailPageState extends State<WeatherDetailPage> {
             const SizedBox(height: 12),
             SizedBox(
               width: 320,
-              child: Text(
+              child:clothingRecommendation == '' ? const CircularProgressIndicator(
+                color: AppStyle.barBackgroundColor,
+              ):Text(
                 clothingRecommendation,
               ),
             ),

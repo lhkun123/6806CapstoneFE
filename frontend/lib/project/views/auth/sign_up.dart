@@ -42,7 +42,6 @@ class _SignUpState extends State<SignUpHttp> {
   };
   void _register() async {
     await apiRequest.postRequest(query).then((response) {
-      print(response.data);
       if (response.data["msg"] == "Success!") {
         _showDialog('You have been successfully registered as a new user');
       }else{
@@ -109,7 +108,6 @@ class _SignUpState extends State<SignUpHttp> {
                     errorStyle: AppStyle.errorFont,
                   ),
                   obscureText: true,
-                  validator: (value) => Validator.validatePassword(value),
                 ),
                 const SizedBox(height: 10.0),
                 TextFormField(
@@ -127,16 +125,19 @@ class _SignUpState extends State<SignUpHttp> {
                     errorStyle: AppStyle.errorFont,
                   ),
                   obscureText: true,
-                  validator: (value) => Validator.validatePassword(value),
 
                 ),
                 const SizedBox(height: 20.0),
                 TextButton(
                   onPressed: () async {
                     if (Validator.validatePasswordsMatch(_passwordController.text.trim(),_confirmPasswordController.text.trim())!=null) {
-                      ScaffoldMessenger.of(context)
-                          .showSnackBar(
-                          const SnackBar(content: Text('Passwords do NOT match!')));
+                      _showDialog('Passwords do NOT match!');
+
+                    }else if(Validator.validatePassword(_passwordController.text.trim())=="Password cannot be empty"){
+                      _showDialog("Password cannot be empty");
+                    }
+                    else if(Validator.validatePassword(_passwordController.text.trim())=='Password must be at least 6 characters long'){
+                      _showDialog('Password must be at least 6 characters long');
                     }
                     else{
                       _register();

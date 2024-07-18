@@ -21,15 +21,6 @@ class Validator {
     } else if (password.length < 6) {
       return 'Password must be at least 6 characters long';
     }
-    // else if (!RegExp(r'(?=.*[A-Z])').hasMatch(password)) {
-    //   return 'Password must contain at least one uppercase letter';
-    // } else if (!RegExp(r'(?=.*[a-z])').hasMatch(password)) {
-    //   return 'Password must contain at least one lowercase letter';
-    // } else if (!RegExp(r'(?=.*\d)').hasMatch(password)) {
-    //   return 'Password must contain at least one number';
-    // } else if (!RegExp(r'(?=.*[\W_])').hasMatch(password)) {
-    //   return 'Password must contain at least one special character';
-    // }
     return null;
   }
 
