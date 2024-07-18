@@ -160,7 +160,12 @@ class _FieldsListPageState extends State<FieldsListPage> {
                           controller.openView();
                         },
                         onChanged: filterFields,
-                        leading: const Icon(Icons.search),
+                        leading: IconButton(
+                          onPressed: (){
+                            _searchByKeyword(controller.text);
+                          },
+                          icon: const Icon(Icons.search),
+                        ),
                       );
                     },
                     suggestionsBuilder: (BuildContext context, SearchController controller) async {

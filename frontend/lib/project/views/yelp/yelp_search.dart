@@ -56,7 +56,6 @@ class _YelpSearchState extends State<YelpSearch> {
             emptyResult=false;
           }
         });
-        print(emptyResult);
       } else {
         throw Exception('Failed to fetch businesses');
       }
@@ -230,10 +229,12 @@ class _YelpSearchState extends State<YelpSearch> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               SizedBox(
+
                 width: 340, height: 40,
                 child: SearchAnchor(
                   viewBackgroundColor: AppStyle.primaryColor,
                   dividerColor: AppStyle.primaryColor,
+
                   builder: (BuildContext context, SearchController controller) {
                     return SearchBar(
                       controller: controller,
@@ -241,16 +242,17 @@ class _YelpSearchState extends State<YelpSearch> {
                       padding: const WidgetStatePropertyAll<EdgeInsets>(
                         EdgeInsets.symmetric(horizontal: 16.0),
                       ),
+                      textInputAction: TextInputAction.search,
 
                       onTap: () {
                         controller.openView();
                       },
-                      textInputAction: TextInputAction.search,
-                      onChanged: (keyword) {
-                        controller.openView();
-                      },
-
-                      leading: const Icon(Icons.search),
+                      leading: IconButton(
+                        onPressed: (){
+                          _searchByKeyword(controller.text);
+                        },
+                        icon: const Icon(Icons.search),
+                      )
                     );
                   },
                   suggestionsBuilder: (BuildContext context, SearchController controller) async {
@@ -259,10 +261,8 @@ class _YelpSearchState extends State<YelpSearch> {
                     return options.map((String keyword) => ListTile(
                       title: Text(keyword),
                       onTap: () {
-                        setState(() {
-                          _searchByKeyword(keyword);
-                          controller.closeView(keyword);
-                        });
+                        controller.closeView(keyword);
+                        _searchByKeyword(keyword);
                       },
                     )).toList();
                   },
