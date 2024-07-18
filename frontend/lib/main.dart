@@ -28,7 +28,7 @@ Future<void> main() async {
   await verifyToken();
   runApp(
     DevicePreview(
-      enabled: true, // 启用 DevicePreview
+      enabled: false, // 启用 DevicePreview
       builder: (context) => const MyApp(),
     ),
   );
