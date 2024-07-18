@@ -32,7 +32,7 @@ class _SignUpState extends State<SignUpHttp> {
     _passwordController.dispose();
     super.dispose();
   }
-  ApiRequest apiRequest=ApiRequest();
+
   late Map<String, dynamic> query = {
     "url": "http://localhost:8080/users",
     "body":{
@@ -40,15 +40,18 @@ class _SignUpState extends State<SignUpHttp> {
       "password":_passwordController.text.trim()
     }
   };
-  void _register() async {
-    await apiRequest.postRequest(query).then((response) {
-      if (response.data["msg"] == "Success!") {
-        _showDialog('You have been successfully registered as a new user');
-      }else{
-        _showDialog(response.data["msg"]);
-      }
-    });
 
+  void _register() async {
+    ApiRequest apiRequest=ApiRequest();
+    if (_formKey.currentState!.validate()) {
+      await apiRequest.postRequest(query).then((response) {
+        if (response.data["msg"] == "Success!") {
+          _showDialog('You have been successfully registered as a new user');
+        } else {
+          _showDialog(response.data["msg"]);
+        }
+      });
+    }
   }
 
   @override
@@ -91,6 +94,9 @@ class _SignUpState extends State<SignUpHttp> {
                     errorStyle: AppStyle.errorFont,
                   ),
                   validator: (value) => Validator.validateEmail(value),
+                  onChanged: (value) {
+                    setState(() {});
+                  },
                 ),
                 const SizedBox(height: 30.0),
                 TextFormField(
@@ -108,6 +114,10 @@ class _SignUpState extends State<SignUpHttp> {
                     errorStyle: AppStyle.errorFont,
                   ),
                   obscureText: true,
+                  validator: (value) => Validator.validatePassword(value),
+                  onChanged: (value) {
+                    setState(() {});
+                  },
                 ),
                 const SizedBox(height: 10.0),
                 TextFormField(
@@ -125,23 +135,15 @@ class _SignUpState extends State<SignUpHttp> {
                     errorStyle: AppStyle.errorFont,
                   ),
                   obscureText: true,
-
+                  validator: (value) => Validator.validatePasswordsMatch(_passwordController.text.trim(),_confirmPasswordController.text.trim()),
+                  onChanged: (value) {
+                    setState(() {});
+                  },
                 ),
                 const SizedBox(height: 20.0),
                 TextButton(
                   onPressed: () async {
-                    if (Validator.validatePasswordsMatch(_passwordController.text.trim(),_confirmPasswordController.text.trim())!=null) {
-                      _showDialog('Passwords do NOT match!');
-
-                    }else if(Validator.validatePassword(_passwordController.text.trim())=="Password cannot be empty"){
-                      _showDialog("Password cannot be empty");
-                    }
-                    else if(Validator.validatePassword(_passwordController.text.trim())=='Password must be at least 6 characters long'){
-                      _showDialog('Password must be at least 6 characters long');
-                    }
-                    else{
                       _register();
-                    }
                   },
                   style: TextButton.styleFrom(
                     foregroundColor: AppStyle.primaryColor,

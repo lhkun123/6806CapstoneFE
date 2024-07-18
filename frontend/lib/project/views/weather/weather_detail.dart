@@ -220,11 +220,17 @@ class _WeatherDetailPageState extends State<WeatherDetailPage> {
             )
                 : Container(),
             const SizedBox(height: 12),
-            SizedBox(
-              width: 320,
-              child:clothingRecommendation == '' ? const CircularProgressIndicator(
+
+            clothingRecommendation == ''
+            ? const SizedBox(
+              width: 30,
+              height: 30,
+              child: CircularProgressIndicator(
                 color: AppStyle.barBackgroundColor,
-              ):Text(
+              )
+            ): SizedBox(
+              width: 320,
+              child:Text(
                 clothingRecommendation,
               ),
             ),
