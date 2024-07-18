@@ -97,8 +97,27 @@ class _FieldsListPageState extends State<FieldsListPage> {
               (a, b) => (a['difficulty'] ?? '').compareTo(b['difficulty'] ?? ''));
     } else if (sortBy == 'Estimated Time') {
       filteredFields.sort((a, b) =>
-          (a['estimatedTime'] ?? '').compareTo(b['estimatedTime'] ?? ''));
+          _convertToMinutes(a['estimatedTime'] ?? '').compareTo(_convertToMinutes(b['estimatedTime'] ?? '')));
     }
+  }
+
+  int _convertToMinutes(String estimatedTime) {
+    int minutes = 0;
+    RegExp exp = RegExp(r'(\d+)(h|m)');
+    Iterable<Match> matches = exp.allMatches(estimatedTime);
+
+    for (Match match in matches) {
+      int value = int.parse(match.group(1)!);
+      String unit = match.group(2)!;
+
+      if (unit == 'h') {
+        minutes += value * 60;
+      } else if (unit == 'm') {
+        minutes += value;
+      }
+    }
+
+    return minutes;
   }
 
   void _searchByKeyword(String keyword) {
