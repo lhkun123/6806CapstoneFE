@@ -17,7 +17,6 @@ class WeatherDetailPage extends StatefulWidget {
 
 class _WeatherDetailPageState extends State<WeatherDetailPage> {
   ApiRequest apiRequest = ApiRequest();
-  final ScrollController _WeatherRcmdScrollController = ScrollController();
   late Map<String, String> clothingRecommendationData;
   late String clothingRecommendation;
   late String clothingType;
@@ -117,7 +116,7 @@ class _WeatherDetailPageState extends State<WeatherDetailPage> {
           },
         ),
       ),
-      body: Container(
+      body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -223,26 +222,10 @@ class _WeatherDetailPageState extends State<WeatherDetailPage> {
             )
                 : Container(),
             const SizedBox(height: 12),
-            loading
-                ? const SizedBox(
-                  width: 30,
-                  height: 30,
-                  child: const CircularProgressIndicator(
-                    color: AppStyle.barBackgroundColor,
-                  )
-                ): SizedBox(
-              width: 300,
-              height: 80,
-              child: Scrollbar(
-                thumbVisibility: true,
-                controller: _WeatherRcmdScrollController,
-                child:
-                SingleChildScrollView(
-                  controller: _WeatherRcmdScrollController,
-                  child: Text(
-                    clothingRecommendation,
-                  ),
-                ),
+            SizedBox(
+              width: 320,
+              child: Text(
+                clothingRecommendation,
               ),
             ),
           ],
