@@ -220,11 +220,11 @@ class _FavouritesState extends State<Favourites> {
                                 Navigator.of(context).push(
                                   MaterialPageRoute(
                                     builder: (context) => YelpOverview(
-                                      alias: favourite["alias"] ?? "",
-                                      latitude: favourite["latitude"] ?? 0,
-                                      longitude: favourite["longitude"] ?? 0,
-                                      location: favourite["location"],
-                                      title: favourite["name"],
+                                      alias: entertainment[index]["alias"] ?? "",
+                                      latitude: entertainment[index]["latitude"] ?? 0,
+                                      longitude: entertainment[index]["longitude"] ?? 0,
+                                      location: entertainment[index]["location"],
+                                      title: entertainment[index]["name"],
                                     ),
                                   ),
                                 ).then((value) => _fetchFavourite()
@@ -265,7 +265,6 @@ class _FavouritesState extends State<Favourites> {
                               const SizedBox(width: 10),
                             ],
                           ),
-
                         ),
                       );
                     },
