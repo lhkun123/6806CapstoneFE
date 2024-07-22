@@ -36,7 +36,9 @@ class RecommendationCard extends StatelessWidget {
                 width: 380,
                 child: Image.network(field['imageUrl'] ?? '',
                     errorBuilder: (context, error, stackTrace) {
-                      return Image.asset('assets/placeholder.png');
+                      return const CircularProgressIndicator(
+                        color: AppStyle.barBackgroundColor,
+                      );
                     },
                   fit: BoxFit.cover,
                 ),

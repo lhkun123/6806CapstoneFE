@@ -20,13 +20,12 @@ class WeatherHome extends StatelessWidget {
           WeatherCard(weatherData: weatherData),
           const SizedBox(height: 10),
           if (badWeather)
-            Column(
+            const Column(
               children: [
-                const Text("The weather is not good for outdoor activities.", style: AppStyle.bigHeadingFont),
-                const SizedBox(height: 10),
-                const Text("You can choose indoor activities.", style: AppStyle.headingFont),
-                const SizedBox(height: 10),
-                Image.asset('assets/image.png'),
+                Text("The weather is not good for outdoor activities.", style: AppStyle.bigHeadingFont),
+                SizedBox(height: 10),
+                Text("You can choose indoor activities.", style: AppStyle.headingFont),
+                SizedBox(height: 10),
               ],
             )
           else
